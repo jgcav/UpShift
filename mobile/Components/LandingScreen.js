@@ -12,7 +12,7 @@ import {
   Button,
 } from "react-native";
 
-export default function LandingScreen() {
+export default function LandingScreen({ navigation }) {
   return (
     <View>
       <Button
