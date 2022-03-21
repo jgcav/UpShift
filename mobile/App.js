@@ -5,6 +5,8 @@ import firebase from "./config/firebase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import LandingScreen from "./Components/LandingScreen";
+import MapView from "react-native-maps";
+import { PROVIDER_GOOGLE } from "react-native-maps";
 
 export default function App() {
   const [data, setData] = useState();
@@ -31,6 +33,11 @@ export default function App() {
     return (
       <View>
         <Text>Loading...</Text>
+        <MapView
+          style={{ height: "50%", width: "100%" }}
+          provider={PROVIDER_GOOGLE}
+          showsUserLocation={true}
+        />
       </View>
     );
 
