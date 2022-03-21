@@ -8,6 +8,7 @@ import LandingScreen from "./Components/LandingScreen";
 import LoginScreen from "./Components/LoginScreen";
 import SignUpScreen from "./Components/SignUpScreen";
 import { AuthProvider } from "./contexts/AuthContext";
+import "react-native-gesture-handler";
 
 export default function App() {
   const [data, setData] = useState();
@@ -40,13 +41,17 @@ export default function App() {
   const Stack = createStackNavigator();
   return (
     <AuthProvider>
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Landing">
-        <Stack.Screen name="Landing" component={LandingScreen} options={{headerShown: false}}></Stack.Screen>
-        <Stack.Screen name="Login" component={LoginScreen}></Stack.Screen>
-        <Stack.Screen name="SignUp" component={SignUpScreen}></Stack.Screen>
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Landing">
+          <Stack.Screen
+            name="Landing"
+            component={LandingScreen}
+            options={{ headerShown: false }}
+          ></Stack.Screen>
+          <Stack.Screen name="Login" component={LoginScreen}></Stack.Screen>
+          <Stack.Screen name="SignUp" component={SignUpScreen}></Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
     </AuthProvider>
   );
 }
