@@ -5,41 +5,31 @@ import firebase from "./config/firebase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import LandingScreen from "./Components/LandingScreen";
-import MapView from "react-native-maps";
-import { PROVIDER_GOOGLE } from "react-native-maps";
+import { RoutePlanner } from "./Components/RoutePlanner";
+const db = firebase.firestore().collection("dev");
 
 export default function App() {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
 
-  const db = firebase.firestore().collection("dev");
-
   useEffect(() => {
     db.get().then((snapshot) => {
       const data = [];
-
       snapshot.forEach((doc) => {
         const { name } = doc.data();
-
         data.push(name);
       });
       setData(data);
-      ``;
-      setLoading(false);
+      // setLoading(false);
     });
   }, []);
 
-  if (loading)
-    return (
-      <View>
-        <Text>Loading...</Text>
-        <MapView
-          style={{ height: "50%", width: "100%" }}
-          provider={PROVIDER_GOOGLE}
-          showsUserLocation={true}
-        />
-      </View>
-    );
+  if (loading) return <RoutePlanner />;
+  // return (
+  //   <View>
+  //     <Text>Loading...</Text>
+  //   </View>
+  // );
 
   const Stack = createStackNavigator();
   return (
