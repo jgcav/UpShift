@@ -2,7 +2,7 @@ import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import { View } from "react-native";
 import { useState, useEffect } from "react";
 import { SearchBar } from "./SearchBar";
-import { fetchgeoCode } from "./api";
+import fetchGeoCode from "./api";
 
 //button for toggle certain views ? i.e traffic / buidlings
 // double press to begin mapping shape ?
@@ -12,7 +12,11 @@ export const RoutePlanner = () => {
   const [searchLocation, setSearchLocation] = useState("");
 
   useEffect(() => {
-    fetchgeoCode();
+    fetchGeoCode();
+    // .then((res) => {
+    //   console.log(res);
+    // });
+    console.log(fetchGeoCode());
   }, []);
 
   const handelPress = (e) => {
