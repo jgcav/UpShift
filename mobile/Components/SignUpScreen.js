@@ -13,74 +13,85 @@ import {
 import { useAuth } from "../contexts/AuthContext";
 
 export default function SignUpScreen({ navigation: { navigate } }) {
-  const emailRef = useRef("");
-  const passwordRef = useRef("");
-  const passwordConfirmRef = useRef("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const { signup } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    console.log("pressed");
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      console.log("Passwords do not match");
+  function handleSubmit() {
+    if (password !== passwordConfirm) {
       return setError("Passwords do not match");
     }
     setError("");
     setLoading(true);
-    console.log(
-      emailRef.current
-      // passwordRef.current,
-      // passwordConfirmRef.current
-    );
-    signup(emailRef.current.value, passwordRef.current.value)
+    signup(email, password)
       .then(() => {
-        navigate("Profile");
+        navigate("ProfileMaker");
       })
-      .catch(() => {
+      .catch((err) => {
         setError("Failed to set-up account");
-        console.log("Failed to set-up account");
+        console.log(err);
       });
     setLoading(false);
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={style.container}>
+    <View behavior="padding" style={style.container}>
       <StatusBar barStyle="light-content" />
       <TextInput
-        ref={emailRef}
         style={style.input}
         placeholder="Email"
         placeholderTextColor={"rgba(255,255,255,0.6)"}
         keyboardType="email-address"
         autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
         autoCorrect={false}
       />
       <TextInput
-        ref={passwordRef}
         style={style.input}
         placeholder="Password"
         placeholderTextColor={"rgba(255,255,255,0.6)"}
+        value={password}
+        onChangeText={setPassword}
         secureTextEntry
       />
       <TextInput
-        ref={passwordConfirmRef}
         style={style.input}
         placeholder="Confirm Password"
         placeholderTextColor={"rgba(255,255,255,0.6)"}
         secureTextEntry
+        value={passwordConfirm}
+        onChangeText={setPasswordConfirm}
         returnKeyType="go"
       />
+      <Text>{error && error}</Text>
+
       <TouchableOpacity style={style.buttonContainer}>
-        <Button title="SIGN UP" color="white" onPress={handleSubmit} />
+        <Button title="SIGN UP" color="black" onPress={handleSubmit} />
       </TouchableOpacity>
-    </KeyboardAvoidingView>
+      <Text>
+        Already have an account?
+        <Text
+          onPress={() => {
+            navigate("Login");
+          }}
+        >
+          {" "}
+          Login
+        </Text>
+      </Text>
+    </View>
   );
 }
 const style = StyleSheet.create({
   container: {
-    backgroundColor: "black",
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#0984E3",
+    justifyContent: "center",
   },
   input: {
     height: 40,

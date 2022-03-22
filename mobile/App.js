@@ -9,6 +9,8 @@ import LoginScreen from "./Components/LoginScreen";
 import SignUpScreen from "./Components/SignUpScreen";
 import { AuthProvider } from "./contexts/AuthContext";
 import "react-native-gesture-handler";
+import ProfileScreen from "./Components/ProfileScreen";
+import ProfileMakerScreen from "./Components/ProfileMakerScreen";
 
 export default function App() {
   const [data, setData] = useState();
@@ -48,8 +50,13 @@ export default function App() {
             component={LandingScreen}
             options={{ headerShown: false }}
           ></Stack.Screen>
-          <Stack.Screen name="Login" component={LoginScreen}></Stack.Screen>
-          <Stack.Screen name="SignUp" component={SignUpScreen}></Stack.Screen>
+          <Stack.Screen name="Login" component={LoginScreen }options={{ headerShown: false }}></Stack.Screen>
+          <Stack.Screen name="SignUp" component={SignUpScreen}options={{ headerShown: false }}></Stack.Screen>
+          <Stack.Screen name="Profile" component={ProfileScreen}options={{ headerShown: false }}></Stack.Screen>
+          <Stack.Screen
+            name="ProfileMaker"
+            component={ProfileMakerScreen}
+          ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>
