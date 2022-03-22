@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import firebase from "./config/firebase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import LandingScreen from "./Components/LandingScreen";
 import LoginScreen from "./Components/LoginScreen";
 import SignUpScreen from "./Components/SignUpScreen";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -44,12 +43,7 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Landing">
-          <Stack.Screen
-            name="Landing"
-            component={LandingScreen}
-            options={{ headerShown: false }}
-          ></Stack.Screen>
+        <Stack.Navigator initialRouteName="Login">
           <Stack.Screen name="Login" component={LoginScreen }options={{ headerShown: false }}></Stack.Screen>
           <Stack.Screen name="SignUp" component={SignUpScreen}options={{ headerShown: false }}></Stack.Screen>
           <Stack.Screen name="Profile" component={ProfileScreen}options={{ headerShown: false }}></Stack.Screen>
