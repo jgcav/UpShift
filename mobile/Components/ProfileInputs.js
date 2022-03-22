@@ -8,17 +8,15 @@ import {
   StyleSheet,
 } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
+import ImageChooser from "./ImageChooser";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function ProfileInputs() {
   const [selectedGender, setSelectedGender] = useState("");
   const genders = ["Male", "Female", "Other"];
+  const [profilePicture, setProfilePicture] = useState(null);
+
   return (
-    // <KeyboardAvoidingView
-    //   behavior="padding"
-    //   keyboardVerticalOffset={10}
-    //   style={style.container}
-    // >
     <View style={styles.container}>
       <Text style={styles.title}>Create Your Profile</Text>
       <TextInput
@@ -31,6 +29,10 @@ export default function ProfileInputs() {
         placeholder="Last Name"
         placeholderTextColor={"white"}
       ></TextInput>
+      <ImageChooser
+        profilePicture={profilePicture}
+        setProfilePicture={setProfilePicture}
+      />
       <Text>Date of Birth</Text>
       <View style={styles.dateBlock}>
         <TextInput
@@ -99,7 +101,7 @@ export default function ProfileInputs() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, alignItems: "center" },
   input: {
     height: 40,
     width: 300,
@@ -120,8 +122,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: 60,
     backgroundColor: "rgba(255,255,255,0.2)",
-    marginBottom: 10,
-    marginRight: 10,
+    margin: 10,
     textAlign: "center",
     color: "white",
     paddingHorizontal: 10,
@@ -135,7 +136,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
     paddingHorizontal: 10,
-    
   },
   dropdown2BtnStyle: {
     width: "70%",
@@ -149,7 +149,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   dropdown2DropdownStyle: { backgroundColor: "rgba(255,255,255,0.2)" },
-  dropdown2RowStyle: { backgroundColor: "rgba(255,255,255,1)", borderBottomColor: "#C5C5C5" },
+  dropdown2RowStyle: {
+    backgroundColor: "rgba(255,255,255,1)",
+    borderBottomColor: "#C5C5C5",
+  },
   dropdown2RowTxtStyle: {
     color: "black",
     textAlign: "center",

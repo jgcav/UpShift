@@ -13,7 +13,7 @@ import ProfileInputs from "./ProfileInputs";
 export default function ProfileMakerScreen() {
   return (
     <KeyboardAvoidingView
-    behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={style.container}
       // keyboardVerticalOffset={10}
     >
@@ -27,7 +27,7 @@ export default function ProfileMakerScreen() {
 const style = StyleSheet.create({
   container: {
     backgroundColor: "#3498db",
-    alignItems: "center",
+    // alignItems: "center",
     flex: 1,
   },
 });
