@@ -14,6 +14,7 @@ import ProfileScreen from "./Components/ProfileScreen";
 import ProfileMakerScreen from "./Components/ProfileMakerScreen";
 import MapView from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
+import ChatScreen from "./Components/ChatScreen";
 
 
 export default function App() {
@@ -61,6 +62,10 @@ export default function App() {
           <Stack.Screen
             name="ProfileMaker"
             component={ProfileMakerScreen}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Chat"
+            component={ChatScreen}
           ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
