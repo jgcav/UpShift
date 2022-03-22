@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Text, TouchableOpacity, View } from "react-native";
+import { Button, Text, TouchableOpacity, View, StyleSheet} from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
@@ -25,3 +25,12 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     </View>
   );
 }
+
+const style = StyleSheet.create({
+  buttonContainer: {
+    backgroundColor: "#0984E3",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+});
