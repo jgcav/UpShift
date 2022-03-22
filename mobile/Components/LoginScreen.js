@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -8,11 +8,34 @@ import {
   Touchable,
   KeyboardAvoidingView,
   StatusBar,
+  Button,
 } from "react-native";
+import { useAuth } from "../contexts/AuthContext";
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation: { navigate } }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  function handleSubmit() {
+    setError("");
+    setLoading(true);
+    login(email, password)
+      .then(() => {
+        setEmail("");
+        setPassword("");
+        navigate("Profile");
+      })
+      .catch(() => {
+        setError("Failed to login");
+      });
+    setLoading(false);
+  }
+
   return (
-    <KeyboardAvoidingView behavior="padding" style={style.container}>
+    <View behavior="padding" style={style.container}>
       <StatusBar barStyle="light-content" />
       <TextInput
         style={style.input}
@@ -20,24 +43,42 @@ export default function LoginScreen() {
         placeholderTextColor={"rgba(255,255,255,0.6)"}
         keyboardType="email-address"
         autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
         autoCorrect={false}
       />
       <TextInput
         style={style.input}
         placeholder="Password"
         placeholderTextColor={"rgba(255,255,255,0.6)"}
+        value={password}
+        onChangeText={setPassword}
         secureTextEntry
-        returnKeyType="go"
       />
+      <Text>{error && error}</Text>
       <TouchableOpacity style={style.buttonContainer}>
-        <Text style={style.buttonText}>LOGIN</Text>
+        <Button title="LOGIN" color="black" onPress={handleSubmit} />
       </TouchableOpacity>
-    </KeyboardAvoidingView>
+      <Text>
+        Already have an account?
+        <Text
+          onPress={() => {
+            navigate("SignUp");
+          }}
+        >
+          {" "}
+          Sign Up
+        </Text>
+      </Text>
+    </View>
   );
 }
 const style = StyleSheet.create({
   container: {
-      backgroundColor: "green"
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#0984E3",
   },
   input: {
     height: 40,

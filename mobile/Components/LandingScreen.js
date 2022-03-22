@@ -15,28 +15,28 @@ import {
 } from "react-native";
 import LoginScreen from "./LoginScreen";
 
-export default function LandingScreen({navigation}) {
+export default function LandingScreen({ navigation }) {
   return (
     <View style={style.container}>
       <View style={style.logoContainer}>
-      <Image style={style.logo} source={require("../assets/bike_logo.png")} />
-      <Text style={style.logoText}>UpShift</Text>
-      <View style={style.buttonContainer}>
-      <Pressable
-        title="signUp"
-        onPress={() => navigation.navigate("SignUp")}>
-          <Text style={style.buttonText}>Sign Up</Text>
-        </Pressable>
-      <Pressable
-        title="Login"
-        onPress={() => navigation.navigate("Login")}>
-          <Text style={style.buttonText}>Login</Text>
-        </Pressable>
-      <Pressable
-        title="profile"
-        onPress={() => navigation.navigate("ProfileMakerScreen")}>
-          <Text style={style.buttonText}>Profile</Text>
-        </Pressable>
+        <Image style={style.logo} source={require("../assets/bike_logo.png")} />
+        <Text style={style.logoText}>UpShift</Text>
+        <View style={style.buttonContainer}>
+          <Pressable
+            title="signUp"
+            onPress={() => navigation.navigate("SignUp")}
+          >
+            <Text style={style.buttonText}>Sign Up</Text>
+          </Pressable>
+          <Pressable title="Login" onPress={() => navigation.navigate("Login")}>
+            <Text style={style.buttonText}>Login</Text>
+          </Pressable>
+          <Pressable
+            title="profile"
+            onPress={() => navigation.navigate("Profile")}
+          >
+            <Text style={style.buttonText}>Profile</Text>
+          </Pressable>
         </View>
       </View>
     </View>
@@ -61,7 +61,7 @@ const style = StyleSheet.create({
     color: "#FFF",
     marginTop: 20,
     fontWeight: "bold",
-    fontSize: 20
+    fontSize: 20,
   },
   logoText2: {
     color: "#FFF",
