@@ -21,7 +21,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       <Text>{currentUser && currentUser.email}</Text>
       <Text>{error && error}</Text>
       <TouchableOpacity style={style.buttonContainer}><Button title="logout" color="black" onPress={handleLogout} /></TouchableOpacity>
-      
+      <TouchableOpacity style={style.buttonContainer}><Button title="chat" color="black" onPress={() => {navigate("Chat")}} /></TouchableOpacity>
     </View>
   );
 }
