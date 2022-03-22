@@ -5,6 +5,7 @@ import firebase from "./config/firebase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import LandingScreen from "./Components/LandingScreen";
+import ProfileMakerScreen from "./Components/ProfileMakerScreen";
 
 export default function App() {
   const [data, setData] = useState();
@@ -39,6 +40,10 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Landing">
         <Stack.Screen name="Landing" component={LandingScreen}></Stack.Screen>
+        <Stack.Screen
+          name="ProfileMakerScreen"
+          component={ProfileMakerScreen}
+        ></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
