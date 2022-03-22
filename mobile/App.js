@@ -4,12 +4,15 @@ import React, { useEffect, useState } from "react";
 import firebase from "./config/firebase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+
 import LoginScreen from "./Components/LoginScreen";
 import SignUpScreen from "./Components/SignUpScreen";
 import { AuthProvider } from "./contexts/AuthContext";
 import "react-native-gesture-handler";
 import ProfileScreen from "./Components/ProfileScreen";
 import ProfileMakerScreen from "./Components/ProfileMakerScreen";
+import MapView from "react-native-maps";
+import { PROVIDER_GOOGLE } from "react-native-maps";
 
 export default function App() {
   const [data, setData] = useState();
@@ -36,6 +39,11 @@ export default function App() {
     return (
       <View>
         <Text>Loading...</Text>
+        <MapView
+          style={{ height: "50%", width: "100%" }}
+          provider={PROVIDER_GOOGLE}
+          showsUserLocation={true}
+        />
       </View>
     );
 
