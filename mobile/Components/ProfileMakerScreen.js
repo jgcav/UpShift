@@ -15,7 +15,6 @@ export default function ProfileMakerScreen() {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={style.container}
-      // keyboardVerticalOffset={10}
     >
       <ScrollView>
         <ProfileInputs />
