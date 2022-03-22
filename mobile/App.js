@@ -12,17 +12,17 @@ export default function App() {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    db.get().then((snapshot) => {
-      const data = [];
-      snapshot.forEach((doc) => {
-        const { name } = doc.data();
-        data.push(name);
-      });
-      setData(data);
-      // setLoading(false);
-    });
-  }, []);
+  // useEffect(() => {
+  //   db.get().then((snapshot) => {
+  //     const data = [];
+  //     snapshot.forEach((doc) => {
+  //       const { name } = doc.data();
+  //       data.push(name);
+  //     });
+  //     setData(data);
+  //     // setLoading(false);
+  //   });
+  // }, []);
 
   if (loading) return <RoutePlanner />;
   // return (

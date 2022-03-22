@@ -1,7 +1,8 @@
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import { View } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SearchBar } from "./SearchBar";
+import { fetchgeoCode } from "./api";
 
 //button for toggle certain views ? i.e traffic / buidlings
 // double press to begin mapping shape ?
@@ -10,16 +11,13 @@ export const RoutePlanner = () => {
   const [points, setPoints] = useState([]);
   const [searchLocation, setSearchLocation] = useState("");
 
-  const handelPress = (e) => {
-    //on press grab hold of lat long , store in obj prep for marker
-    // const latLng = {
-    //   latitude: Number(e.nativeEvent.coordinate.latitude),
-    //   longitude: Number(e.nativeEvent.coordinate.longitude),
-    // };
+  useEffect(() => {
+    fetchgeoCode();
+  }, []);
 
+  const handelPress = (e) => {
     const latitude = Number(e.nativeEvent.coordinate.latitude);
     const longitude = Number(e.nativeEvent.coordinate.longitude);
-
     setPoints((currentState) => [
       ...currentState,
       {
@@ -27,13 +25,9 @@ export const RoutePlanner = () => {
         longitude,
       },
     ]);
-
-    //setPoints(latLng);
-    //for conditional rendering of markers,
   };
 
   console.log(searchLocation);
-
   return (
     <View>
       <MapView
