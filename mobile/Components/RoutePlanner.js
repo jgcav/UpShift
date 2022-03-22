@@ -1,22 +1,36 @@
 import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import { View } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SearchBar } from "./SearchBar";
 import fetchGeoCode from "./api";
 
-//button for toggle certain views ? i.e traffic / buidlings
-// double press to begin mapping shape ?
-
 export const RoutePlanner = () => {
+  const _map = useRef(null);
   const [points, setPoints] = useState([]);
-  const [searchLocation, setSearchLocation] = useState("");
+  const [inputLocation, setInputLocation] = useState("");
+  const [geocodeResult, setGeocodeResult] = useState();
+  const [test, setTest] = useState(false);
 
   useEffect(() => {
-    fetchGeoCode();
-    // .then((res) => {
-    //   console.log(res);
-    // });
-    console.log(fetchGeoCode());
+    fetchGeoCode().then((response) => {
+      const position = response.results[0].geometry.location;
+      setGeocodeResult({ position });
+    });
+    setTest(true);
+  }, []);
+
+  useEffect(() => {
+    if (test === true) {
+      if (_map.current) {
+        _map.current.animateCamera({
+          center: {
+            latitude: geocodeResult.position.lat,
+            longitude: geocodeResult.position.lng,
+          },
+          zoom: 15,
+        });
+      }
+    }
   }, []);
 
   const handelPress = (e) => {
@@ -31,14 +45,16 @@ export const RoutePlanner = () => {
     ]);
   };
 
-  console.log(searchLocation);
+  console.log(geocodeResult);
   return (
     <View>
       <MapView
+        ref={_map}
         customMapStyle={mapStyle}
         style={{ height: "100%", width: "100%" }}
         provider={PROVIDER_GOOGLE}
         showsUserLocation={true}
+        showsMyLocationButton={true}
         //UI buttons?
         showsTraffic={true}
         showsCompass={true}
@@ -46,8 +62,8 @@ export const RoutePlanner = () => {
         loadingEnabled={true}
       >
         <SearchBar
-          setSearchLocation={setSearchLocation}
-          searchLocation={searchLocation}
+          setInputLocation={setInputLocation}
+          inputLocation={inputLocation}
         />
         {points.length < 2 ? null : (
           <Polyline coordinates={points} strokeWidth={2} strokeColor="black" />

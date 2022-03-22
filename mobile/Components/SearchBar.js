@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { View, TextInput } from "react-native";
 
-export const SearchBar = ({ setSearchLocation, searchLocation }) => {
-  const updateSearch = (searchLocation) => {
-    setSearchLocation(searchLocation);
+export const SearchBar = ({ setInputLocation, inputLocation }) => {
+  const updateSearch = (input) => {
+    setInputLocation(input);
   };
 
   return (
@@ -11,7 +10,7 @@ export const SearchBar = ({ setSearchLocation, searchLocation }) => {
       <TextInput
         placeholder={"Search"}
         onChangeText={updateSearch}
-        value={searchLocation}
+        value={inputLocation}
         style={{
           borderRadius: 10,
           margin: 10,
