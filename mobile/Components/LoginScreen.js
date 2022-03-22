@@ -57,16 +57,17 @@ export default function LoginScreen({ navigation: { navigate } }) {
       />
       <Text>{error && error}</Text>
       <TouchableOpacity style={style.buttonContainer}>
-        <Button title="LOGIN" color="black" onPress={handleSubmit} />
+        <Button title="LOGIN" color="white" onPress={handleSubmit} />
       </TouchableOpacity>
       <Text>
         Already have an account?
+        {" "}
         <Text
+          style={style.textHighlight}
           onPress={() => {
             navigate("SignUp");
           }}
         >
-          {" "}
           Sign Up
         </Text>
       </Text>
@@ -89,7 +90,7 @@ const style = StyleSheet.create({
     paddingHorizontal: 10,
   },
   buttonContainer: {
-    backgroundColor: "#0984E3",
+    backgroundColor: "rgba(255,255,255,0.2)",
     paddingVertical: 10,
     paddingHorizontal: 10,
     marginBottom: 20,
@@ -99,4 +100,8 @@ const style = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
+  textHighlight: {
+    color: "white",
+    textDecorationLine: "underline"
+  }
 });
