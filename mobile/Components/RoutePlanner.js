@@ -6,33 +6,30 @@ import { useState } from "react";
 // double press to begin mapping shape ?
 
 export const RoutePlanner = () => {
-  const [points, setPoints] = useState();
-  const [toggle, setToggle] = useState(false);
+  const [points, setPoints] = useState([]);
 
   const handelPress = (e) => {
     //on press grab hold of lat long , store in obj prep for marker
-    const latLng = {
-      latitude: Number(e.nativeEvent.coordinate.latitude),
-      longitude: Number(e.nativeEvent.coordinate.longitude),
-    };
+    // const latLng = {
+    //   latitude: Number(e.nativeEvent.coordinate.latitude),
+    //   longitude: Number(e.nativeEvent.coordinate.longitude),
+    // };
 
-    // const latitude = Number(e.nativeEvent.coordinate.latitude);
-    // const longitude = Number(e.nativeEvent.coordinate.longitude);
+    const latitude = Number(e.nativeEvent.coordinate.latitude);
+    const longitude = Number(e.nativeEvent.coordinate.longitude);
 
-    // setPoints((currentState) => [
-    //   ...currentState,
-    //   {
-    //     latitude,
-    //     longitude,
-    //   },
-    // ]);
+    setPoints((currentState) => [
+      ...currentState,
+      {
+        latitude,
+        longitude,
+      },
+    ]);
 
-    setPoints(latLng);
+    //setPoints(latLng);
     //for conditional rendering of markers,
-    setToggle(true);
   };
 
-  console.log(points);
   return (
     <View>
       <MapView
@@ -45,9 +42,8 @@ export const RoutePlanner = () => {
         showsCompass={true}
         onPress={handelPress}
       >
-        {!toggle ? null : (
-          //   <Polyline coordinate={points} strokeWidth={5} strokeColor="black" />
-          <Marker coordinate={points} />
+        {points.length < 2 ? null : (
+          <Polyline coordinates={points} strokeWidth={2} strokeColor="black" />
         )}
       </MapView>
     </View>
