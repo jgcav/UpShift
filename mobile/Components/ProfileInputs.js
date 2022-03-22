@@ -7,33 +7,34 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import SelectDropdown from "react-native-select-dropdown";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function ProfileInputs() {
-  const [selectedGender, setSelectedGender] = useState("male");
-
+  const [selectedGender, setSelectedGender] = useState("");
+  const genders = ["Male", "Female", "Other"];
   return (
     // <KeyboardAvoidingView
     //   behavior="padding"
     //   keyboardVerticalOffset={10}
     //   style={style.container}
     // >
-    <View style={style.container}>
-      <Text style={style.title}>Create Your Profile</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Create Your Profile</Text>
       <TextInput
-        style={style.input}
+        style={styles.input}
         placeholder="First Name"
         placeholderTextColor={"white"}
       ></TextInput>
       <TextInput
-        style={style.input}
+        style={styles.input}
         placeholder="Last Name"
         placeholderTextColor={"white"}
       ></TextInput>
       <Text>Date of Birth</Text>
-      <View style={style.dateBlock}>
+      <View style={styles.dateBlock}>
         <TextInput
-          style={style.dateInput}
+          style={styles.dateInput}
           placeholder="DD"
           placeholderTextColor={"white"}
           keyboardType="number-pad"
@@ -41,7 +42,7 @@ export default function ProfileInputs() {
           returnKeyType={"done"}
         ></TextInput>
         <TextInput
-          style={style.dateInput}
+          style={styles.dateInput}
           placeholder="MM"
           placeholderTextColor={"white"}
           keyboardType="number-pad"
@@ -49,7 +50,7 @@ export default function ProfileInputs() {
           returnKeyType={"done"}
         ></TextInput>
         <TextInput
-          style={style.dateInput}
+          style={styles.dateInput}
           placeholder="YYYY"
           placeholderTextColor={"white"}
           keyboardType="number-pad"
@@ -57,30 +58,47 @@ export default function ProfileInputs() {
           returnKeyType={"done"}
         ></TextInput>
       </View>
-      <Picker
-        selectedValue={selectedGender}
-        onValueChange={(itemValue, itemIndex) => setSelectedGender(itemValue)}
-        mode="dropdown"
-        style={style.dropdown}
-      >
-        <Picker.Item label="Choose Gender:" value="" />
-        <Picker.Item label="Male" value="male" />
-        <Picker.Item label="Female" value="female" />
-        <Picker.Item label="Other" value="other" />
-      </Picker>
+      <View style={styles.dropdown}>
+        <SelectDropdown
+          data={genders}
+          onSelect={(selectedItem, index) => {
+            setSelectedGender(selectedItem);
+          }}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem;
+          }}
+          defaultButtonText={"Select gender"}
+          buttonStyle={styles.dropdown2BtnStyle}
+          buttonTextStyle={styles.dropdown2BtnTxtStyle}
+          renderDropdownIcon={(isOpened) => {
+            return (
+              <FontAwesome
+                name={isOpened ? "chevron-up" : "chevron-down"}
+                color={"#444"}
+                size={18}
+              />
+            );
+          }}
+          dropdownIconPosition={"right"}
+          dropdownStyle={styles.dropdown2DropdownStyle}
+          rowStyle={styles.dropdown2RowStyle}
+          rowTextStyle={styles.dropdown2RowTxtStyle}
+        />
+      </View>
+
       <TextInput
-        style={style.input}
+        style={styles.input}
         placeholder="Bike"
         placeholderTextColor={"white"}
       ></TextInput>
-      <TouchableOpacity style={style.buttonContainer}>
-        <Text style={style.buttonText}>CREATE</Text>
+      <TouchableOpacity style={styles.buttonContainer}>
+        <Text style={styles.buttonText}>CREATE</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   container: { flex: 1 },
   input: {
     height: 40,
@@ -111,14 +129,33 @@ const style = StyleSheet.create({
   dateBlock: {
     flexDirection: "row",
   },
+
   dropdown: {
-    marginVertical: 10,
-    width: 250,
+    padding: 10,
+    marginBottom: 20,
+    textAlign: "center",
     paddingHorizontal: 10,
-    paddingBottom: 10,
-    borderWidth: 1,
-    borderColor: "#666",
+    
   },
+  dropdown2BtnStyle: {
+    width: "70%",
+    height: 40,
+    backgroundColor: "rgba(255,255,255,0.2)",
+    borderRadius: 8,
+  },
+  dropdown2BtnTxtStyle: {
+    color: "#FFF",
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  dropdown2DropdownStyle: { backgroundColor: "rgba(255,255,255,0.2)" },
+  dropdown2RowStyle: { backgroundColor: "rgba(255,255,255,1)", borderBottomColor: "#C5C5C5" },
+  dropdown2RowTxtStyle: {
+    color: "black",
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+
   buttonContainer: {
     backgroundColor: "#0984e3",
     paddingVertical: 10,
