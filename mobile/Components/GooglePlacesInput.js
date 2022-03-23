@@ -9,29 +9,15 @@ import {
   SafeAreaView,
 } from "react-native";
 
-const axios = require("axios");
-const key = "AIzaSyB9qaNzvpNBy-fFRSdbm7FEUHgkVEhvmvw";
+import searchLocation from "./api";
 
 const GooglePlacesInput = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isShowing, setIsShowing] = useState(false);
 
-  const searchLocation = async (text) => {
-    setSearchKeyword({ searchKeyword: text });
-    axios
-      .request({
-        method: "get",
-        url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${searchKeyword}&types=geocode&key=${key}`,
-      })
-      .then((response) => {
-        console.log(response.data.predictions);
-        setSearchResults(response.data.predictions);
-        setIsShowing(true);
-      })
-      .catch((e) => {
-        console.log(e.response);
-      });
+  const handleInput = () => {
+    searchLocation();
   };
 
   return (
@@ -39,19 +25,18 @@ const GooglePlacesInput = () => {
       <View style={styles.autocompleteContainer}>
         <TextInput
           placeholder="Search"
-          returnKeyType="search"
           style={styles.searchBox}
           placeholderTextColor="#000"
-          onChangeText={(text) => searchLocation(text)}
-          value={searchKeyword}
+          onChangeText={handleInput}
         />
 
-        {isShowing && (
+        {/* {isShowing && (
           <FlatList
             data={searchResults}
             renderItem={({ item, index }) => {
               return (
                 <TouchableOpacity
+                  key={index}
                   style={styles.resultItem}
                   onPress={() => {
                     setSearchKeyword(item.description);
@@ -65,7 +50,7 @@ const GooglePlacesInput = () => {
             keyExtractor={(item) => item.id}
             style={styles.searchResultsContainer}
           />
-        )}
+        )} */}
       </View>
     </SafeAreaView>
   );

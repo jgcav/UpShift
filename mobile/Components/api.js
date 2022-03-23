@@ -12,4 +12,20 @@ const fetchGeoCode = async () => {
   return position.data;
 };
 
+const searchLocation = async (text) => {
+  axios
+    .request({
+      method: "get",
+      url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=Manchester&types=geocode&key=${key}`,
+    })
+    .then((response) => {
+      response.data.predictions.forEach((suggestion) => {
+        console.log(suggestion.description);
+      });
+    })
+    .catch((e) => {
+      console.log(e.response);
+    });
+};
+
 export default searchLocation;
