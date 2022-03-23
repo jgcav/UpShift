@@ -3,7 +3,7 @@ import { Text, TextInput, StyleSheet, View, Button } from "react-native";
 import Message from "./Message";
 import io from "socket.io-client";
 import { useAuth } from "../contexts/AuthContext";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, addDoc } from "firebase/firestore";
 import firebase from "../config/firebase";
 const socket = io("http://localhost:4000");
 
@@ -42,6 +42,14 @@ export default function ChatScreen({ route }) {
     // .catch((err) => {});
   }
 
+  function postMessage(content) {
+    return addDoc(collection(db, `rooms/${roomId}/messages`), content).catch(
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
   useEffect(() => {
     socket.emit("join room", roomId);
     console.log("read");
@@ -72,6 +80,7 @@ export default function ChatScreen({ route }) {
       timestamp: new Date(),
     };
     socket.emit("chat message", content);
+    postMessage(content);
     setCurrentMessage("");
   }
 
