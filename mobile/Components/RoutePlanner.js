@@ -1,39 +1,29 @@
 import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useState, useEffect, useRef } from "react";
-import { SearchBar } from "./SearchBar";
+import GooglePlacesInput from "./GooglePlacesInput";
 import fetchGeoCode from "./api";
 
 export const RoutePlanner = () => {
   const _map = useRef(null);
   const [points, setPoints] = useState([]);
+
   const [inputLocation, setInputLocation] = useState("");
-  const [geocodeResult, setGeocodeResult] = useState();
-  const [test, setTest] = useState(false);
 
+  //used for moving camera once search iput recivied
   useEffect(() => {
-    fetchGeoCode().then((response) => {
-      const position = response.results[0].geometry.location;
-      setGeocodeResult({ position });
-    });
-    setTest(true);
-  }, []);
-
-  useEffect(() => {
-    if (test === true) {
-      if (_map.current) {
-        _map.current.animateCamera({
-          center: {
-            latitude: geocodeResult.position.lat,
-            longitude: geocodeResult.position.lng,
-          },
-          zoom: 15,
-        });
-      }
+    if (_map.current) {
+      _map.current.animateCamera({
+        // center: {
+        //   latitude: geocodeResult.position.lat,
+        //   longitude: geocodeResult.position.lng,
+        // },
+        zoom: 15,
+      });
     }
   }, []);
 
-  const handelPress = (e) => {
+  const drawPolyLine = (e) => {
     const latitude = Number(e.nativeEvent.coordinate.latitude);
     const longitude = Number(e.nativeEvent.coordinate.longitude);
     setPoints((currentState) => [
@@ -45,33 +35,46 @@ export const RoutePlanner = () => {
     ]);
   };
 
-  console.log(geocodeResult);
   return (
     <View>
-      <MapView
-        ref={_map}
-        customMapStyle={mapStyle}
-        style={{ height: "100%", width: "100%" }}
-        provider={PROVIDER_GOOGLE}
-        showsUserLocation={true}
-        showsMyLocationButton={true}
-        //UI buttons?
-        showsTraffic={true}
-        showsCompass={true}
-        onPress={handelPress}
-        loadingEnabled={true}
-      >
-        <SearchBar
-          setInputLocation={setInputLocation}
-          inputLocation={inputLocation}
-        />
-        {points.length < 2 ? null : (
-          <Polyline coordinates={points} strokeWidth={2} strokeColor="black" />
-        )}
-      </MapView>
+      <View style={styles.searchbar}>
+        <GooglePlacesInput />
+      </View>
+
+      <View style={styles.map}>
+        <MapView
+          ref={_map}
+          customMapStyle={mapStyle}
+          style={{ height: "100%", width: "100%" }}
+          provider={PROVIDER_GOOGLE}
+          showsUserLocation={true}
+          onPress={drawPolyLine}
+          loadingEnabled={true}
+          //UI buttons?
+          showsTraffic={true}
+          showsMyLocationButton={true}
+        >
+          {points.length < 2 ? null : (
+            <Polyline
+              coordinates={points}
+              strokeWidth={3}
+              strokeColor="black"
+            />
+          )}
+        </MapView>
+      </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  searchbar: {
+    zIndex: 2,
+  },
+  map: {
+    zIndex: 1,
+  },
+});
 
 //simple silver map style taken from google
 const mapStyle = [

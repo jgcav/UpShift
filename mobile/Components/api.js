@@ -12,4 +12,4 @@ const fetchGeoCode = async () => {
   return position.data;
 };
 
-export default fetchGeoCode;
+export default searchLocation;
