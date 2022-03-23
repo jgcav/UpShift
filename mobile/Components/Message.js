@@ -5,8 +5,7 @@ export default function Message({ message }) {
   return (
     <View>
       <Text>{message.message}</Text>
-      <Text>{message.user}</Text>
-      <Text>{message.timestamp}</Text>
+      <Text>{`${message.firstName} ${message.lastName} ${message.timestamp}`}</Text>
     </View>
   );
 }

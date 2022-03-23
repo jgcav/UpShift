@@ -6,6 +6,8 @@ import { useAuth } from "../contexts/AuthContext";
 import {
   collection,
   getDocs,
+  getDoc,
+  doc,
   addDoc,
   query,
   orderBy,
@@ -20,6 +22,7 @@ export default function ChatScreen({ route }) {
   const roomId = route.params.roomId;
   const [currentMessage, setCurrentMessage] = useState("");
   const [chat, setChat] = useState([]);
+  const [userProfile, setUserProfile] = useState({});
   const { currentUser } = useAuth();
 
   function getMessages() {
@@ -35,6 +38,7 @@ export default function ChatScreen({ route }) {
         .reverse()
         .map((doc) => {
           const message = { ...doc.data() };
+          console.log(doc.data());
           const d = new Date(
             Number(
               "" +
@@ -44,7 +48,8 @@ export default function ChatScreen({ route }) {
           );
           const msg = {
             message: message.message,
-            user: message.user,
+            firstName: message.firstName,
+            lastName: message.lastName,
             timestamp: `${("0" + d.getHours()).slice(-2)}:${(
               "0" + d.getMinutes()
             ).slice(-2)}`,
@@ -64,9 +69,25 @@ export default function ChatScreen({ route }) {
     );
   }
 
+  function getProfile() {
+    const docRef = doc(db, "profiles", `${currentUser.uid}`);
+
+    return getDoc(docRef)
+      .then((docSnap) => {
+        console.log(docSnap.data());
+        const { firstName, lastName } = docSnap.data();
+        return { firstName, lastName };
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   useEffect(() => {
     socket.emit("join room", roomId);
-    console.log("read");
+    getProfile().then((profile) => {
+      setUserProfile(profile);
+    });
     getMessages().then((msgs) => {
       setChat(msgs);
     });
@@ -89,7 +110,8 @@ export default function ChatScreen({ route }) {
   function handleSubmit() {
     const content = {
       message: currentMessage,
-      user: currentUser.uid,
+      firstName: userProfile.firstName,
+      lastName: userProfile.lastName,
       roomId: roomId,
       timestamp: new Date(),
     };
