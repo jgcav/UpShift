@@ -25,6 +25,10 @@ export default function ChatScreen({ route }) {
     };
   }, [socket]);
 
+  useEffect(() => {
+    socket.emit("join room", roomId);
+  }, []);
+
   function handleSubmit() {
     const content = {
       message: currentMessage,
