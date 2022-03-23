@@ -32,33 +32,36 @@ export default function ChatScreen({ route }) {
       limit(12)
     );
 
-    return getDocs(q).then((snapshot) => {
-      const messages = snapshot.docs
-        .slice(0)
-        .reverse()
-        .map((doc) => {
-          const message = { ...doc.data() };
-          console.log(doc.data());
-          const d = new Date(
-            Number(
-              "" +
-                message.timestamp.seconds +
-                message.timestamp.nanoseconds / 1000000
-            )
-          );
-          const msg = {
-            message: message.message,
-            firstName: message.firstName,
-            lastName: message.lastName,
-            timestamp: `${("0" + d.getHours()).slice(-2)}:${(
-              "0" + d.getMinutes()
-            ).slice(-2)}`,
-          };
-          return msg;
-        });
-      return messages;
-    });
-    // .catch((err) => {});
+    return getDocs(q)
+      .then((snapshot) => {
+        const messages = snapshot.docs
+          .slice(0)
+          .reverse()
+          .map((doc) => {
+            const message = { ...doc.data() };
+            console.log(doc.data());
+            const d = new Date(
+              Number(
+                "" +
+                  message.timestamp.seconds +
+                  message.timestamp.nanoseconds / 1000000
+              )
+            );
+            const msg = {
+              message: message.message,
+              firstName: message.firstName,
+              lastName: message.lastName,
+              timestamp: `${("0" + d.getHours()).slice(-2)}:${(
+                "0" + d.getMinutes()
+              ).slice(-2)}`,
+            };
+            return msg;
+          });
+        return messages;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function postMessage(content) {
