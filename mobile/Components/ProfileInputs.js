@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  KeyboardAvoidingView,
   TextInput,
   Text,
   View,
@@ -25,9 +24,9 @@ export default function ProfileInputs() {
   const db = getFirestore(firebase);
 
   function postProfile(profile) {
-    return addDoc(collection(db, `dev/profiles`), {
-      firstName: firstName,
-    }).catch((err) => {
+    return addDoc(collection(db, `dev/1`), 
+      profile
+    ).catch((err) => {
       console.log(err);
     });
   }

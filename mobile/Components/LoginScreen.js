@@ -70,6 +70,14 @@ export default function LoginScreen({ navigation: { navigate } }) {
         >
           Sign Up
         </Text>
+        <Text
+          style={style.textHighlight}
+          onPress={() => {
+            navigate("ProfileMaker");
+          }}
+        >
+          ProfileMaker
+        </Text>
       </Text>
     </View>
   );
