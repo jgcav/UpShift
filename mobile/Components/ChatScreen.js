@@ -3,13 +3,52 @@ import { Text, TextInput, StyleSheet, View, Button } from "react-native";
 import Message from "./Message";
 import io from "socket.io-client";
 import { useAuth } from "../contexts/AuthContext";
+import { collection, getDocs } from "firebase/firestore";
+import firebase from "../config/firebase";
 const socket = io("http://localhost:4000");
+
+const db = firebase.firestore();
 
 export default function ChatScreen({ route }) {
   const roomId = route.params.roomId;
   const [currentMessage, setCurrentMessage] = useState("");
   const [chat, setChat] = useState([]);
   const { currentUser } = useAuth();
+
+  function getMessages() {
+    return getDocs(collection(db, "rooms", `${roomId}`, "messages")).then(
+      (snapshot) => {
+        const messages = snapshot.docs.slice(0).map((doc) => {
+          const message = { ...doc.data() };
+          const d = new Date(
+            Number(
+              "" +
+                message.timestamp.seconds +
+                message.timestamp.nanoseconds / 1000000
+            )
+          );
+          const msg = {
+            message: message.message,
+            user: message.user,
+            timestamp: `${("0" + d.getHours()).slice(-2)}:${(
+              "0" + d.getMinutes()
+            ).slice(-2)}`,
+          };
+          return msg;
+        });
+        return messages;
+      }
+    );
+    // .catch((err) => {});
+  }
+
+  useEffect(() => {
+    socket.emit("join room", roomId);
+    console.log("read");
+    getMessages().then((msgs) => {
+      setChat(msgs);
+    });
+  }, []);
 
   useEffect(() => {
     function messageListener(message) {
@@ -24,10 +63,6 @@ export default function ChatScreen({ route }) {
       socket.off("chat message", messageListener);
     };
   }, [socket]);
-
-  useEffect(() => {
-    socket.emit("join room", roomId);
-  }, []);
 
   function handleSubmit() {
     const content = {
