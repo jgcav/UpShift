@@ -9,6 +9,7 @@ import {
   addDoc,
   query,
   orderBy,
+  limit,
 } from "firebase/firestore";
 import firebase from "../config/firebase";
 const socket = io("http://localhost:4000");
@@ -24,7 +25,8 @@ export default function ChatScreen({ route }) {
   function getMessages() {
     const q = query(
       collection(db, "rooms", `${roomId}`, "messages"),
-      orderBy("timestamp", "desc")
+      orderBy("timestamp", "desc"),
+      limit(12)
     );
 
     return getDocs(q).then((snapshot) => {
