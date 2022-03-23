@@ -5,7 +5,8 @@ import io from "socket.io-client";
 import { useAuth } from "../contexts/AuthContext";
 const socket = io("http://localhost:4000");
 
-export default function ChatScreen() {
+export default function ChatScreen({ route }) {
+  const roomId = route.params.roomId;
   const [currentMessage, setCurrentMessage] = useState("");
   const [chat, setChat] = useState([]);
   const { currentUser } = useAuth();
@@ -28,9 +29,9 @@ export default function ChatScreen() {
     const content = {
       message: currentMessage,
       user: currentUser.uid,
+      roomId: roomId,
       timestamp: new Date(),
     };
-    console.log(content);
     socket.emit("chat message", content);
     setCurrentMessage("");
   }
