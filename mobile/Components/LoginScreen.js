@@ -13,8 +13,8 @@ import {
 import { useAuth } from "../contexts/AuthContext";
 
 export default function LoginScreen({ navigation: { navigate } }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("ttt@ttt.com");
+  const [password, setPassword] = useState("password");
   const { login } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -60,8 +60,7 @@ export default function LoginScreen({ navigation: { navigate } }) {
         <Button title="LOGIN" color="white" onPress={handleSubmit} />
       </TouchableOpacity>
       <Text>
-        Already have an account?
-        {" "}
+        Already have an account?{" "}
         <Text
           style={style.textHighlight}
           onPress={() => {
@@ -102,6 +101,6 @@ const style = StyleSheet.create({
   },
   textHighlight: {
     color: "white",
-    textDecorationLine: "underline"
-  }
+    textDecorationLine: "underline",
+  },
 });
