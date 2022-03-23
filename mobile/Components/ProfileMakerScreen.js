@@ -10,14 +10,14 @@ import {
 
 import ProfileInputs from "./ProfileInputs";
 
-export default function ProfileMakerScreen() {
+export default function ProfileMakerScreen({ navigation: { navigate } }) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={style.container}
     >
       <ScrollView>
-        <ProfileInputs />
+        <ProfileInputs navigate={navigate} />
       </ScrollView>
     </KeyboardAvoidingView>
   );

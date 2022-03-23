@@ -10,34 +10,39 @@ import SelectDropdown from "react-native-select-dropdown";
 import ImageChooser from "./ImageChooser";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import firebase from "../config/firebase";
-import { collection, addDoc, getFirestore} from "firebase/firestore";
+import { collection, addDoc, getFirestore } from "firebase/firestore";
+// import { auth } from "../config/firebase";
+import { auth } from "firebase/app";
 
-export default function ProfileInputs() {
+export default function ProfileInputs({ navigate }) {
   const [firstName, onChangeFirstName] = useState("");
   const [lastName, onChangeLastName] = useState("");
   const [profilePicture, setProfilePicture] = useState(null);
   const [date, onChangeDate] = useState("2000-01-01");
   const [selectedGender, setSelectedGender] = useState("");
   const genders = ["Male", "Female", "Other"];
+  ``;
   const [bike, onChangeBike] = useState("");
 
-  const db = getFirestore(firebase);
+  // const db = getFirestore(firebase);
+  const db = firebase.firestore();
+  const user = firebase.auth().currentUser;
+  console.log(user.uid);
 
   function postProfile(profile) {
-    return addDoc(collection(db, `dev/1`), 
-      profile
-    ).catch((err) => {
-      console.log(err);
-    });
+    return addDoc(collection(db, `dev/profile/${user.uid}`), profile).catch(
+      (err) => {
+        console.log(err);
+      }
+    );
   }
-
 
   const onPress = () => {
     const profile = { firstName, lastName, selectedGender, bike };
     console.log(profile);
     postProfile(profile);
-  }
-
+    navigate("Profile");
+  };
 
   return (
     <View style={styles.container}>

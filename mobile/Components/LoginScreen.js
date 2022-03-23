@@ -61,7 +61,6 @@ export default function LoginScreen({ navigation: { navigate } }) {
       </TouchableOpacity>
       <Text>
         Already have an account?
-        {" "}
         <Text
           style={style.textHighlight}
           onPress={() => {
@@ -110,6 +109,6 @@ const style = StyleSheet.create({
   },
   textHighlight: {
     color: "white",
-    textDecorationLine: "underline"
-  }
+    textDecorationLine: "underline",
+  },
 });
