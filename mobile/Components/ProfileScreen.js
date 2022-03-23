@@ -11,7 +11,7 @@ import { useAuth } from "../contexts/AuthContext";
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
   const [error, setError] = useState("");
-  const [room, setRoom] = useState("");
+  const [room, setRoom] = useState("1");
   const handleLogout = () => {
     setError("");
 
