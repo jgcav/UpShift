@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Text, TextInput, StyleSheet, View, Button } from "react-native";
-// import Message from "./Message";
+import Message from "./Message";
 import io from "socket.io-client";
 
 const socket = io("http://localhost:4000");
@@ -20,13 +20,16 @@ export default function ChatScreen() {
   }, [socket]);
 
   function handleSubmit() {
-    console.log(currentMessage);
-    socket.emit("chat message", currentMessage);
+
+    socket.emit("chat message", currentMessage)
   }
 
   return (
     <View style={styles.container}>
-      {/* <Message message={message} /> */}
+      {chat.map((message, index) => {
+        return <Message key={index} message={message} />;
+      })}
+
       <View style={styles.messageField}>
         <TextInput
           placeholder="Enter Your Message Here..."
