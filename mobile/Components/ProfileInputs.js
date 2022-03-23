@@ -17,7 +17,7 @@ import {
   setDoc,
   doc,
 } from "firebase/firestore";
-// import { auth } from "../config/firebase";
+
 import { auth } from "firebase/app";
 
 export default function ProfileInputs({ navigate }) {
@@ -27,10 +27,8 @@ export default function ProfileInputs({ navigate }) {
   const [date, onChangeDate] = useState("2000-01-01");
   const [selectedGender, setSelectedGender] = useState("");
   const genders = ["Male", "Female", "Other"];
-
   const [bike, onChangeBike] = useState("");
 
-  // const db = getFirestore(firebase);
   const db = firebase.firestore();
   const user = firebase.auth().currentUser;
   console.log(user.uid);
