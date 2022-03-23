@@ -39,22 +39,36 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   console.log(profile, "PROFILE");
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text>{currentUser && currentUser.email}</Text>
       <Text>{error && error}</Text>
-      <TouchableOpacity style={style.buttonContainer}>
-        <Button title="logout" color="black" onPress={handleLogout} />
+      <TouchableOpacity style={styles.buttonContainer}>
+        <Button title="Logout" color="black" onPress={handleLogout} />
       </TouchableOpacity>
-      <Text>{profile.bike}</Text>
+      <View style={styles.profileCard}>
+        <Text style={styles.text}>
+          Name: {profile.firstName} {profile.lastName}
+        </Text>
+        <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
+        <Text style={styles.text}>Bike: {profile.bike}</Text>
+      </View>
     </View>
   );
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
+  container: { backgroundColor: "#0984E3", flex: 1 },
   buttonContainer: {
-    backgroundColor: "#0984E3",
+    backgroundColor: "rgba(255,255,255,0.2)",
     paddingVertical: 10,
     paddingHorizontal: 10,
-    marginBottom: 20,
+    margin: 20,
+  },
+  profileCard: {
+    backgroundColor: "#0984E3",
+  },
+  text: {
+    color: "#fff",
+    padding: 10,
   },
 });
