@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import { Button, Text, TouchableOpacity, View, StyleSheet} from "react-native";
+import React, { useState, useEffect } from "react";
+import { Button, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
+import firebase from "../config/firebase";
+import { doc, getDoc } from "firebase/firestore";
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
   const [error, setError] = useState("");
+  const [profile, setProfile] = useState({});
+  const db = firebase.firestore();
 
   const handleLogout = () => {
     setError("");
@@ -16,12 +20,32 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         setError("Failed to log out");
       });
   };
+
+  function getProfile() {
+    const userId = currentUser.uid;
+    const ref = doc(db, "profiles", `${userId}`);
+    // console.log(userId, "uid")
+    return getDoc(ref).then((snapshot) => {
+      // console.log(snapshot.data(), "snapshot")
+      return snapshot.data();
+    });
+  }
+
+  useEffect(() => {
+    getProfile().then((data) => {
+      setProfile(data);
+    });
+  }, []);
+  console.log(profile, "PROFILE");
+
   return (
     <View>
       <Text>{currentUser && currentUser.email}</Text>
       <Text>{error && error}</Text>
-      <TouchableOpacity style={style.buttonContainer}><Button title="logout" color="black" onPress={handleLogout} /></TouchableOpacity>
-      
+      <TouchableOpacity style={style.buttonContainer}>
+        <Button title="logout" color="black" onPress={handleLogout} />
+      </TouchableOpacity>
+      <Text>{profile.bike}</Text>
     </View>
   );
 }
