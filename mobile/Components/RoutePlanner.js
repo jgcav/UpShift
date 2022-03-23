@@ -8,20 +8,23 @@ export const RoutePlanner = () => {
   const _map = useRef(null);
   const [points, setPoints] = useState([]);
 
-  const [inputLocation, setInputLocation] = useState("");
+  const [selectedPlace, setSelectedPlace] = useState({
+    lat: 53.480759,
+    lng: -2.242631,
+  });
 
   //used for moving camera once search iput recivied
   useEffect(() => {
     if (_map.current) {
       _map.current.animateCamera({
-        // center: {
-        //   latitude: geocodeResult.position.lat,
-        //   longitude: geocodeResult.position.lng,
-        // },
-        zoom: 15,
+        center: {
+          latitude: selectedPlace.lat,
+          longitude: selectedPlace.lng,
+        },
+        zoom: 13,
       });
     }
-  }, []);
+  }, [selectedPlace]);
 
   const drawPolyLine = (e) => {
     const latitude = Number(e.nativeEvent.coordinate.latitude);
@@ -38,7 +41,7 @@ export const RoutePlanner = () => {
   return (
     <View>
       <View style={styles.searchbar}>
-        <GooglePlacesInput />
+        <GooglePlacesInput setSelectedPlace={setSelectedPlace} />
       </View>
 
       <View style={styles.map}>

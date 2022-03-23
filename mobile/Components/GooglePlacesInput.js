@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,15 +9,28 @@ import {
   SafeAreaView,
 } from "react-native";
 
-import searchLocation from "./api";
+import { searchLocation, fetchLatLng } from "./api";
 
-const GooglePlacesInput = () => {
+const GooglePlacesInput = ({ setSelectedPlace }) => {
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState();
   const [isShowing, setIsShowing] = useState(false);
 
-  const handleInput = () => {
-    searchLocation();
+  const handleInput = (e) => {
+    setSearchKeyword(e);
+    searchLocation(e).then((data) => {
+      const predictions = data.map((datum) => {
+        return { name: datum.description, id: datum.place_id };
+      });
+      setSearchResults(predictions);
+    });
+    setIsShowing(true);
+  };
+
+  const moveMap = (id) => {
+    fetchLatLng(id).then((data) => {
+      setSelectedPlace(data);
+    });
   };
 
   return (
@@ -28,9 +41,10 @@ const GooglePlacesInput = () => {
           style={styles.searchBox}
           placeholderTextColor="#000"
           onChangeText={handleInput}
+          value={searchKeyword}
         />
 
-        {/* {isShowing && (
+        {isShowing && (
           <FlatList
             data={searchResults}
             renderItem={({ item, index }) => {
@@ -39,18 +53,17 @@ const GooglePlacesInput = () => {
                   key={index}
                   style={styles.resultItem}
                   onPress={() => {
-                    setSearchKeyword(item.description);
-                    setIsShowing(false);
+                    moveMap(item.id);
                   }}
                 >
-                  <Text>{item.description}</Text>
+                  <Text>{item.name}</Text>
                 </TouchableOpacity>
               );
             }}
             keyExtractor={(item) => item.id}
             style={styles.searchResultsContainer}
           />
-        )} */}
+        )}
       </View>
     </SafeAreaView>
   );

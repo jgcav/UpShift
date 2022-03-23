@@ -1,31 +1,14 @@
 const axios = require("axios");
 const key = "AIzaSyB9qaNzvpNBy-fFRSdbm7FEUHgkVEhvmvw";
 
-const fetchGeoCode = async () => {
-  const address = "10 teably avenue";
-  const city = "Manchester";
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${
-    address + city
-  }&key=${key}`;
-
-  const position = await axios.get(url);
-  return position.data;
+export const fetchLatLng = async (place_id) => {
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${place_id}&key=${key}`;
+  const latLng = await axios.get(url);
+  return latLng.data.results[0].geometry.location;
 };
 
-const searchLocation = async (text) => {
-  axios
-    .request({
-      method: "get",
-      url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=Manchester&types=geocode&key=${key}`,
-    })
-    .then((response) => {
-      response.data.predictions.forEach((suggestion) => {
-        console.log(suggestion.description);
-      });
-    })
-    .catch((e) => {
-      console.log(e.response);
-    });
+export const searchLocation = async (text) => {
+  const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&components=country:GB&key=${key}`;
+  const suggestions = await axios.get(url);
+  return suggestions.data.predictions;
 };
-
-export default searchLocation;
