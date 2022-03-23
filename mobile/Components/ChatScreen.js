@@ -3,7 +3,13 @@ import { Text, TextInput, StyleSheet, View, Button } from "react-native";
 import Message from "./Message";
 import io from "socket.io-client";
 import { useAuth } from "../contexts/AuthContext";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import firebase from "../config/firebase";
 const socket = io("http://localhost:4000");
 
@@ -16,9 +22,16 @@ export default function ChatScreen({ route }) {
   const { currentUser } = useAuth();
 
   function getMessages() {
-    return getDocs(collection(db, "rooms", `${roomId}`, "messages")).then(
-      (snapshot) => {
-        const messages = snapshot.docs.slice(0).map((doc) => {
+    const q = query(
+      collection(db, "rooms", `${roomId}`, "messages"),
+      orderBy("timestamp", "desc")
+    );
+
+    return getDocs(q).then((snapshot) => {
+      const messages = snapshot.docs
+        .slice(0)
+        .reverse()
+        .map((doc) => {
           const message = { ...doc.data() };
           const d = new Date(
             Number(
@@ -36,9 +49,8 @@ export default function ChatScreen({ route }) {
           };
           return msg;
         });
-        return messages;
-      }
-    );
+      return messages;
+    });
     // .catch((err) => {});
   }
 
