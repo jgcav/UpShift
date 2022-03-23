@@ -2,7 +2,6 @@ import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import { View, StyleSheet } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import GooglePlacesInput from "./GooglePlacesInput";
-import fetchGeoCode from "./api";
 
 export const RoutePlanner = () => {
   const _map = useRef(null);
@@ -13,7 +12,6 @@ export const RoutePlanner = () => {
     lng: -2.242631,
   });
 
-  //used for moving camera once search iput recivied
   useEffect(() => {
     if (_map.current) {
       _map.current.animateCamera({

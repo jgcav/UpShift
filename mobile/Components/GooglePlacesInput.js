@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -31,6 +31,7 @@ const GooglePlacesInput = ({ setSelectedPlace }) => {
     fetchLatLng(id).then((data) => {
       setSelectedPlace(data);
     });
+    setSearchKeyword("");
   };
 
   return (
@@ -42,6 +43,7 @@ const GooglePlacesInput = ({ setSelectedPlace }) => {
           placeholderTextColor="#000"
           onChangeText={handleInput}
           value={searchKeyword}
+          returnKeyType="search"
         />
 
         {isShowing && (
@@ -54,6 +56,7 @@ const GooglePlacesInput = ({ setSelectedPlace }) => {
                   style={styles.resultItem}
                   onPress={() => {
                     moveMap(item.id);
+                    setIsShowing(false);
                   }}
                 >
                   <Text>{item.name}</Text>
