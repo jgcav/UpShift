@@ -41,7 +41,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       </TouchableOpacity>
       <TextInput
         placeholder="room"
-        placeholderTextColor={"rgba(255,255,255,0.6)"}
+        placeholderTextColor="black"
         autoCapitalize="none"
         value={room}
         onChangeText={setRoom}
