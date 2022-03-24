@@ -12,21 +12,17 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { useState, useEffect } from "react";
 
 // remember to add users profile picture after line 12
-export default function RiderCard({ rider, navigate }) {
+export default function RiderCard({ rider, navigate, setLoading }) {
   const [profileUrl, setProfileUrl] = useState("");
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storage = getStorage();
     getDownloadURL(ref(storage, `images/${rider.uid}/profile.jpg`)).then(
       (url) => {
         setProfileUrl(url);
-        setLoading(false);
       }
     );
   }, []);
-
-  if (loading) return <Text>Loading...</Text>;
 
   return (
     <TouchableOpacity
@@ -46,7 +42,15 @@ export default function RiderCard({ rider, navigate }) {
       <View style={styles.infoContainer}>
         <Text>{`${rider.firstName} ${rider.lastName}`}</Text>
         <View style={styles.infoLower}>
-          <Text style={styles.textLower}>1 mile</Text>
+          <Image
+            style={styles.location}
+            source={require("../images/Location.png")}
+          />
+          <Text style={styles.textLower}>1 km</Text>
+          <Image
+            style={styles.bike}
+            source={require("../images/motorbike-icon.png")}
+          />
           <Text style={styles.textLower}>{`${rider.bike}`} </Text>
         </View>
       </View>
@@ -80,11 +84,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flex: 1,
     alignItems: "flex-end",
-    justifyContent: "flex-start",
+    justifyContent: "flex-end",
   },
   textLower: {
     flex: 1,
-    alignItems: "flex-end",
   },
   requestContainer: {
     flex: 2,
@@ -95,6 +98,17 @@ const styles = StyleSheet.create({
     width: 66,
     height: 66,
     borderRadius: 66 / 2,
+  },
+  location: {
+    width: 15,
+    height: 15,
+    marginBottom: 3,
+  },
+  bike: {
+    width: 17,
+    height: 15,
+    marginBottom: 3,
+    marginRight: 2,
   },
   button: {
     alignItems: "center",
