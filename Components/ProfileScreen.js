@@ -9,7 +9,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   const [error, setError] = useState("");
   const [profile, setProfile] = useState({});
   const db = firebase.firestore();
-  
+
   const handleLogout = () => {
     setError("");
 
@@ -50,6 +50,13 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         </Text>
         <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
         <Text style={styles.text}>Bike: {profile.bike}</Text>
+        <Button
+          title="Find Rider"
+          color="black"
+          onPress={() => {
+            navigate("Rider Finder");
+          }}
+        />
       </View>
     </View>
   );
