@@ -1,5 +1,12 @@
 import React from "react";
-import { Text, View, Button, Image, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  Button,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { useState, useEffect } from "react";
 
@@ -17,22 +24,22 @@ export default function RiderCard({ rider, navigate }) {
   }, []);
 
   return (
-    <View>
+    <TouchableOpacity
+      onPress={() => {
+        navigate("Rider Profile", { rider, profileUrl });
+      }}
+    >
       <Image
         style={styles.logo}
         source={{
           uri: profileUrl,
         }}
       />
-      <Text
-        onPress={() => {
-          navigate("Rider Profile", { rider, profileUrl });
-        }}
-      >{`${rider.firstName} ${rider.lastName}`}</Text>
+      <Text>{`${rider.firstName} ${rider.lastName}`}</Text>
       <Text>location : 1mile</Text>
       <Text>Bike: {`${rider.bike}`} </Text>
       <Button title="Message" color="black" onPress={() => {}} />
-    </View>
+    </TouchableOpacity>
   );
 }
 const styles = StyleSheet.create({
