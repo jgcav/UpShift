@@ -1,5 +1,5 @@
 import MapView, { Polyline, PROVIDER_GOOGLE, Polygon } from "react-native-maps";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Button } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import GooglePlacesInput from "./GooglePlacesInput";
 import { snapToRoad } from "./api";
@@ -26,6 +26,7 @@ export const RoutePlanner = () => {
   }, [selectedPlace]);
 
   const drawPolyLine = (e) => {
+    console.log(e);
     const latitude = Number(e.nativeEvent.coordinate.latitude);
     const longitude = Number(e.nativeEvent.coordinate.longitude);
     setPoints((currentState) => [
@@ -52,7 +53,6 @@ export const RoutePlanner = () => {
   };
 
   const resetPolygon = () => {
-    console.log("reset");
     setPoints([]);
   };
 
@@ -61,9 +61,12 @@ export const RoutePlanner = () => {
       <View style={styles.searchbar}>
         <GooglePlacesInput setSelectedPlace={setSelectedPlace} />
       </View>
-
+      <View style={styles.clearbutton}>
+        <Button title="Clear" color="black" onPress={resetPolygon} />
+      </View>
       <View style={styles.map}>
         <MapView
+          zoomTapEnabled={false}
           ref={_map}
           customMapStyle={mapStyle}
           style={{ height: "100%", width: "100%" }}
@@ -82,7 +85,6 @@ export const RoutePlanner = () => {
               strokeWidth={3}
               strokeColor="black"
               tappable={true}
-              onPress={resetPolygon}
             />
           )}
         </MapView>
@@ -92,6 +94,9 @@ export const RoutePlanner = () => {
 };
 
 const styles = StyleSheet.create({
+  clearbutton: {
+    zIndex: 2,
+  },
   searchbar: {
     zIndex: 2,
   },
