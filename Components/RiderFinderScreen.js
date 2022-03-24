@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { View, Text, ScrollView, StyleSheet, Image } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import firebase from "../config/firebase.js";
 import RiderCard from "./RiderCard";
@@ -11,6 +11,7 @@ const db = firebase.firestore();
 export default function RiderFinder({ navigation: { navigate } }) {
   const [riders, setRiders] = useState([]);
   const { currentUser } = useAuth();
+  const [loading, setLoading] = useState(true);
 
   function getRider() {
     const q = collection(db, "profiles");
@@ -29,13 +30,37 @@ export default function RiderFinder({ navigation: { navigate } }) {
   useEffect(() => {
     getRider().then((profiles) => {
       setRiders(profiles);
+      setLoading(false);
     });
   }, []);
+  if (loading)
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          textAlign: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Image
+          style={styles.loading}
+          source={require("../images/GREY-GEAR-LOADING.gif")}
+        />
+      </View>
+    );
 
   return (
     <ScrollView style={styles.container}>
       {riders.map((rider, index) => {
-        return <RiderCard rider={rider} navigate={navigate} key={index} />;
+        return (
+          <RiderCard
+            rider={rider}
+            navigate={navigate}
+            setLoading={setLoading}
+            key={index}
+          />
+        );
       })}
     </ScrollView>
   );
@@ -45,5 +70,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#0984E3",
     flex: 1,
+  },
+  loading: {
+    width: 100,
+    height: 100,
   },
 });
