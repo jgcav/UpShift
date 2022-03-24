@@ -2,6 +2,7 @@ import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import { View, StyleSheet } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import GooglePlacesInput from "./GooglePlacesInput";
+import { snapToRoad } from "./api";
 
 export const RoutePlanner = () => {
   const _map = useRef(null);
@@ -36,6 +37,20 @@ export const RoutePlanner = () => {
     ]);
   };
 
+  const snapPoints = () => {
+    let pointsString = "";
+    points.forEach((point) => {
+      pointsString += point.latitude + "," + point.longitude + "|";
+    });
+    const preppedPoints = pointsString.slice(0, -1);
+    snapToRoad(preppedPoints).then((data) => {
+      const snappedPoints = data.map((datum) => {
+        return datum.location;
+      });
+      setPoints(snappedPoints);
+    });
+  };
+
   return (
     <View>
       <View style={styles.searchbar}>
@@ -50,6 +65,7 @@ export const RoutePlanner = () => {
           provider={PROVIDER_GOOGLE}
           showsUserLocation={true}
           onPress={drawPolyLine}
+          onLongPress={snapPoints}
           loadingEnabled={true}
           //UI buttons?
           showsTraffic={true}
