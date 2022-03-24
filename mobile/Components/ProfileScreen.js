@@ -3,6 +3,7 @@ import { Button, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import firebase from "../config/firebase";
 import { doc, getDoc } from "firebase/firestore";
+
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
   const [error, setError] = useState("");
@@ -24,9 +25,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   function getProfile() {
     const userId = currentUser.uid;
     const ref = doc(db, "profiles", `${userId}`);
-    // console.log(userId, "uid")
     return getDoc(ref).then((snapshot) => {
-      // console.log(snapshot.data(), "snapshot")
       return snapshot.data();
     });
   }
@@ -36,7 +35,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       setProfile(data);
     });
   }, []);
-  console.log(profile, "PROFILE");
 
   return (
     <View style={styles.container}>
@@ -45,6 +43,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       <TouchableOpacity style={styles.buttonContainer}>
         <Button title="Logout" color="black" onPress={handleLogout} />
       </TouchableOpacity>
+      <Text>Your Profile</Text>
       <View style={styles.profileCard}>
         <Text style={styles.text}>
           Name: {profile.firstName} {profile.lastName}

@@ -10,15 +10,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import ImageChooser from "./ImageChooser";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import firebase from "../config/firebase";
-import {
-  collection,
-  addDoc,
-  getFirestore,
-  setDoc,
-  doc,
-} from "firebase/firestore";
-
-import { auth } from "firebase/app";
+import { setDoc, doc } from "firebase/firestore";
 
 export default function ProfileInputs({ navigate }) {
   const [firstName, onChangeFirstName] = useState("");
@@ -31,7 +23,6 @@ export default function ProfileInputs({ navigate }) {
 
   const db = firebase.firestore();
   const user = firebase.auth().currentUser;
-  console.log(user.uid);
 
   function postProfile(profile) {
     return setDoc(doc(db, "profiles", `${user.uid}`), profile).catch((err) => {
@@ -41,7 +32,6 @@ export default function ProfileInputs({ navigate }) {
 
   const onPress = () => {
     const profile = { firstName, lastName, selectedGender, bike };
-    console.log(profile);
     postProfile(profile);
     navigate("Profile");
   };

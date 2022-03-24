@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  StyleSheet,
-  ScrollView,
-  KeyboardAvoidingView,
-} from "react-native";
+import { StyleSheet, ScrollView, KeyboardAvoidingView } from "react-native";
 
 import ProfileInputs from "./ProfileInputs";
 
@@ -26,7 +19,6 @@ export default function ProfileMakerScreen({ navigation: { navigate } }) {
 const style = StyleSheet.create({
   container: {
     backgroundColor: "#3498db",
-    // alignItems: "center",
     flex: 1,
   },
 });
