@@ -33,14 +33,20 @@ export default function ProfileInputs({ navigate }) {
 
   const postImage = (image) => {
     const storage = getStorage();
-    const storageRef = ref(storage, "test.jpg");
+    const storageRef = ref(storage, `images/${user.uid}/profile.jpg`);
     uploadBytes(storageRef, image).then((snapshot) => {
       console.log("Uploaded a blob or file!");
     });
   };
 
   const onPress = () => {
-    const profile = { firstName, lastName, selectedGender, bike };
+    const profile = {
+      firstName,
+      lastName,
+      selectedGender,
+      bike,
+      uid: user.uid,
+    };
     postProfile(profile);
     postImage(profilePicture);
     navigate("Profile");
