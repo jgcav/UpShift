@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button, Image, StyleSheet } from "react-native";
+import { View, Text, Button, Image, StyleSheet, Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
 export default function ImageChooser({ profilePicture, setProfilePicture }) {
@@ -10,9 +10,11 @@ export default function ImageChooser({ profilePicture, setProfilePicture }) {
       aspect: [4, 3],
       quality: 1,
     }).then((result) => {
-      console.log(result);
       if (!result.cancelled) {
-        setProfilePicture(result.uri);
+        let uri = result.uri;
+        const uploadUri =
+          Platform.OS === "ios" ? uri.replace("file://", "") : uri;
+        setProfilePicture(uploadUri);
       }
     });
   };
