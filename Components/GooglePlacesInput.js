@@ -108,6 +108,10 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
 
+  autocompleteContainer: {
+    backgroundColor: "red",
+  },
+
   container: {
     flex: 1,
     alignItems: "center",

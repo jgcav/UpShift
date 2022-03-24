@@ -4,9 +4,14 @@ import { useState, useEffect, useRef } from "react";
 import GooglePlacesInput from "./GooglePlacesInput";
 import { snapToRoad } from "./api";
 
+import firebase from "../config/firebase";
+import { doc, updateDoc } from "firebase/firestore";
+const db = firebase.firestore();
+
 export const RoutePlanner = () => {
   const _map = useRef(null);
   const [points, setPoints] = useState([]);
+  const [snapped, setSnapped] = useState(false);
 
   const [selectedPlace, setSelectedPlace] = useState({
     lat: 53.480759,
@@ -26,7 +31,6 @@ export const RoutePlanner = () => {
   }, [selectedPlace]);
 
   const drawPolyLine = (e) => {
-    console.log(e);
     const latitude = Number(e.nativeEvent.coordinate.latitude);
     const longitude = Number(e.nativeEvent.coordinate.longitude);
     setPoints((currentState) => [
@@ -50,10 +54,25 @@ export const RoutePlanner = () => {
       });
       setPoints(snappedPoints);
     });
+    setSnapped(true);
   };
 
   const resetPolygon = () => {
     setPoints([]);
+  };
+
+  const saveRoute = () => {
+    if (snapped) {
+      const route = { myRoute: points };
+      return updateDoc(
+        doc(db, "profiles", "kXLvtv4DwcswDgqpVGp2"),
+        route
+      ).catch((e) => {
+        console.log(e);
+      });
+    } else {
+      console.log("please snapp to road before saving");
+    }
   };
 
   return (
@@ -63,6 +82,7 @@ export const RoutePlanner = () => {
       </View>
       <View style={styles.clearbutton}>
         <Button title="Clear" color="black" onPress={resetPolygon} />
+        <Button title="Save" color="black" onPress={saveRoute} />
       </View>
       <View style={styles.map}>
         <MapView
