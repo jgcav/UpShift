@@ -6,6 +6,7 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  ScrollView,
 } from "react-native";
 
 export default function RiderProfileScreen({ route }) {
@@ -22,20 +23,22 @@ export default function RiderProfileScreen({ route }) {
         />
       </View>
       <View style={styles.info}>
-        <View style={styles.infoTop}>
-          <Text
-            style={styles.name}
-          >{`${rider.firstName} ${rider.lastName}`}</Text>
-          {/* <Text>405 followers</Text> */}
-          <Text style={styles.age}>{rider.age}</Text>
-        </View>
+        <ScrollView>
+          <View style={styles.infoTop}>
+            <Text
+              style={styles.name}
+            >{`${rider.firstName} ${rider.lastName}`}</Text>
+            {/* <Text>405 followers</Text> */}
+            <Text style={styles.age}>{rider.age}</Text>
+          </View>
 
-        <Text style={styles.bio}>{rider.bio}</Text>
-        <Text style={styles.bike}>{rider.bike}</Text>
-        <View style={styles.infoLower}>
-          <Text style={styles.gender}>{rider.selectedGender}</Text>
-          <Text style={styles.distance}>1 mile</Text>
-        </View>
+          <Text style={styles.bio}>{rider.bio}</Text>
+          <Text style={styles.bike}>{rider.bike}</Text>
+          <View style={styles.infoLower}>
+            <Text style={styles.gender}>{rider.selectedGender}</Text>
+            <Text style={styles.distance}>1 mile</Text>
+          </View>
+        </ScrollView>
       </View>
 
       <TouchableOpacity style={styles.button}>

@@ -26,7 +26,7 @@ export default function RiderCard({ rider, navigate }) {
     );
   }, []);
 
-  if (loading) return <Text>Loading..</Text>;
+  if (loading) return <Text>Loading...</Text>;
 
   return (
     <TouchableOpacity
@@ -62,16 +62,18 @@ export default function RiderCard({ rider, navigate }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    marginHorizontal: 10,
     marginTop: 10,
     backgroundColor: "#299DF6",
   },
   imageContainer: {
     flex: 1.1,
+    alignItems: "center",
+    marginLeft: 8,
+    justifyContent: "flex-end",
   },
   infoContainer: {
     flex: 3,
-    paddingHorizontal: 5,
+    paddingHorizontal: 10,
     paddingVertical: 10,
   },
   infoLower: {
@@ -85,12 +87,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   requestContainer: {
-    flex: 1.5,
+    flex: 2,
     justifyContent: "center",
   },
   logo: {
     marginVertical: 5,
-    marginLeft: 5,
     width: 66,
     height: 66,
     borderRadius: 66 / 2,
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 5,
-    paddingHorizontal: 32,
+    paddingHorizontal: 10,
     borderRadius: 8,
     elevation: 3,
     backgroundColor: "black",
