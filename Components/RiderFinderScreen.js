@@ -28,7 +28,6 @@ export default function RiderFinder({ navigation: { navigate } }) {
 
   useEffect(() => {
     getRider().then((profiles) => {
-      console.log(profiles, "in pro");
       setRiders(profiles);
     });
   }, []);

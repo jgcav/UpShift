@@ -11,6 +11,7 @@ import ProfileMakerScreen from "./Components/ProfileMakerScreen";
 import ChatScreen from "./Components/ChatScreen";
 import ChatListScreen from "./Components/ChatListScreen";
 import RiderFinderScreen from "./Components/RiderFinderScreen";
+import RiderProfileScreen from "./Components/RiderProfileScreen";
 
 export default function App() {
   const [loading, setLoading] = useState(false);
@@ -49,6 +50,10 @@ export default function App() {
           <Stack.Screen
             name="Rider Finder"
             component={RiderFinderScreen}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Rider Profile"
+            component={RiderProfileScreen}
           ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>

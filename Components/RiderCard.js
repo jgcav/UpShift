@@ -11,25 +11,24 @@ export default function RiderCard({ rider, navigate }) {
     const storage = getStorage();
     getDownloadURL(ref(storage, `images/${rider.uid}/profile.jpg`)).then(
       (url) => {
-        console.log(url);
         setProfileUrl(url);
       }
     );
   }, []);
 
   return (
-    <View
-      onPress={() => {
-        navigate("rider profile ");
-      }}
-    >
+    <View>
       <Image
         style={styles.logo}
         source={{
           uri: profileUrl,
         }}
       />
-      <Text>{`${rider.firstName} ${rider.lastName}`}</Text>
+      <Text
+        onPress={() => {
+          navigate("Rider Profile", { rider, profileUrl });
+        }}
+      >{`${rider.firstName} ${rider.lastName}`}</Text>
       <Text>location : 1mile</Text>
       <Text>Bike: {`${rider.bike}`} </Text>
       <Button title="Message" color="black" onPress={() => {}} />
