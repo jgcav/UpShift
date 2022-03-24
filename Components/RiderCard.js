@@ -11,19 +11,22 @@ import {
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { useState, useEffect } from "react";
 
-
 // remember to add users profile picture after line 12
 export default function RiderCard({ rider, navigate }) {
   const [profileUrl, setProfileUrl] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storage = getStorage();
     getDownloadURL(ref(storage, `images/${rider.uid}/profile.jpg`)).then(
       (url) => {
         setProfileUrl(url);
+        setLoading(false);
       }
     );
   }, []);
+
+  if (loading) return <Text>Loading..</Text>;
 
   return (
     <TouchableOpacity
@@ -55,9 +58,6 @@ export default function RiderCard({ rider, navigate }) {
     </TouchableOpacity>
   );
 }
-
-
-
 
 const styles = StyleSheet.create({
   container: {

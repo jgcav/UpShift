@@ -11,7 +11,6 @@ import {
 export default function RiderProfileScreen({ route }) {
   const { height, width } = Dimensions.get("window");
   const { rider, profileUrl } = route.params;
-  console.log(rider, profileUrl);
   return (
     <View style={styles.container}>
       <View style={styles.imgContainer}>
