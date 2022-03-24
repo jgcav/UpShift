@@ -11,6 +11,7 @@ import ImageChooser from "./ImageChooser";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import firebase from "../config/firebase";
 import { setDoc, doc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 export default function ProfileInputs({ navigate }) {
   const [firstName, onChangeFirstName] = useState("");
@@ -30,9 +31,18 @@ export default function ProfileInputs({ navigate }) {
     });
   }
 
+  const postImage = (image) => {
+    const storage = getStorage();
+    const storageRef = ref(storage, "test.jpg");
+    uploadBytes(storageRef, image).then((snapshot) => {
+      console.log("Uploaded a blob or file!");
+    });
+  };
+
   const onPress = () => {
     const profile = { firstName, lastName, selectedGender, bike };
     postProfile(profile);
+    postImage(profilePicture);
     navigate("Profile");
   };
 
