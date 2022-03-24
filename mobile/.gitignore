@@ -10,7 +10,8 @@ npm-debug.*
 *.orig.*
 web-build/
 
+gMapsKeys
+
 # macOS
 .DS_Store
 .env 
-app.config.js
