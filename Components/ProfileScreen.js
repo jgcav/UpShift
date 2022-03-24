@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Button, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import {
+  Button,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  Image,
+} from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import firebase from "../config/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
   const [error, setError] = useState("");
   const [profile, setProfile] = useState({});
   const db = firebase.firestore();
-  
+  const userId = currentUser.uid;
+  const [profilePicture, setProfilePicture] = useState("");
+
   const handleLogout = () => {
     setError("");
 
@@ -23,16 +33,26 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   };
 
   function getProfile() {
-    const userId = currentUser.uid;
     const ref = doc(db, "profiles", `${userId}`);
     return getDoc(ref).then((snapshot) => {
       return snapshot.data();
     });
   }
 
+  function getProfilePicture() {
+    const storage = getStorage();
+    const pathReference = ref(storage, `images/${userId}/profile.jpg`);
+    return getDownloadURL(pathReference).then((url) => {
+      return url;
+    });
+  }
+
   useEffect(() => {
     getProfile().then((data) => {
       setProfile(data);
+    });
+    getProfilePicture().then((url) => {
+      setProfilePicture(url);
     });
   }, []);
 
@@ -50,6 +70,13 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         </Text>
         <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
         <Text style={styles.text}>Bike: {profile.bike}</Text>
+
+        <Image
+          style={styles.tinyLogo}
+          source={{
+            uri: profilePicture,
+          }}
+        />
       </View>
     </View>
   );
