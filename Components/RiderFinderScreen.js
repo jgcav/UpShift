@@ -43,6 +43,7 @@ export default function RiderFinder({ navigation: { navigate } }) {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#0984E3",
     flex: 1,
   },
 });
