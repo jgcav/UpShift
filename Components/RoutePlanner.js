@@ -1,4 +1,4 @@
-import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Polyline, PROVIDER_GOOGLE, Polygon } from "react-native-maps";
 import { View, StyleSheet } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import GooglePlacesInput from "./GooglePlacesInput";
@@ -51,6 +51,11 @@ export const RoutePlanner = () => {
     });
   };
 
+  const resetPolygon = () => {
+    console.log("reset");
+    setPoints([]);
+  };
+
   return (
     <View>
       <View style={styles.searchbar}>
@@ -72,10 +77,12 @@ export const RoutePlanner = () => {
           showsMyLocationButton={true}
         >
           {points.length < 2 ? null : (
-            <Polyline
+            <Polygon
               coordinates={points}
               strokeWidth={3}
               strokeColor="black"
+              tappable={true}
+              onPress={resetPolygon}
             />
           )}
         </MapView>

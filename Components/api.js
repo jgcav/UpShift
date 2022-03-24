@@ -15,6 +15,7 @@ export const searchLocation = async (text) => {
 };
 
 export const snapToRoad = async (points) => {
+  console.log(points);
   const url = `https://roads.googleapis.com/v1/snapToRoads?path=${points}&interpolate=true&key=${key}`;
   try {
     const newPoints = await axios.get(url);
