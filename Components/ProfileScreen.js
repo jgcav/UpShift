@@ -57,6 +57,13 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             navigate("Rider Finder");
           }}
         />
+        <Button
+          title="Chat"
+          color="black"
+          onPress={() => {
+            navigate("ChatList");
+          }}
+        />
       </View>
     </View>
   );
