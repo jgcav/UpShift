@@ -5,7 +5,6 @@ import firebase from "./config/firebase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-
 import LoginScreen from "./Components/LoginScreen";
 import SignUpScreen from "./Components/SignUpScreen";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -15,7 +14,7 @@ import ProfileMakerScreen from "./Components/ProfileMakerScreen";
 import MapView from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import ChatScreen from "./Components/ChatScreen";
-
+import ChatListScreen from "./Components/ChatListScreen";
 
 export default function App() {
   const [data, setData] = useState();
@@ -52,25 +51,36 @@ export default function App() {
 
   const Stack = createStackNavigator();
   return (
-
     <AuthProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen name="Login" component={LoginScreen }options={{ headerShown: false }}></Stack.Screen>
-          <Stack.Screen name="SignUp" component={SignUpScreen}options={{ headerShown: false }}></Stack.Screen>
-          <Stack.Screen name="Profile" component={ProfileScreen}options={{ headerShown: false }}></Stack.Screen>
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="SignUp"
+            component={SignUpScreen}
+            options={{ headerShown: false }}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Profile"
+            component={ProfileScreen}
+            options={{ headerShown: false }}
+          ></Stack.Screen>
           <Stack.Screen
             name="ProfileMaker"
             component={ProfileMakerScreen}
           ></Stack.Screen>
+          <Stack.Screen name="Chat" component={ChatScreen}></Stack.Screen>
           <Stack.Screen
-            name="Chat"
-            component={ChatScreen}
+            name="ChatList"
+            component={ChatListScreen}
           ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>
-
   );
 }
 

@@ -77,7 +77,7 @@ export default function ChatScreen({ route }) {
 
     return getDoc(docRef)
       .then((docSnap) => {
-        console.log(docSnap.data());
+        console.log(docSnap);
         const { firstName, lastName } = docSnap.data();
         return { firstName, lastName };
       })

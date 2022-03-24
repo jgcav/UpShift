@@ -11,7 +11,6 @@ import { useAuth } from "../contexts/AuthContext";
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
   const [error, setError] = useState("");
-  const [room, setRoom] = useState("1");
   const handleLogout = () => {
     setError("");
 
@@ -35,18 +34,10 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           title="chat"
           color="black"
           onPress={() => {
-            navigate("Chat", { roomId: room });
+            navigate("ChatList");
           }}
         />
       </TouchableOpacity>
-      <TextInput
-        placeholder="room"
-        placeholderTextColor="black"
-        autoCapitalize="none"
-        value={room}
-        onChangeText={setRoom}
-        autoCorrect={false}
-      />
     </View>
   );
 }
