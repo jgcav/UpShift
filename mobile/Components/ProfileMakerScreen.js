@@ -1,24 +1,16 @@
 import React from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  StyleSheet,
-  ScrollView,
-  KeyboardAvoidingView,
-} from "react-native";
+import { StyleSheet, ScrollView, KeyboardAvoidingView } from "react-native";
 
 import ProfileInputs from "./ProfileInputs";
 
-export default function ProfileMakerScreen() {
+export default function ProfileMakerScreen({ navigation: { navigate } }) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={style.container}
-      // keyboardVerticalOffset={10}
     >
       <ScrollView>
-        <ProfileInputs />
+        <ProfileInputs navigate={navigate} />
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -27,7 +19,6 @@ export default function ProfileMakerScreen() {
 const style = StyleSheet.create({
   container: {
     backgroundColor: "#3498db",
-    // alignItems: "center",
     flex: 1,
   },
 });
