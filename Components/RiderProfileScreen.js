@@ -51,7 +51,7 @@ const { height, width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20,
+    backgroundColor: "#0984E3",
   },
   imgContainer: {
     justifyContent: "center",
@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     justifyContent: "center",
-    width: width * 0.95,
-    height: width * 0.95,
+    width: width,
+    height: width,
   },
   info: {
     flex: 1,
