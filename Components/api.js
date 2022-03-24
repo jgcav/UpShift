@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-import { key } from "../config/gMapsKeys";
+import { key } from "../config/gMapsKey";
 
 export const fetchLatLng = async (place_id) => {
   const url = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${place_id}&key=${key}`;
