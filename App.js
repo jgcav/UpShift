@@ -12,7 +12,7 @@ import ChatScreen from "./Components/ChatScreen";
 import ChatListScreen from "./Components/ChatListScreen";
 
 export default function App() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   if (loading) return <RoutePlanner />;
 

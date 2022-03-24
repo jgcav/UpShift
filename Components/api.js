@@ -13,3 +13,13 @@ export const searchLocation = async (text) => {
   const suggestions = await axios.get(url);
   return suggestions.data.predictions;
 };
+
+export const snapToRoad = async (points) => {
+  const url = `https://roads.googleapis.com/v1/snapToRoads?path=${points}&interpolate=true&key=${key}`;
+  try {
+    const newPoints = await axios.get(url);
+    return newPoints.data.snappedPoints;
+  } catch (e) {
+    console.log(e);
+  }
+};
