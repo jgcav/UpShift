@@ -1,9 +1,14 @@
-import React, { useState } from "react";
-import { Button, Text, TouchableOpacity, View, StyleSheet} from "react-native";
+import React, { useState, useEffect } from "react";
+import { Button, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
+import firebase from "../config/firebase";
+import { doc, getDoc } from "firebase/firestore";
+
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
   const [error, setError] = useState("");
+  const [profile, setProfile] = useState({});
+  const db = firebase.firestore();
 
   const handleLogout = () => {
     setError("");
@@ -16,21 +21,53 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         setError("Failed to log out");
       });
   };
+
+  function getProfile() {
+    const userId = currentUser.uid;
+    const ref = doc(db, "profiles", `${userId}`);
+    return getDoc(ref).then((snapshot) => {
+      return snapshot.data();
+    });
+  }
+
+  useEffect(() => {
+    getProfile().then((data) => {
+      setProfile(data);
+    });
+  }, []);
+
   return (
-    <View>
+    <View style={styles.container}>
       <Text>{currentUser && currentUser.email}</Text>
       <Text>{error && error}</Text>
-      <TouchableOpacity style={style.buttonContainer}><Button title="logout" color="black" onPress={handleLogout} /></TouchableOpacity>
-      
+      <TouchableOpacity style={styles.buttonContainer}>
+        <Button title="Logout" color="black" onPress={handleLogout} />
+      </TouchableOpacity>
+      <Text>Your Profile</Text>
+      <View style={styles.profileCard}>
+        <Text style={styles.text}>
+          Name: {profile.firstName} {profile.lastName}
+        </Text>
+        <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
+        <Text style={styles.text}>Bike: {profile.bike}</Text>
+      </View>
     </View>
   );
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
+  container: { backgroundColor: "#0984E3", flex: 1 },
   buttonContainer: {
-    backgroundColor: "#0984E3",
+    backgroundColor: "rgba(255,255,255,0.2)",
     paddingVertical: 10,
     paddingHorizontal: 10,
-    marginBottom: 20,
+    margin: 20,
+  },
+  profileCard: {
+    backgroundColor: "#0984E3",
+  },
+  text: {
+    color: "#fff",
+    padding: 10,
   },
 });

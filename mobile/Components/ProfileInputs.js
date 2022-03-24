@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  KeyboardAvoidingView,
   TextInput,
   Text,
   View,
@@ -10,11 +9,32 @@ import {
 import SelectDropdown from "react-native-select-dropdown";
 import ImageChooser from "./ImageChooser";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import firebase from "../config/firebase";
+import { setDoc, doc } from "firebase/firestore";
 
-export default function ProfileInputs() {
+export default function ProfileInputs({ navigate }) {
+  const [firstName, onChangeFirstName] = useState("");
+  const [lastName, onChangeLastName] = useState("");
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [date, onChangeDate] = useState("2000-01-01");
   const [selectedGender, setSelectedGender] = useState("");
   const genders = ["Male", "Female", "Other"];
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [bike, onChangeBike] = useState("");
+
+  const db = firebase.firestore();
+  const user = firebase.auth().currentUser;
+
+  function postProfile(profile) {
+    return setDoc(doc(db, "profiles", `${user.uid}`), profile).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  const onPress = () => {
+    const profile = { firstName, lastName, selectedGender, bike };
+    postProfile(profile);
+    navigate("Profile");
+  };
 
   return (
     <View style={styles.container}>
@@ -23,11 +43,13 @@ export default function ProfileInputs() {
         style={styles.input}
         placeholder="First Name"
         placeholderTextColor={"white"}
+        onChangeText={onChangeFirstName}
       ></TextInput>
       <TextInput
         style={styles.input}
         placeholder="Last Name"
         placeholderTextColor={"white"}
+        onChangeText={onChangeLastName}
       ></TextInput>
       <ImageChooser
         profilePicture={profilePicture}
@@ -92,8 +114,9 @@ export default function ProfileInputs() {
         style={styles.input}
         placeholder="Bike"
         placeholderTextColor={"white"}
+        onChangeText={onChangeBike}
       ></TextInput>
-      <TouchableOpacity style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
         <Text style={styles.buttonText}>CREATE</Text>
       </TouchableOpacity>
     </View>
