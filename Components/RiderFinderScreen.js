@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, Image } from "react-native";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, limit } from "firebase/firestore";
 import firebase from "../config/firebase.js";
 import RiderCard from "./RiderCard";
 import { useState, useEffect } from "react";
@@ -14,7 +14,7 @@ export default function RiderFinder({ navigation: { navigate } }) {
   const [loading, setLoading] = useState(true);
 
   function getRider() {
-    const q = collection(db, "profiles");
+    const q = query(collection(db, "profiles"), limit(10));
 
     return getDocs(q).then((snapshot) => {
       const profiles = [];
@@ -41,6 +41,8 @@ export default function RiderFinder({ navigation: { navigate } }) {
           alignItems: "center",
           textAlign: "center",
           justifyContent: "center",
+          backgroundColor: "#0984E3",
+          flex: 1,
         }}
       >
         <Image
