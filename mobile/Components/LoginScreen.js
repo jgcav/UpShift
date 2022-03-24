@@ -60,7 +60,7 @@ export default function LoginScreen({ navigation: { navigate } }) {
         <Button title="LOGIN" color="white" onPress={handleSubmit} />
       </TouchableOpacity>
       <Text>
-        Already have an account?
+        Already have an account?{" "}
         <Text
           style={style.textHighlight}
           onPress={() => {

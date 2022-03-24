@@ -3,13 +3,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import "react-native-gesture-handler";
 import { AuthProvider } from "./contexts/AuthContext";
-
 import { RoutePlanner } from "./Components/RoutePlanner";
-
 import LoginScreen from "./Components/LoginScreen";
 import SignUpScreen from "./Components/SignUpScreen";
 import ProfileScreen from "./Components/ProfileScreen";
 import ProfileMakerScreen from "./Components/ProfileMakerScreen";
+import ChatScreen from "./Components/ChatScreen";
+import ChatListScreen from "./Components/ChatListScreen";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -39,6 +39,11 @@ export default function App() {
           <Stack.Screen
             name="ProfileMaker"
             component={ProfileMakerScreen}
+          ></Stack.Screen>
+          <Stack.Screen name="Chat" component={ChatScreen}></Stack.Screen>
+          <Stack.Screen
+            name="ChatList"
+            component={ChatListScreen}
           ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>

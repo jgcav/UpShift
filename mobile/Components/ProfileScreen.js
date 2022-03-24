@@ -9,7 +9,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   const [error, setError] = useState("");
   const [profile, setProfile] = useState({});
   const db = firebase.firestore();
-
+  
   const handleLogout = () => {
     setError("");
 
