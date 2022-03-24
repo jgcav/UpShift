@@ -33,10 +33,23 @@ export default function RiderProfileScreen({ route }) {
           </View>
 
           <Text style={styles.bio}>{rider.bio}</Text>
-          <Text style={styles.bike}>{rider.bike}</Text>
+          <View style={styles.bike}>
+            <Image
+              style={styles.bikeImg}
+              source={require("../images/motorbike-icon.png")}
+            />
+            <Text style={styles.bikeTxt}>{rider.bike}</Text>
+          </View>
+
           <View style={styles.infoLower}>
             <Text style={styles.gender}>{rider.selectedGender}</Text>
-            <Text style={styles.distance}>1 mile</Text>
+            <View style={styles.locationContainer}>
+              <Image
+                style={styles.location}
+                source={require("../images/Location.png")}
+              />
+              <Text style={styles.distance}>1 km</Text>
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -88,6 +101,9 @@ const styles = StyleSheet.create({
     fontSize: 22,
   },
   bike: {
+    flexDirection: "row",
+  },
+  bikeTxt: {
     fontSize: 18,
   },
   infoLower: {
@@ -99,6 +115,9 @@ const styles = StyleSheet.create({
   },
   distance: {
     fontSize: 18,
+  },
+  locationContainer: {
+    flexDirection: "row",
   },
   button: {
     alignItems: "center",
@@ -114,5 +133,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "white",
+  },
+  location: {
+    width: 20,
+    height: 20,
+    marginTop: 3,
+  },
+  bikeImg: {
+    width: 23,
+    height: 20,
+    marginTop: 3,
+    marginRight: 2,
   },
 });
