@@ -14,7 +14,7 @@ import firebase from "../config/firebase";
 import { doc, setDoc } from "firebase/firestore";
 const db = firebase.firestore();
 
-export const RoutePlanner = () => {
+export const RoutePlanner = ({ userLocation }) => {
   const _map = useRef(null);
   const [points, setPoints] = useState([]);
   const [snapped, setSnapped] = useState(false);
@@ -22,16 +22,12 @@ export const RoutePlanner = () => {
   const [routeNameField, setRouteNameField] = useState(false);
   const [routeName, setRouteName] = useState("");
 
-  const [userLocation, setUserLocation] = useState("");
+  console.log(userLocation, "route");
 
   const [selectedPlace, setSelectedPlace] = useState({
-    lat: 53.480759,
-    lng: -2.242631,
+    lat: 53.82144,
+    lng: -1.8251776,
   });
-
-  // useEffect(() => {
-  //   fetchCurrLocation().then((data) => setSelectedPlace());
-  // }, []);
 
   useEffect(() => {
     if (_map.current) {
