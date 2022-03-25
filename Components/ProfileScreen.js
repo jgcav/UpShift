@@ -18,7 +18,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   const [profile, setProfile] = useState({});
   const db = firebase.firestore();
   const userId = currentUser.uid;
-  const [profilePicture, setProfilePicture] = useState("");
+  const [profilePicture, setProfilePicture] = useState();
 
   const handleLogout = () => {
     setError("");
@@ -41,8 +41,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
   function getProfilePicture() {
     const storage = getStorage();
-    const pathReference = ref(storage, "images/image2.jpg");
-    console.log(pathReference);
+    const pathReference = ref(storage, `images/${userId}/profile.jpg`);
     return getDownloadURL(pathReference).then((url) => {
       return url;
     });
@@ -64,15 +63,15 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       <TouchableOpacity style={styles.buttonContainer}>
         <Button title="Logout" color="black" onPress={handleLogout} />
       </TouchableOpacity>
-      <Text>Your Profile</Text>
+      <Text style={styles.title}>Your Profile</Text>
       <View style={styles.profileCard}>
         <Text style={styles.text}>
           Name: {profile.firstName} {profile.lastName}
         </Text>
         <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
         <Text style={styles.text}>Bike: {profile.bike}</Text>
-
         <Image
+          style={styles.profilePic}
           source={{
             uri: profilePicture,
           }}
@@ -94,7 +93,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#0984E3",
   },
   text: {
+    fontSize: 20,
     color: "#fff",
     padding: 10,
+  },
+  profilePic: {
+    width: 250,
+    height: 250,
+    margin: 10,
+    alignSelf: "center",
+    borderRadius: 40,
+  },
+  title: {
+    fontSize: 25,
+    alignSelf: "center",
+    fontWeight: "bold",
+    color: "#fff",
   },
 });

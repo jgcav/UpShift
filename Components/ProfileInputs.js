@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Button,
+  Image,
 } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 // import ImageChooser from "./ImageChooser";
@@ -18,7 +19,7 @@ import * as ImagePicker from "expo-image-picker";
 export default function ProfileInputs({ navigate }) {
   const [firstName, onChangeFirstName] = useState("");
   const [lastName, onChangeLastName] = useState("");
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePictureInput, setProfilePictureInput] = useState("not changed");
   const [date, onChangeDate] = useState("2000-01-01");
   const [selectedGender, setSelectedGender] = useState("");
   const genders = ["Male", "Female", "Other"];
@@ -33,20 +34,6 @@ export default function ProfileInputs({ navigate }) {
     });
   }
 
-  // const postImage = (image) => {
-  //   const storage = getStorage();
-  //   const storageRef = ref(storage, `images/${user.uid}/profile.jpg`);
-  //   console.log(image);
-  //   uploadBytes(storageRef, image).then((snapshot) => {
-  //     console.log("Uploaded a blob or file!");
-  //   });
-  // };
-
-  // const postImage = (image) => {
-  //   const storageRef = storage.reference();
-  //   const imageRef = storageRef.child(`images/${user.uid}/profile.jpg`);
-  //   const localFile = URL(image);
-  // };
   useEffect(() => {
     (async () => {
       if (Platform.OS !== "web") {
@@ -68,6 +55,7 @@ export default function ProfileInputs({ navigate }) {
     });
     if (!result.cancelled) {
       let uri = result.uri;
+
       const uploadUri =
         Platform.OS === "ios" ? uri.replace("file://", "") : uri;
       const storage = await getStorage();
@@ -87,7 +75,6 @@ export default function ProfileInputs({ navigate }) {
       uid: user.uid,
     };
     postProfile(profile);
-    // postImage(profilePicture);
     navigate("Profile");
   };
 
@@ -106,20 +93,15 @@ export default function ProfileInputs({ navigate }) {
         placeholderTextColor={"white"}
         onChangeText={onChangeLastName}
       ></TextInput>
-      {/* <ImageChooser
-        profilePicture={profilePicture}
-        setProfilePicture={setProfilePicture}
-      /> */}
-
       <View styles={styles.container}>
         <Button
           title="Pick an Image From Camera Roll +"
           onPress={pickImage}
           color="white"
         />
-        {/* {profilePicture && (
-        <Image source={{ uri: profilePicture }} style={styles.image} />
-      )} */}
+        {/* {profilePictureInput && (
+          <Image source={{ uri: profilePictureInput }} style={styles.image} />
+        )} */}
       </View>
       <Text>Date of Birth</Text>
       <View style={styles.dateBlock}>
