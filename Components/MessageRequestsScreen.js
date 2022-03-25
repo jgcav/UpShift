@@ -58,9 +58,15 @@ export default function MessageRequestsScreen({ navigation: { navigate } }) {
 
   return (
     <ScrollView style={styles.container}>
-      {profiles.map((rider, index) => {
-        console.log(rider, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-        return <RequestCard rider={rider} key={index} />;
+      {profiles.map((profile, index) => {
+        return (
+          <RequestCard
+            profile={profile}
+            profileUrl={profilesUrl[index]}
+            navigate={navigate}
+            key={index}
+          />
+        );
       })}
     </ScrollView>
   );
