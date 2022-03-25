@@ -89,6 +89,8 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           color="black"
           onPress={() => {
             navigate("ChatList");
+          }}
+        />
       </View>
     </View>
   );
