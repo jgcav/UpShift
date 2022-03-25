@@ -43,12 +43,14 @@ export const RoutePlanner = () => {
   };
 
   const snapPoints = () => {
-    let pointsString = "";
-    points.forEach((point) => {
-      pointsString += point.latitude + "," + point.longitude + "|";
-    });
-    const preppedPoints = pointsString.slice(0, -1);
-    snapToRoad(preppedPoints).then((data) => {
+    const pointString = points.reduce((prev, curr, index) => {
+      if (index === points.length - 1) {
+        return prev + curr.latitude + "," + curr.longitude;
+      }
+      return (prev += curr.latitude + "," + curr.longitude + "|");
+    }, "");
+
+    snapToRoad(pointString).then((data) => {
       const snappedPoints = data.map((datum) => {
         return datum.location;
       });
@@ -61,17 +63,19 @@ export const RoutePlanner = () => {
     setPoints([]);
   };
 
-  const saveRoute = () => {
+  const saveRoute = async () => {
     if (snapped) {
       const route = { myRoute: points };
-      return updateDoc(
-        doc(db, "profiles", "kXLvtv4DwcswDgqpVGp2"),
-        route
-      ).catch((e) => {
+      try {
+        return await updateDoc(
+          doc(db, "profiles", "kXLvtv4DwcswDgqpVGp2"),
+          route
+        );
+      } catch (e) {
         console.log(e);
-      });
+      }
     } else {
-      console.log("please snapp to road before saving");
+      console.log("please snap to road before saving");
     }
   };
 
@@ -125,7 +129,6 @@ const styles = StyleSheet.create({
   },
 });
 
-//simple silver map style taken from google
 const mapStyle = [
   {
     elementType: "geometry",
