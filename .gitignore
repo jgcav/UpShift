@@ -15,3 +15,4 @@ config/gMapKey.js
 # macOS
 .DS_Store
 .env 
+.gMapKey.JS

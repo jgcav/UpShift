@@ -70,12 +70,25 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         </Text>
         <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
         <Text style={styles.text}>Bike: {profile.bike}</Text>
+
         <Image
           style={styles.profilePic}
           source={{
             uri: profilePicture,
           }}
         />
+        <Button
+          title="Find Rider"
+          color="black"
+          onPress={() => {
+            navigate("Rider Finder");
+          }}
+        />
+        <Button
+          title="Chat"
+          color="black"
+          onPress={() => {
+            navigate("ChatList");
       </View>
     </View>
   );
