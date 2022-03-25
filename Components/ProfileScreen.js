@@ -3,13 +3,16 @@ import { Button, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import firebase from "../config/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { RoutePlanner } from "./RoutePlanner";
+import { fetchCurrLocation } from "./api";
 
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
   const [error, setError] = useState("");
   const [profile, setProfile] = useState({});
   const db = firebase.firestore();
-  
+  const [userLocation, setUserLocation] = useState({});
+
   const handleLogout = () => {
     setError("");
 
@@ -36,6 +39,15 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     });
   }, []);
 
+  useEffect(() => {
+    fetchCurrLocation().then((data) => {
+      console.log(data);
+      setUserLocation(data);
+    });
+  }, []);
+
+  console.log(userLocation, "profile");
+
   return (
     <View style={styles.container}>
       <Text>{currentUser && currentUser.email}</Text>
@@ -50,7 +62,15 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         </Text>
         <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
         <Text style={styles.text}>Bike: {profile.bike}</Text>
+        <TouchableOpacity style={styles.buttonContainer}>
+          <Button
+            title="Plan Route"
+            color="black"
+            onPress={navigate("RoutePlanner")}
+          />
+        </TouchableOpacity>
       </View>
+      <RoutePlanner userLocation={userLocation} />
     </View>
   );
 }
