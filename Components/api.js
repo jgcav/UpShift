@@ -29,7 +29,7 @@ export const fetchCurrLocation = async () => {
   try {
     const location = await axios.post(url);
     return location.data.location;
-  } catch (e) {
-    console.log(e);
+  } catch (err) {
+    console.log(err);
   }
 };
