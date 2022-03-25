@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import GooglePlacesInput from "./GooglePlacesInput";
-import { snapToRoad } from "./api";
+import { fetchCurrLocation, snapToRoad } from "./api";
 
 import firebase from "../config/firebase";
 import { doc, setDoc } from "firebase/firestore";
@@ -22,12 +22,16 @@ export const RoutePlanner = () => {
   const [routeNameField, setRouteNameField] = useState(false);
   const [routeName, setRouteName] = useState("");
 
-  console.log(routeName);
+  const [userLocation, setUserLocation] = useState("");
 
   const [selectedPlace, setSelectedPlace] = useState({
     lat: 53.480759,
     lng: -2.242631,
   });
+
+  // useEffect(() => {
+  //   fetchCurrLocation().then((data) => setSelectedPlace());
+  // }, []);
 
   useEffect(() => {
     if (_map.current) {

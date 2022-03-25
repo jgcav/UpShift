@@ -23,3 +23,13 @@ export const snapToRoad = async (points) => {
     console.log(e);
   }
 };
+
+export const fetchCurrLocation = async () => {
+  const url = `https://www.googleapis.com/geolocation/v1/geolocate?key=${key}`;
+  try {
+    const location = await axios.post(url);
+    return location.data.location;
+  } catch (e) {
+    console.log(e);
+  }
+};
