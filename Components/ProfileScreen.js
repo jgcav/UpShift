@@ -41,7 +41,8 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
   function getProfilePicture() {
     const storage = getStorage();
-    const pathReference = ref(storage, `images/${userId}/profile.jpg`);
+    const pathReference = ref(storage, "images/image2.jpg");
+    console.log(pathReference);
     return getDownloadURL(pathReference).then((url) => {
       return url;
     });
@@ -72,7 +73,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         <Text style={styles.text}>Bike: {profile.bike}</Text>
 
         <Image
-          style={styles.tinyLogo}
           source={{
             uri: profilePicture,
           }}

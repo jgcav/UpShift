@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextInput,
   Text,
   View,
   TouchableOpacity,
   StyleSheet,
+  Button,
 } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
-import ImageChooser from "./ImageChooser";
+// import ImageChooser from "./ImageChooser";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import firebase from "../config/firebase";
 import { setDoc, doc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
+import * as ImagePicker from "expo-image-picker";
 
 export default function ProfileInputs({ navigate }) {
   const [firstName, onChangeFirstName] = useState("");
@@ -31,20 +33,50 @@ export default function ProfileInputs({ navigate }) {
     });
   }
 
-  const postImage = (image) => {
-    const storage = getStorage();
-    const storageRef = ref(storage, `images/${user.uid}/profile.jpg`);
-    console.log(image);
-    uploadBytes(storageRef, image).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-    });
-  };
+  // const postImage = (image) => {
+  //   const storage = getStorage();
+  //   const storageRef = ref(storage, `images/${user.uid}/profile.jpg`);
+  //   console.log(image);
+  //   uploadBytes(storageRef, image).then((snapshot) => {
+  //     console.log("Uploaded a blob or file!");
+  //   });
+  // };
 
   // const postImage = (image) => {
   //   const storageRef = storage.reference();
   //   const imageRef = storageRef.child(`images/${user.uid}/profile.jpg`);
   //   const localFile = URL(image);
   // };
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== "web") {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Camera Roll Access Required");
+        }
+      }
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      let uri = result.uri;
+      const uploadUri =
+        Platform.OS === "ios" ? uri.replace("file://", "") : uri;
+      const storage = await getStorage();
+      const response = await fetch(uploadUri);
+      const blob = await response.blob();
+      const storageRef = await ref(storage, `images/${user.uid}/profile.jpg`);
+      await uploadBytes(storageRef, blob);
+    }
+  };
 
   const onPress = () => {
     const profile = {
@@ -55,7 +87,7 @@ export default function ProfileInputs({ navigate }) {
       uid: user.uid,
     };
     postProfile(profile);
-    postImage(profilePicture);
+    // postImage(profilePicture);
     navigate("Profile");
   };
 
@@ -74,10 +106,21 @@ export default function ProfileInputs({ navigate }) {
         placeholderTextColor={"white"}
         onChangeText={onChangeLastName}
       ></TextInput>
-      <ImageChooser
+      {/* <ImageChooser
         profilePicture={profilePicture}
         setProfilePicture={setProfilePicture}
-      />
+      /> */}
+
+      <View styles={styles.container}>
+        <Button
+          title="Pick an Image From Camera Roll +"
+          onPress={pickImage}
+          color="white"
+        />
+        {/* {profilePicture && (
+        <Image source={{ uri: profilePicture }} style={styles.image} />
+      )} */}
+      </View>
       <Text>Date of Birth</Text>
       <View style={styles.dateBlock}>
         <TextInput
