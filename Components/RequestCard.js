@@ -11,7 +11,13 @@ import {
 } from "firebase/firestore";
 import firebase from "../config/firebase.js";
 const db = firebase.firestore();
-export default function RequestCard({ profileUrl, profile, navigate }) {
+export default function RequestCard({
+  profileUrl,
+  profile,
+  navigate,
+  setInteracted,
+  setNewChat,
+}) {
   const { currentUser } = useAuth();
 
   function createChatRoom() {
@@ -41,12 +47,25 @@ export default function RequestCard({ profileUrl, profile, navigate }) {
       }),
     ];
     Promise.all(Proms).then(() => {
+      setInteracted(true);
+      setNewChat(true);
       console.log("done");
     });
   }
 
-  function handleAccept() {
-    createChatRoom();
+  function deleteRequest() {
+    const Proms = [
+      updateDoc(doc(db, "profiles", `${profile.uid}`), {
+        requests: arrayRemove(`${currentUser.uid}`),
+      }),
+      updateDoc(doc(db, "profiles", `${currentUser.uid}`), {
+        requests: arrayRemove(`${profile.uid}`),
+      }),
+    ];
+    Promise.all(Proms).then(() => {
+      setInteracted(true);
+      console.log("done");
+    });
   }
 
   return (
@@ -63,12 +82,14 @@ export default function RequestCard({ profileUrl, profile, navigate }) {
         <Text>{`${profile.firstName} ${profile.lastName}`}</Text>
       </View>
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.text} onPress={handleAccept}>
-          accept
+        <Text style={styles.text} onPress={createChatRoom}>
+          Accept
         </Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.text}>decline</Text>
+        <Text style={styles.text} onPress={deleteRequest}>
+          Decline
+        </Text>
       </TouchableOpacity>
     </View>
   );

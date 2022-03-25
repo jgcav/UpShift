@@ -8,10 +8,15 @@ import RequestCard from "./RequestCard.js";
 
 const db = firebase.firestore();
 const storage = getStorage();
-export default function MessageRequestsScreen({ navigation: { navigate } }) {
+export default function MessageRequestsScreen({
+  navigation: { navigate },
+  route,
+}) {
+  const { setNewChat } = route.params;
   const [profiles, setProfiles] = useState([]);
   const [profilesUrl, setProfilesUrl] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [interacted, setInteracted] = useState(false);
   const { currentUser } = useAuth();
 
   function getProfile(id) {
@@ -50,10 +55,12 @@ export default function MessageRequestsScreen({ navigation: { navigate } }) {
         setProfilesUrl(urls);
         setLoading(false);
       });
-  }, []);
+  }, [interacted]);
 
   if (loading) {
     return <Text>loading...</Text>;
+  }
+  if (interacted) {
   }
 
   return (
@@ -64,6 +71,8 @@ export default function MessageRequestsScreen({ navigation: { navigate } }) {
             profile={profile}
             profileUrl={profilesUrl[index]}
             navigate={navigate}
+            setInteracted={setInteracted}
+            setNewChat={setNewChat}
             key={index}
           />
         );

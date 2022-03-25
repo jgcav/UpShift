@@ -18,6 +18,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 const db = firebase.firestore();
 export default function ChatListScreen({ navigation: { navigate } }) {
   const [chats, setChats] = useState([]);
+  const [newChat, setNewChat] = useState(false);
   const { currentUser } = useAuth();
   function getChats() {
     const docsRef = collection(
@@ -36,13 +37,13 @@ export default function ChatListScreen({ navigation: { navigate } }) {
     getChats().then((rooms) => {
       setChats(rooms);
     });
-  }, []);
+  }, [newChat]);
   return (
     <View>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          navigate("Message Requests");
+          navigate("Message Requests", { setNewChat });
         }}
       >
         <Text style={styles.text}>requested</Text>
