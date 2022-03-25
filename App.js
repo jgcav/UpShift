@@ -12,7 +12,7 @@ import ChatScreen from "./Components/ChatScreen";
 import ChatListScreen from "./Components/ChatListScreen";
 import RiderFinderScreen from "./Components/RiderFinderScreen";
 import RiderProfileScreen from "./Components/RiderProfileScreen";
-
+import MessageRequestsScreen from "./Components/MessageRequestsScreen";
 export default function App() {
   const [loading, setLoading] = useState(false);
 
@@ -54,6 +54,10 @@ export default function App() {
           <Stack.Screen
             name="Rider Profile"
             component={RiderProfileScreen}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Message Requests"
+            component={MessageRequestsScreen}
           ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>

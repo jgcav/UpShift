@@ -13,6 +13,7 @@ import {
   limit,
 } from "firebase/firestore";
 import firebase from "../config/firebase";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const db = firebase.firestore();
 export default function ChatListScreen({ navigation: { navigate } }) {
@@ -38,9 +39,37 @@ export default function ChatListScreen({ navigation: { navigate } }) {
   }, []);
   return (
     <View>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          navigate("Message Requests");
+        }}
+      >
+        <Text style={styles.text}>requested</Text>
+      </TouchableOpacity>
       {chats.map((chat, index) => {
         return <ChatsCard chat={chat} navigate={navigate} key={chat.roomId} />;
       })}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 5,
+    paddingHorizontal: 7,
+    borderRadius: 8,
+    elevation: 3,
+    backgroundColor: "black",
+    marginRight: 5,
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
+    color: "white",
+  },
+});
