@@ -45,6 +45,10 @@ export default function App() {
             name="ChatList"
             component={ChatListScreen}
           ></Stack.Screen>
+          <Stack.Screen
+            name="RoutePlanner"
+            component={RoutePlanner}
+          ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>
