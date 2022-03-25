@@ -12,6 +12,7 @@ export const RoutePlanner = () => {
   const _map = useRef(null);
   const [points, setPoints] = useState([]);
   const [snapped, setSnapped] = useState(false);
+  const [drawMethod, setDrawMethod] = useState("Draw Polyline");
 
   const [selectedPlace, setSelectedPlace] = useState({
     lat: 53.480759,
@@ -63,6 +64,10 @@ export const RoutePlanner = () => {
     setPoints([]);
   };
 
+  const undoLastPoint = () => {
+    setPoints(points.slice(0, -1));
+  };
+
   const saveRoute = async () => {
     if (snapped) {
       const route = { myRoute: points };
@@ -87,6 +92,16 @@ export const RoutePlanner = () => {
       <View style={styles.clearbutton}>
         <Button title="Clear" color="black" onPress={resetPolygon} />
         <Button title="Save" color="black" onPress={saveRoute} />
+        <Button title="Undo" color="black" onPress={undoLastPoint} />
+        <Button
+          title={drawMethod}
+          color="black"
+          onPress={() => {
+            drawMethod === "Draw Polyline"
+              ? setDrawMethod("Draw Polygon")
+              : setDrawMethod("Draw Polyline");
+          }}
+        />
       </View>
       <View style={styles.map}>
         <MapView
@@ -103,12 +118,13 @@ export const RoutePlanner = () => {
           showsTraffic={true}
           showsMyLocationButton={true}
         >
-          {points.length < 2 ? null : (
-            <Polygon
+          {points.length < 2 ? null : drawMethod === "Draw Polyline" ? (
+            <Polygon coordinates={points} strokeWidth={3} strokeColor="black" />
+          ) : (
+            <Polyline
               coordinates={points}
               strokeWidth={3}
               strokeColor="black"
-              tappable={true}
             />
           )}
         </MapView>
