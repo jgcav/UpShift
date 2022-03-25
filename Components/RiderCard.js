@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -8,13 +8,16 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
+import { useAuth } from "../contexts/AuthContext";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
-import { useState, useEffect } from "react";
+import { updateDoc, doc, arrayUnion, arrayRemove } from "firebase/firestore";
 
-// remember to add users profile picture after line 12
+import firebase from "../config/firebase.js";
+const db = firebase.firestore();
 export default function RiderCard({ rider, navigate, setLoading }) {
   const [profileUrl, setProfileUrl] = useState("");
-
+  const [requested, setRequested] = useState(false);
+  const { currentUser } = useAuth();
   useEffect(() => {
     const storage = getStorage();
     getDownloadURL(ref(storage, `images/${rider.uid}/profile.jpg`)).then(
@@ -24,11 +27,47 @@ export default function RiderCard({ rider, navigate, setLoading }) {
     );
   }, []);
 
+  function addRequest(uid, uid2, type) {
+    const msgR = doc(db, "profiles", `${uid}`);
+    updateDoc(msgR, { [type]: arrayUnion(`${uid2}`) })
+      .then(() => {})
+      .catch((err) => {});
+    () => {
+      console.log(err);
+    };
+  }
+  function remRequest(uid, uid2, type) {
+    const msgR = doc(db, "profiles", `${uid}`);
+    updateDoc(msgR, { [type]: arrayRemove(`${uid2}`) })
+      .then(() => {})
+      .catch((err) => {});
+    () => {
+      console.log(err);
+    };
+  }
+
+  function handlePress() {
+    if (requested === false) {
+      addRequest(rider.uid, currentUser.uid, "requests");
+      addRequest(currentUser.uid, rider.uid, "requested");
+    } else {
+      remRequest(rider.uid, currentUser.uid, "requests");
+      remRequest(currentUser.uid, rider.uid, "requested");
+    }
+    setRequested((currReq) => !currReq);
+  }
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={() => {
-        navigate("Rider Profile", { rider, profileUrl });
+        navigate("Rider Profile", {
+          rider,
+          profileUrl,
+          requested,
+          setRequested,
+          addRequest,
+          remRequest,
+        });
       }}
     >
       <View style={styles.imageContainer}>
@@ -55,8 +94,8 @@ export default function RiderCard({ rider, navigate, setLoading }) {
         </View>
       </View>
       <View style={styles.requestContainer}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.text}>Message</Text>
+        <TouchableOpacity style={styles.button} onPress={handlePress}>
+          <Text style={styles.text}>{requested ? "Requested" : "Connect"}</Text>
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
@@ -114,7 +153,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: 7,
     borderRadius: 8,
     elevation: 3,
     backgroundColor: "black",

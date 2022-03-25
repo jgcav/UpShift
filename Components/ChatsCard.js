@@ -5,9 +5,11 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import firebase from "../config/firebase";
 
 const db = firebase.firestore();
+
 export default function ChatsCard({ chat, navigate }) {
   const [userProfile, setUserProfile] = useState({});
   const [profileUrl, setProfileUrl] = useState("");
+
 
   function getProfile() {
     const docRef = doc(db, "profiles", `${chat.chatterId}`);

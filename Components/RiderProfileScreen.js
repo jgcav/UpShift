@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -8,10 +8,25 @@ import {
   Dimensions,
   ScrollView,
 } from "react-native";
-
+import { useAuth } from "../contexts/AuthContext";
 export default function RiderProfileScreen({ route }) {
   const { height, width } = Dimensions.get("window");
-  const { rider, profileUrl } = route.params;
+  const { currentUser } = useAuth();
+  const { rider, profileUrl, requested, setRequested, addRequest, remRequest } =
+    route.params;
+  const [updateRequest, setUpdateRequest] = useState(requested);
+
+  function handlePressed() {
+    if (updateRequest === false) {
+      addRequest(rider.uid, currentUser.uid, "requests");
+      addRequest(currentUser.uid, rider.uid, "requested");
+    } else {
+      remRequest(rider.uid, currentUser.uid, "requests");
+      remRequest(currentUser.uid, rider.uid, "requested");
+    }
+    setUpdateRequest((currReq) => !currReq);
+    setRequested((currReq) => !currReq);
+  }
   return (
     <View style={styles.container}>
       <View style={styles.imgContainer}>
@@ -54,8 +69,10 @@ export default function RiderProfileScreen({ route }) {
         </ScrollView>
       </View>
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.text}>Message</Text>
+      <TouchableOpacity style={styles.button} onPress={handlePressed}>
+        <Text style={styles.text}>
+          {updateRequest ? "Requested" : "Connect"}
+        </Text>
       </TouchableOpacity>
     </View>
   );
