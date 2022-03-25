@@ -24,6 +24,7 @@ export default function ProfileInputs({ navigate }) {
   const [selectedGender, setSelectedGender] = useState("");
   const genders = ["Male", "Female", "Other"];
   const [bike, onChangeBike] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const db = firebase.firestore();
   const user = firebase.auth().currentUser;
@@ -55,17 +56,24 @@ export default function ProfileInputs({ navigate }) {
     });
     if (!result.cancelled) {
       let uri = result.uri;
-
+      console.log("58"); //dont touch
+      setIsUploading(true);
       const uploadUri =
         Platform.OS === "ios" ? uri.replace("file://", "") : uri;
-      const storage = await getStorage();
+      const storage = getStorage();
       const response = await fetch(uploadUri);
+      console.log("63"); //dont touch
       const blob = await response.blob();
-      const storageRef = await ref(storage, `images/${user.uid}/profile.jpg`);
+      console.log("65"); //dont touch
+      const storageRef = ref(storage, `images/${user.uid}/profile.jpg`);
       await uploadBytes(storageRef, blob);
+      console.log("68"); //dont touch
+      setIsUploading(false);
     }
+    setProfilePictureInput(result.uri);
   };
-
+  console.log(profilePictureInput);
+  console.log(isUploading);
   const onPress = () => {
     const profile = {
       firstName,
@@ -78,97 +86,105 @@ export default function ProfileInputs({ navigate }) {
     navigate("Profile");
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Create Your Profile</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="First Name"
-        placeholderTextColor={"white"}
-        onChangeText={onChangeFirstName}
-      ></TextInput>
-      <TextInput
-        style={styles.input}
-        placeholder="Last Name"
-        placeholderTextColor={"white"}
-        onChangeText={onChangeLastName}
-      ></TextInput>
-      <View styles={styles.container}>
-        <Button
-          title="Pick an Image From Camera Roll +"
-          onPress={pickImage}
-          color="white"
-        />
-        {/* {profilePictureInput && (
-          <Image source={{ uri: profilePictureInput }} style={styles.image} />
-        )} */}
+  if (isUploading) {
+    return (
+      <View>
+        <Text style={styles.loadingMessage}>Uploading ProfilePicture</Text>
       </View>
-      <Text>Date of Birth</Text>
-      <View style={styles.dateBlock}>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Create Your Profile</Text>
         <TextInput
-          style={styles.dateInput}
-          placeholder="DD"
+          style={styles.input}
+          placeholder="First Name"
           placeholderTextColor={"white"}
-          keyboardType="number-pad"
-          maxLength={2}
-          returnKeyType={"done"}
+          onChangeText={onChangeFirstName}
         ></TextInput>
         <TextInput
-          style={styles.dateInput}
-          placeholder="MM"
+          style={styles.input}
+          placeholder="Last Name"
           placeholderTextColor={"white"}
-          keyboardType="number-pad"
-          maxLength={2}
-          returnKeyType={"done"}
+          onChangeText={onChangeLastName}
         ></TextInput>
-        <TextInput
-          style={styles.dateInput}
-          placeholder="YYYY"
-          placeholderTextColor={"white"}
-          keyboardType="number-pad"
-          maxLength={4}
-          returnKeyType={"done"}
-        ></TextInput>
-      </View>
-      <View style={styles.dropdown}>
-        <SelectDropdown
-          data={genders}
-          onSelect={(selectedItem, index) => {
-            setSelectedGender(selectedItem);
-          }}
-          buttonTextAfterSelection={(selectedItem, index) => {
-            return selectedItem;
-          }}
-          defaultButtonText={"Select gender"}
-          buttonStyle={styles.dropdown2BtnStyle}
-          buttonTextStyle={styles.dropdown2BtnTxtStyle}
-          renderDropdownIcon={(isOpened) => {
-            return (
-              <FontAwesome
-                name={isOpened ? "chevron-up" : "chevron-down"}
-                color={"#444"}
-                size={18}
-              />
-            );
-          }}
-          dropdownIconPosition={"right"}
-          dropdownStyle={styles.dropdown2DropdownStyle}
-          rowStyle={styles.dropdown2RowStyle}
-          rowTextStyle={styles.dropdown2RowTxtStyle}
-        />
-      </View>
+        <View styles={styles.container}>
+          <Button
+            title="Pick an Image From Camera Roll +"
+            onPress={pickImage}
+            color="white"
+          />
+          {profilePictureInput && (
+            <Image source={{ uri: profilePictureInput }} style={styles.image} />
+          )}
+        </View>
+        <Text>Date of Birth</Text>
+        <View style={styles.dateBlock}>
+          <TextInput
+            style={styles.dateInput}
+            placeholder="DD"
+            placeholderTextColor={"white"}
+            keyboardType="number-pad"
+            maxLength={2}
+            returnKeyType={"done"}
+          ></TextInput>
+          <TextInput
+            style={styles.dateInput}
+            placeholder="MM"
+            placeholderTextColor={"white"}
+            keyboardType="number-pad"
+            maxLength={2}
+            returnKeyType={"done"}
+          ></TextInput>
+          <TextInput
+            style={styles.dateInput}
+            placeholder="YYYY"
+            placeholderTextColor={"white"}
+            keyboardType="number-pad"
+            maxLength={4}
+            returnKeyType={"done"}
+          ></TextInput>
+        </View>
+        <View style={styles.dropdown}>
+          <SelectDropdown
+            data={genders}
+            onSelect={(selectedItem, index) => {
+              setSelectedGender(selectedItem);
+            }}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              return selectedItem;
+            }}
+            defaultButtonText={"Select gender"}
+            buttonStyle={styles.dropdown2BtnStyle}
+            buttonTextStyle={styles.dropdown2BtnTxtStyle}
+            renderDropdownIcon={(isOpened) => {
+              return (
+                <FontAwesome
+                  name={isOpened ? "chevron-up" : "chevron-down"}
+                  color={"#444"}
+                  size={18}
+                />
+              );
+            }}
+            dropdownIconPosition={"right"}
+            dropdownStyle={styles.dropdown2DropdownStyle}
+            rowStyle={styles.dropdown2RowStyle}
+            rowTextStyle={styles.dropdown2RowTxtStyle}
+          />
+        </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Bike"
-        placeholderTextColor={"white"}
-        onChangeText={onChangeBike}
-      ></TextInput>
-      <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
-        <Text style={styles.buttonText}>CREATE</Text>
-      </TouchableOpacity>
-    </View>
-  );
+        <TextInput
+          style={styles.input}
+          placeholder="Bike"
+          placeholderTextColor={"white"}
+          onChangeText={onChangeBike}
+        ></TextInput>
+        <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
+          <Text style={styles.buttonText}>CREATE</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -241,5 +257,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
     fontWeight: "bold",
+  },
+  loadingMessage: {
+    fontWeight: "bold",
+    color: "white",
+    fontSize: 25,
+    padding: 20,
+    textAlign: "center",
+    marginTop: 100,
   },
 });
