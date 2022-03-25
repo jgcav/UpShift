@@ -18,7 +18,7 @@ export const RoutePlanner = () => {
   const _map = useRef(null);
   const [points, setPoints] = useState([]);
   const [snapped, setSnapped] = useState(false);
-  const [drawMethod, setDrawMethod] = useState("Draw Polyline");
+  const [drawMethod, setDrawMethod] = useState("Polyline");
   const [routeNameField, setRouteNameField] = useState(false);
   const [routeName, setRouteName] = useState("");
 
@@ -82,11 +82,11 @@ export const RoutePlanner = () => {
     if (snapped && routeName.length > 0) {
       const route = { myRoute: points };
       try {
-        return await setDoc(
+        const newroute = await setDoc(
           doc(db, `profiles/vr9xGysRo7OpkOEQZ3yAyLkRCg92/routes/${routeName}`),
           route
-          // profile/{uid}/routes
         );
+        return newroute;
       } catch (e) {
         console.log(e);
       }
@@ -100,36 +100,39 @@ export const RoutePlanner = () => {
       <View style={styles.searchbar}>
         <GooglePlacesInput setSelectedPlace={setSelectedPlace} />
       </View>
+
       <View style={styles.toolbar}>
         <Button title="Clear" color="black" onPress={resetPolygon} />
         <Button
           title="Save"
           color="black"
-          onPress={() => setRouteNameField(true)}
+          onPress={() => setRouteNameField((curr) => !curr)}
         />
         <Button title="Undo" color="black" onPress={undoLastPoint} />
         <Button
           title={drawMethod}
           color="black"
           onPress={() => {
-            drawMethod === "Draw Polyline"
-              ? setDrawMethod("Draw Polygon")
-              : setDrawMethod("Draw Polyline");
+            drawMethod === "Polyline"
+              ? setDrawMethod("Polygon")
+              : setDrawMethod("Polyline");
           }}
         />
-        {/* {/* {setRouteNameField === true ? ( */}
-        <SafeAreaView>
-          <View style={styles.routeNameInput}>
+      </View>
+      {routeNameField ? (
+        <View style={styles.routeNameInput}>
+          <SafeAreaView>
             <TextInput
               placeholder="Route Name"
               onChangeText={(e) => setRouteName(e)}
               onSubmitEditing={saveRoute}
               placeholderTextColor="#fff"
+              returnKeyType="done"
             />
-          </View>
-        </SafeAreaView>
-        {/* ) : null} */}
-      </View>
+          </SafeAreaView>
+        </View>
+      ) : null}
+
       <View style={styles.map}>
         <MapView
           zoomTapEnabled={false}
@@ -143,7 +146,6 @@ export const RoutePlanner = () => {
           loadingEnabled={true}
           //UI buttons?
           showsTraffic={true}
-          showsMyLocationButton={true}
         >
           {points.length < 2 ? null : drawMethod === "Draw Polyline" ? (
             <Polygon coordinates={points} strokeWidth={3} strokeColor="black" />
@@ -168,12 +170,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: "#aaa",
     color: "#000",
-    backgroundColor: "black",
     borderWidth: 1.5,
-    paddingLeft: 15,
   },
   toolbar: {
     zIndex: 2,
+    position: "absolute",
+    bottom: 60,
+    right: 30,
   },
   searchbar: {
     zIndex: 2,

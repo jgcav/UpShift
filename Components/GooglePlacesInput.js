@@ -109,11 +109,10 @@ const styles = StyleSheet.create({
   },
 
   autocompleteContainer: {
-    backgroundColor: "red",
+    justifyContent: "center",
   },
 
   container: {
-    flex: 1,
-    alignItems: "center",
+    position: "absolute",
   },
 });
