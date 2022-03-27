@@ -14,7 +14,7 @@ import {
   limit,
 } from "firebase/firestore";
 import firebase from "../config/firebase";
-const socket = io("http://localhost:4000");
+const socket = io("http://localhost:3000");
 
 const db = firebase.firestore();
 
