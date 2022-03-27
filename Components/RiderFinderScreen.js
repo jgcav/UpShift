@@ -1,6 +1,13 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, Image } from "react-native";
-import { collection, getDocs, query, limit } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  limit,
+  getDoc,
+  doc,
+} from "firebase/firestore";
 import firebase from "../config/firebase.js";
 import RiderCard from "./RiderCard";
 import { useState, useEffect } from "react";
@@ -13,26 +20,29 @@ export default function RiderFinder({ navigation: { navigate } }) {
   const { currentUser } = useAuth();
   const [loading, setLoading] = useState(true);
 
-  function getRider() {
-    const q = query(collection(db, "profiles"), limit(10));
-
-    return getDocs(q).then((snapshot) => {
-      const profiles = [];
-      snapshot.docs.slice(0).forEach((doc) => {
-        if (doc.data().uid !== currentUser.uid) {
-          profiles.push(doc.data());
-        }
+  function getRiders() {
+    const Proms = [
+      getDocs(query(collection(db, "profiles"), limit(10))),
+      getDoc(doc(db, `profiles/${currentUser.uid}`)),
+    ];
+    return Promise.all(Proms).then(([snapshot, docSnap]) => {
+      let profiles = snapshot.docs.map((doc) => {
+        return doc.data();
       });
+      const { connected } = docSnap.data();
+      profiles = profiles.filter((profile) => !connected.includes(profile.uid));
       return profiles;
     });
   }
 
   useEffect(() => {
-    getRider().then((profiles) => {
+    getRiders().then((profiles) => {
       setRiders(profiles);
       setLoading(false);
     });
   }, []);
+
+  
   if (loading)
     return (
       <View
