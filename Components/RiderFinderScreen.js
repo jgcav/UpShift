@@ -27,8 +27,8 @@ export default function RiderFinder({ navigation: { navigate } }) {
         query(
           collection(db, "profiles"),
           where("selectedGender", "==", "Male"),
-          where("age", ">=", "20"),
-          where("age", "<=", "31"),
+          where("age", ">=", 20),
+          where("age", "<=", 31),
           limit(10)
         )
       ),
