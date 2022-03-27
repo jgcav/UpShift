@@ -7,6 +7,7 @@ import {
   limit,
   getDoc,
   doc,
+  where,
 } from "firebase/firestore";
 import firebase from "../config/firebase.js";
 import RiderCard from "./RiderCard";
@@ -22,7 +23,15 @@ export default function RiderFinder({ navigation: { navigate } }) {
 
   function getRiders() {
     const Proms = [
-      getDocs(query(collection(db, "profiles"), limit(10))),
+      getDocs(
+        query(
+          collection(db, "profiles"),
+          where("selectedGender", "==", "Male"),
+          where("age", ">=", "20"),
+          where("age", "<=", "31"),
+          limit(10)
+        )
+      ),
       getDoc(doc(db, `profiles/${currentUser.uid}`)),
     ];
     return Promise.all(Proms).then(([snapshot, docSnap]) => {
@@ -42,7 +51,6 @@ export default function RiderFinder({ navigation: { navigate } }) {
     });
   }, []);
 
-  
   if (loading)
     return (
       <View
