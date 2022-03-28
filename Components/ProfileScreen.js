@@ -12,6 +12,10 @@ import { useAuth } from "../contexts/AuthContext";
 import firebase from "../config/firebase";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { fetchCurrLocation } from "../Components/api";
+  Image,
+} from "react-native";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+
 
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
@@ -20,6 +24,9 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   const [profile, setProfile] = useState({});
   const [routes, setRoutes] = useState({});
   const db = firebase.firestore();
+  const userId = currentUser.uid;
+  const [profilePicture, setProfilePicture] = useState();
+
 
   const handleLogout = () => {
     setError("");
@@ -34,12 +41,12 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   };
 
   function getProfile() {
-    const userId = currentUser.uid;
     const ref = doc(db, "profiles", `${userId}`);
     return getDoc(ref).then((snapshot) => {
       return snapshot.data();
     });
   }
+
 
   function getRoutes() {
     const userId = currentUser.uid;
@@ -61,9 +68,22 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     });
   }, []);
 
+
+  function getProfilePicture() {
+    const storage = getStorage();
+    const pathReference = ref(storage, `images/${userId}/profile.jpg`);
+    return getDownloadURL(pathReference).then((url) => {
+      return url;
+    });
+  }
+
+
   useEffect(() => {
     getProfile().then((data) => {
       setProfile(data);
+    });
+    getProfilePicture().then((url) => {
+      setProfilePicture(url);
     });
   }, []);
 
@@ -92,20 +112,42 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <Text>{currentUser && currentUser.email}</Text>
-        <Text>{error && error}</Text>
-        <TouchableOpacity style={styles.buttonContainer}>
-          <Button title="Logout" color="black" onPress={handleLogout} />
-        </TouchableOpacity>
-        <Text>Your Profile</Text>
-        <View style={styles.profileCard}>
-          <Text style={styles.text}>
-            Name: {profile.firstName} {profile.lastName}
-          </Text>
-          <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
-          <Text style={styles.text}>Bike: {profile.bike}</Text>
-          <TouchableOpacity style={styles.buttonContainer}>
+
+     <ScrollView>
+      <Text>{currentUser && currentUser.email}</Text>
+      <Text>{error && error}</Text>
+      <TouchableOpacity style={styles.buttonContainer}>
+        <Button title="Logout" color="black" onPress={handleLogout} />
+      </TouchableOpacity>
+      <Text style={styles.title}>Your Profile</Text>
+      <View style={styles.profileCard}>
+        <Text style={styles.text}>
+          Name: {profile.firstName} {profile.lastName}
+        </Text>
+        <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
+        <Text style={styles.text}>Bike: {profile.bike}</Text>
+
+        <Image
+          style={styles.profilePic}
+          source={{
+            uri: profilePicture,
+          }}
+        />
+        <Button
+          title="Find Rider"
+          color="black"
+          onPress={() => {
+            navigate("Rider Finder");
+          }}
+        />
+        <Button
+          title="Chat"
+          color="black"
+          onPress={() => {
+            navigate("ChatList");
+          }}
+        />
+     <TouchableOpacity style={styles.buttonContainer}>
             <Button
               title="Plan Route"
               color="black"
@@ -134,7 +176,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#0984E3",
   },
   text: {
+    fontSize: 20,
     color: "#fff",
     padding: 10,
+  },
+  profilePic: {
+    width: 250,
+    height: 250,
+    margin: 10,
+    alignSelf: "center",
+    borderRadius: 40,
+  },
+  title: {
+    fontSize: 25,
+    alignSelf: "center",
+    fontWeight: "bold",
+    color: "#fff",
   },
 });
