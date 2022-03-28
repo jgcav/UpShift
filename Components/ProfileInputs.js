@@ -12,7 +12,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import firebase from "../config/firebase";
 import { setDoc, doc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from "expo-image-picker";
 
 export default function ProfileInputs({ navigate }) {
@@ -23,7 +23,21 @@ export default function ProfileInputs({ navigate }) {
   const [selectedGender, setSelectedGender] = useState("");
   const [region, setRegion] = useState("");
   const genders = ["Male", "Female", "Other"];
-  const regions = ["Scotland", "North East", "North West", "Yorkshire & Humberside", "East Midlands", "West Midlands", "East of England", "London", "South East", "South West", "Wales", "Northern Ireland", "Isle of Man"]
+  const regions = [
+    "Scotland",
+    "North East",
+    "North West",
+    "Yorkshire & Humberside",
+    "East Midlands",
+    "West Midlands",
+    "East of England",
+    "London",
+    "South East",
+    "South West",
+    "Wales",
+    "Northern Ireland",
+    "Isle of Man",
+  ];
   const [bike, onChangeBike] = useState("");
   const [bio, onChangeBio] = useState("");
   const [isUploading, setIsUploading] = useState(false);
@@ -74,8 +88,9 @@ export default function ProfileInputs({ navigate }) {
     }
     setProfilePictureInput(result.uri);
   };
-  
+
   const onPress = () => {
+    const storage = getStorage();
     getDownloadURL(ref(storage, `images/${user.uid}/profile.jpg`)).then(
       (url) => {
         const random = Math.floor(Math.random() * (10000 + 1));
@@ -89,8 +104,8 @@ export default function ProfileInputs({ navigate }) {
           img: url,
           bio,
           random,
-          DOB: "2000-01-01",
-          age: "0"
+          DOB: new Date(2000, 1, 1),
+          age: "0",
         };
         postProfile(profile);
         navigate("Profile");
