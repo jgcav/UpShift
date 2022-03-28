@@ -1,6 +1,15 @@
 import React from "react";
-import { View, Text, ScrollView, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Image,
+  Dimensions,
+} from "react-native";
+
 import SelectDropdown from "react-native-select-dropdown";
+import Slider from "@react-native-community/slider";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import {
   collection,
@@ -32,35 +41,41 @@ const regions = [
 ];
 const genders = ["Male", "Female", "Other", "All"];
 const db = firebase.firestore();
-
+const { height, width } = Dimensions.get("window");
 export default function RiderFinder({ navigation: { navigate } }) {
   const [riders, setRiders] = useState([]);
   const { currentUser } = useAuth();
   const [gender, setGender] = useState("All");
-  const [region, setRegion] = useState(`${currentUser.region}`);
+  const [region, setRegion] = useState("North East");
   const [loading, setLoading] = useState(true);
+  const [ageL, setAgeL] = useState(18);
+  const [ageH, setAgeH] = useState(100);
+  const [lAge, setLAge] = useState(18);
+  const [hAge, setHAge] = useState(100);
 
-  function getRiders() {
+  function getRiders(minDOB, maxDOB) {
     let q;
     if (gender === "All") {
-      console.log("all");
       q = query(
         collection(db, "profiles"),
         where("region", "==", `${region}`),
-        where("uid", "!=", `${currentUser.uid}`)
+        where("DOB", "<", minDOB),
+        where("DOB", ">", maxDOB)
       );
     } else {
       q = query(
         collection(db, "profiles"),
         where("selectedGender", "==", `${gender}`),
         where("region", "==", `${region}`),
-        where("uid", "!=", `${currentUser.uid}`)
+        where("DOB", "<", minDOB),
+        where("DOB", ">", maxDOB)
       );
     }
     const Proms = [getDocs(q), getDoc(doc(db, `profiles/${currentUser.uid}`))];
     return Promise.all(Proms).then(([snapshot, docSnap]) => {
-      let profiles = snapshot.docs.map((doc) => {
-        return doc.data();
+      let profiles = [];
+      snapshot.docs.forEach((doc) => {
+        if (doc.data.uid !== currentUser.uid) profiles.push(doc.data());
       });
       const { connected } = docSnap.data();
       if (connected !== undefined) {
@@ -80,11 +95,17 @@ export default function RiderFinder({ navigation: { navigate } }) {
   }
 
   useEffect(() => {
-    getRiders().then((profiles) => {
+    const d = new Date();
+    const d2 = new Date();
+    d.setFullYear(d.getFullYear() - lAge);
+    d.setHours(0, 0, 0, 0);
+    d2.setFullYear(d2.getFullYear() - hAge);
+    d2.setHours(23, 59, 59, 99);
+    getRiders(d, d2).then((profiles) => {
       setRiders(profiles);
       setLoading(false);
     });
-  }, [region, gender]);
+  }, [region, gender, lAge, hAge]);
 
   if (loading)
     return (
@@ -159,7 +180,41 @@ export default function RiderFinder({ navigation: { navigate } }) {
           rowTextStyle={styles.dropdown2RowTxtStyle}
         />
       </View>
-
+      <Text style={{ fontSize: 20, fontWeight: "bold" }}>{ageL}</Text>
+      {/* <Text style={{ fontSize: 20, fontWeight: "bold" }}>{slidingL}</Text> */}
+      <Slider
+        style={{ width: width * 0.9, height: 40 }}
+        minimumValue={18}
+        maximumValue={100}
+        value={ageL}
+        onValueChange={(value) => {
+          if (value > ageH) {
+            setAgeH(parseInt(value));
+            setAgeL(parseInt(value));
+          } else {
+            setAgeL(parseInt(value));
+          }
+        }}
+        // onSlidingStart={() => setSlidingL("Sliding")}
+        onSlidingComplete={() => setLAge(ageL)}
+      />
+      <Text style={{ fontSize: 20, fontWeight: "bold" }}>{ageH}</Text>
+      {/* <Text style={{ fontSize: 20, fontWeight: "bold" }}>{slidingH}</Text> */}
+      <Slider
+        style={{ width: width * 0.9, height: 40 }}
+        minimumValue={18}
+        maximumValue={100}
+        value={ageH}
+        onValueChange={(value) => {
+          if (value < ageL) {
+            setAgeH(parseInt(value));
+            setAgeL(parseInt(value));
+          } else {
+            setAgeH(parseInt(value));
+          }
+        }}
+        onSlidingComplete={() => setHAge(ageH)}
+      />
       {riders.map((rider, index) => {
         return (
           <RiderCard
