@@ -5,12 +5,12 @@ import { getAuth } from "firebase/auth";
 import "firebase/compat/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBtwVhxLOeOH-Vzxw_5iAXrZAnkZoy7vis",
-  authDomain: "upshift-e484e.firebaseapp.com",
-  projectId: "upshift-e484e",
-  storageBucket: "upshift-e484e.appspot.com",
-  messagingSenderId: "374818272374",
-  appId: "1:374818272374:web:85c707857fccf851961b57",
+  apiKey: "AIzaSyAMxKZxYPXHMlV625ieO6ry74KPYzlIc9Q",
+  authDomain: "upshift2-5ebdc.firebaseapp.com",
+  projectId: "upshift2-5ebdc",
+  storageBucket: "upshift2-5ebdc.appspot.com",
+  messagingSenderId: "403454723062",
+  appId: "1:403454723062:web:48f582da94ca46aa90bdd7",
 };
 
 firebase.initializeApp(firebaseConfig);

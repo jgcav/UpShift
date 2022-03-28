@@ -15,17 +15,8 @@ import { updateDoc, doc, arrayUnion, arrayRemove } from "firebase/firestore";
 import firebase from "../config/firebase.js";
 const db = firebase.firestore();
 export default function RiderCard({ rider, navigate, setLoading }) {
-  const [profileUrl, setProfileUrl] = useState("");
   const [requested, setRequested] = useState(false);
   const { currentUser } = useAuth();
-  useEffect(() => {
-    const storage = getStorage();
-    getDownloadURL(ref(storage, `images/${rider.uid}/profile.jpg`)).then(
-      (url) => {
-        setProfileUrl(url);
-      }
-    );
-  }, []);
 
   function addRequest(uid, uid2, type) {
     const msgR = doc(db, "profiles", `${uid}`);
@@ -74,7 +65,7 @@ export default function RiderCard({ rider, navigate, setLoading }) {
         <Image
           style={styles.logo}
           source={{
-            uri: profileUrl,
+            uri: rider.img,
           }}
         />
       </View>

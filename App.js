@@ -14,7 +14,9 @@ import { SavedRoutes } from "./Components/SavedRoutes";
 import RiderFinderScreen from "./Components/RiderFinderScreen";
 import RiderProfileScreen from "./Components/RiderProfileScreen";
 import MessageRequestsScreen from "./Components/MessageRequestsScreen";
+import { LogBox } from "react-native";
 
+LogBox.ignoreLogs(["Setting a timer"]);
 export default function App() {
   const [loading, setLoading] = useState(true);
 
