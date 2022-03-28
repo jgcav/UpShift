@@ -53,7 +53,6 @@ export default function RiderCard({ rider, navigate, setLoading }) {
       onPress={() => {
         navigate("Rider Profile", {
           rider,
-          profileUrl,
           requested,
           setRequested,
           addRequest,
