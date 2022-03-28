@@ -14,17 +14,17 @@ import firebase from "../config/firebase";
 import { doc, setDoc } from "firebase/firestore";
 const db = firebase.firestore();
 
-export const RoutePlanner = ({ route, navigation: { navigate } }) => {
+export const SavedRoutes = ({ route }) => {
   const _map = useRef(null);
-  const [points, setPoints] = useState([]);
+  const [points, setPoints] = useState(route.params.location);
   const [snapped, setSnapped] = useState(false);
   const [drawMethod, setDrawMethod] = useState("Polyline");
   const [routeNameField, setRouteNameField] = useState(false);
   const [routeName, setRouteName] = useState("");
 
   const [selectedPlace, setSelectedPlace] = useState({
-    lat: route.params.location.lat,
-    lng: route.params.location.lng,
+    lat: route.params.location[0].latitude,
+    lng: route.params.location[0].longitude,
   });
 
   useEffect(() => {
@@ -93,11 +93,6 @@ export const RoutePlanner = ({ route, navigation: { navigate } }) => {
     }
   };
 
-  const returnToProfile = () => {
-    saveRoute();
-    navigate("Profile");
-  };
-
   return (
     <View>
       <View style={styles.searchbar}>
@@ -109,9 +104,7 @@ export const RoutePlanner = ({ route, navigation: { navigate } }) => {
         <Button
           title="Save"
           color="black"
-          onPress={() => {
-            setRouteNameField((curr) => !curr);
-          }}
+          onPress={() => setRouteNameField((curr) => !curr)}
         />
         <Button title="Undo" color="black" onPress={undoLastPoint} />
         <Button
@@ -130,7 +123,7 @@ export const RoutePlanner = ({ route, navigation: { navigate } }) => {
             <TextInput
               placeholder="Enter a name for this route..."
               onChangeText={(e) => setRouteName(e)}
-              onSubmitEditing={returnToProfile}
+              onSubmitEditing={saveRoute}
               placeholderTextColor="black"
               returnKeyType="done"
             />

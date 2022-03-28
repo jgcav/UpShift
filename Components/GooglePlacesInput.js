@@ -108,8 +108,11 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
 
+  autocompleteContainer: {
+    justifyContent: "center",
+  },
+
   container: {
-    flex: 1,
-    alignItems: "center",
+    position: "absolute",
   },
 });
