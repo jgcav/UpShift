@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Button, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import {
+  Button,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  List,
+  ScrollView,
+} from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import firebase from "../config/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import { RoutePlanner } from "./RoutePlanner";
-import { fetchCurrLocation } from "./api";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { fetchCurrLocation } from "../Components/api";
 
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
   const [error, setError] = useState("");
-  const [profile, setProfile] = useState({});
-  const db = firebase.firestore();
   const [userLocation, setUserLocation] = useState({});
+  const [profile, setProfile] = useState({});
+  const [routes, setRoutes] = useState({});
+  const db = firebase.firestore();
 
   const handleLogout = () => {
     setError("");
@@ -33,6 +41,26 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     });
   }
 
+  function getRoutes() {
+    const userId = currentUser.uid;
+    const ref = collection(db, "profiles", `${userId}`, "routes");
+    let routeInfo = [];
+    return getDocs(ref).then((snapshot) => {
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const id = doc.id;
+        routeInfo.push({ id, ...data });
+      });
+      return routeInfo;
+    });
+  }
+
+  useEffect(() => {
+    fetchCurrLocation().then((data) => {
+      setUserLocation(data);
+    });
+  }, []);
+
   useEffect(() => {
     getProfile().then((data) => {
       setProfile(data);
@@ -40,37 +68,56 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   }, []);
 
   useEffect(() => {
-    fetchCurrLocation().then((data) => {
-      console.log(data);
-      setUserLocation(data);
+    getRoutes().then((data) => {
+      setRoutes(data);
     });
-  }, []);
+  }, [routes]);
 
-  console.log(userLocation, "profile");
+  function displaySavedRoutes() {
+    const savedRoutes = [];
+    for (let i = 0; i < routes.length; i++) {
+      savedRoutes.push(
+        <Button
+          key={i}
+          title={routes[i].id}
+          color="black"
+          onPress={() =>
+            navigate("SavedRoutes", { location: routes[i].myRoute })
+          }
+        />
+      );
+    }
+    return savedRoutes;
+  }
 
   return (
     <View style={styles.container}>
-      <Text>{currentUser && currentUser.email}</Text>
-      <Text>{error && error}</Text>
-      <TouchableOpacity style={styles.buttonContainer}>
-        <Button title="Logout" color="black" onPress={handleLogout} />
-      </TouchableOpacity>
-      <Text>Your Profile</Text>
-      <View style={styles.profileCard}>
-        <Text style={styles.text}>
-          Name: {profile.firstName} {profile.lastName}
-        </Text>
-        <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
-        <Text style={styles.text}>Bike: {profile.bike}</Text>
+      <ScrollView>
+        <Text>{currentUser && currentUser.email}</Text>
+        <Text>{error && error}</Text>
         <TouchableOpacity style={styles.buttonContainer}>
-          <Button
-            title="Plan Route"
-            color="black"
-            onPress={navigate("RoutePlanner")}
-          />
+          <Button title="Logout" color="black" onPress={handleLogout} />
         </TouchableOpacity>
-      </View>
-      <RoutePlanner userLocation={userLocation} />
+        <Text>Your Profile</Text>
+        <View style={styles.profileCard}>
+          <Text style={styles.text}>
+            Name: {profile.firstName} {profile.lastName}
+          </Text>
+          <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
+          <Text style={styles.text}>Bike: {profile.bike}</Text>
+          <TouchableOpacity style={styles.buttonContainer}>
+            <Button
+              title="Plan Route"
+              color="black"
+              onPress={() =>
+                navigate("RoutePlanner", { location: userLocation })
+              }
+            />
+          </TouchableOpacity>
+        </View>
+        <Text>Saved Routes</Text>
+        <View>{displaySavedRoutes()}</View>
+      </ScrollView>
     </View>
   );
 }
