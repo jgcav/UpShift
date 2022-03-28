@@ -64,21 +64,21 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     });
   }, []);
 
-  function getProfilePicture() {
-    const storage = getStorage();
-    const pathReference = ref(storage, `images/${userId}/profile.jpg`);
-    return getDownloadURL(pathReference).then((url) => {
-      return url;
-    });
-  }
+  // function getProfilePicture() {
+  //   const storage = getStorage();
+  //   const pathReference = ref(storage, `images/${userId}/profile.jpg`);
+  //   return getDownloadURL(pathReference).then((url) => {
+  //     return url;
+  //   });
+  // }
 
   useEffect(() => {
     getProfile().then((data) => {
       setProfile(data);
     });
-    getProfilePicture().then((url) => {
-      setProfilePicture(url);
-    });
+    // getProfilePicture().then((url) => {
+    //   setProfilePicture(url);
+    // });
   }, []);
 
   useEffect(() => {
@@ -111,20 +111,24 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       <TouchableOpacity style={styles.buttonContainer}>
         <Button title="Logout" color="black" onPress={handleLogout} />
       </TouchableOpacity>
+
       <Text style={styles.title}>Your Profile</Text>
       <View style={styles.profileCard}>
+        <Image
+          style={styles.profilePic}
+          source={{
+            uri: profile.img,
+          }}
+        />
         <Text style={styles.text}>
           Name: {profile.firstName} {profile.lastName}
         </Text>
         <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
         <Text style={styles.text}>Bike: {profile.bike}</Text>
+        <Text style={styles.text}>Region: {profile.region}</Text>
+        <Text style={styles.text}>Age: {profile.age}</Text>
+        <Text style={styles.text}>Bio: {profile.bio}</Text>
 
-        <Image
-          style={styles.profilePic}
-          source={{
-            uri: profilePicture,
-          }}
-        />
         <Button
           title="Find Rider"
           color="black"
