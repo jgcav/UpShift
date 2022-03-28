@@ -16,7 +16,7 @@ import RiderProfileScreen from "./Components/RiderProfileScreen";
 import MessageRequestsScreen from "./Components/MessageRequestsScreen";
 import { LogBox } from "react-native";
 
-LogBox.ignoreLogs(["Setting a timer"]);
+LogBox.ignoreLogs(["Setting a timer", "AsyncStorage"]);
 export default function App() {
   const [loading, setLoading] = useState(true);
 
