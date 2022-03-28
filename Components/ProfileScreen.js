@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import {
   Button,
   Text,
@@ -24,6 +25,9 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   const db = firebase.firestore();
   const userId = currentUser.uid;
   const [profilePicture, setProfilePicture] = useState();
+  const [isRouteSaved, setIsRouteSaved] = useState(false);
+
+  const isFocused = useIsFocused();
 
   const handleLogout = () => {
     setError("");
@@ -85,7 +89,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     getRoutes().then((data) => {
       setRoutes(data);
     });
-  }, []);
+  }, [isFocused]);
 
   function displaySavedRoutes() {
     const savedRoutes = [];
@@ -96,7 +100,9 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           title={routes[i].id}
           color="black"
           onPress={() =>
-            navigate("SavedRoutes", { location: routes[i].myRoute })
+            navigate("SavedRoutes", {
+              location: routes[i].myRoute,
+            })
           }
         />
       );
@@ -143,7 +149,11 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           <Button
             title="Plan Route"
             color="black"
-            onPress={() => navigate("RoutePlanner", { location: userLocation })}
+            onPress={() =>
+              navigate("RoutePlanner", {
+                location: userLocation,
+              })
+            }
           />
         </TouchableOpacity>
       </View>
