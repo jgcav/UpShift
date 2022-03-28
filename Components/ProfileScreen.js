@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import {
   Button,
   Text,
@@ -25,6 +26,9 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
   const [userLocation, setUserLocation] = useState({});
   const [profilePicture, setProfilePicture] = useState();
+  const [isRouteSaved, setIsRouteSaved] = useState(false);
+
+  const isFocused = useIsFocused();
   const [profile, setProfile] = useState({});
   const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,14 +42,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   }, []);
 
 
-  // function getProfilePicture() {
-  //   const storage = getStorage();
-  //   const pathReference = ref(storage, `images/${userId}/profile.jpg`);
-  //   return getDownloadURL(pathReference).then((url) => {
-  //     return url;
-  //   });
-  // }
-
   useEffect(() => {
     getRoutes(userId).then((data) => {
       setRoutes(data);
@@ -57,7 +53,9 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       setProfilePicture(url);
     });
     setLoading(false);
-  }, []);
+  }, [isFocused]);
+
+
 
   const handleLogout = () => {
     setError("");
@@ -108,7 +106,11 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           <Button
             title="Plan Route"
             color="black"
-            onPress={() => navigate("RoutePlanner", { location: userLocation })}
+            onPress={() =>
+              navigate("RoutePlanner", {
+                location: userLocation,
+              })
+            }
           />
         </TouchableOpacity>
 
