@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, Image } from "react-native";
+import SelectDropdown from "react-native-select-dropdown";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import {
   collection,
   getDocs,
@@ -13,11 +15,28 @@ import firebase from "../config/firebase.js";
 import RiderCard from "./RiderCard";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext.js";
-
+const regions = [
+  "Scotland",
+  "North East",
+  "North West",
+  "Yorkshire & Humberside",
+  "East Midlands",
+  "West Midlands",
+  "East of England",
+  "London",
+  "South East",
+  "South West",
+  "Wales",
+  "Northern Ireland",
+  "Isle of Man",
+];
+const genders = ["Male", "Female", "Other", "All"];
 const db = firebase.firestore();
 
 export default function RiderFinder({ navigation: { navigate } }) {
   const [riders, setRiders] = useState([]);
+  const [gender, setGender] = useState("Male");
+  const [region, setRegion] = useState("North East");
   const { currentUser } = useAuth();
   const [loading, setLoading] = useState(true);
 
@@ -26,10 +45,9 @@ export default function RiderFinder({ navigation: { navigate } }) {
       getDocs(
         query(
           collection(db, "profiles"),
-          where("selectedGender", "==", "Male"),
-          where("age", ">=", 20),
-          where("age", "<=", 31),
-          limit(10)
+          where("selectedGender", "==", `${gender}`),
+          where("region", "==", `${region}`),
+          where("uid", "!=", `${currentUser.uid}`)
         )
       ),
       getDoc(doc(db, `profiles/${currentUser.uid}`)),
@@ -39,7 +57,18 @@ export default function RiderFinder({ navigation: { navigate } }) {
         return doc.data();
       });
       const { connected } = docSnap.data();
-      profiles = profiles.filter((profile) => !connected.includes(profile.uid));
+      if (connected !== undefined) {
+        profiles = profiles.filter(
+          (profile) => !connected.includes(profile.uid)
+        );
+      }
+      for (let i = profiles.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = profiles[i];
+        profiles[i] = profiles[j];
+        profiles[j] = temp;
+      }
+
       return profiles;
     });
   }
@@ -49,7 +78,7 @@ export default function RiderFinder({ navigation: { navigate } }) {
       setRiders(profiles);
       setLoading(false);
     });
-  }, []);
+  }, [region, gender]);
 
   if (loading)
     return (
@@ -72,6 +101,59 @@ export default function RiderFinder({ navigation: { navigate } }) {
 
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.filterContainer}>
+        <SelectDropdown
+          data={regions}
+          onSelect={(selectedItem, index) => {
+            setRegion(selectedItem);
+          }}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem;
+          }}
+          defaultButtonText={"Region"}
+          buttonStyle={styles.dropdown2BtnStyle}
+          buttonTextStyle={styles.dropdown2BtnTxtStyle}
+          renderDropdownIcon={(isOpened) => {
+            return (
+              <FontAwesome
+                name={isOpened ? "chevron-up" : "chevron-down"}
+                color={"#444"}
+                size={18}
+              />
+            );
+          }}
+          dropdownIconPosition={"right"}
+          dropdownStyle={styles.dropdown2DropdownStyle}
+          rowStyle={styles.dropdown2RowStyle}
+          rowTextStyle={styles.dropdown2RowTxtStyle}
+        />
+        <SelectDropdown
+          data={genders}
+          onSelect={(selectedItem, index) => {
+            setGender(selectedItem);
+          }}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem;
+          }}
+          defaultButtonText={"Gender"}
+          buttonStyle={styles.dropdown2BtnStyle}
+          buttonTextStyle={styles.dropdown2BtnTxtStyle}
+          renderDropdownIcon={(isOpened) => {
+            return (
+              <FontAwesome
+                name={isOpened ? "chevron-up" : "chevron-down"}
+                color={"#444"}
+                size={18}
+              />
+            );
+          }}
+          dropdownIconPosition={"right"}
+          dropdownStyle={styles.dropdown2DropdownStyle}
+          rowStyle={styles.dropdown2RowStyle}
+          rowTextStyle={styles.dropdown2RowTxtStyle}
+        />
+      </View>
+
       {riders.map((rider, index) => {
         return (
           <RiderCard
@@ -90,6 +172,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#0984E3",
     flex: 1,
+  },
+  filterContainer: {
+    flexDirection: "row",
   },
   loading: {
     width: 100,
