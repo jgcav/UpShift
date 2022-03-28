@@ -180,41 +180,80 @@ export default function RiderFinder({ navigation: { navigate } }) {
           rowTextStyle={styles.dropdown2RowTxtStyle}
         />
       </View>
-      <Text style={{ fontSize: 20, fontWeight: "bold" }}>{ageL}</Text>
-      {/* <Text style={{ fontSize: 20, fontWeight: "bold" }}>{slidingL}</Text> */}
-      <Slider
-        style={{ width: width * 0.9, height: 40 }}
-        minimumValue={18}
-        maximumValue={100}
-        value={ageL}
-        onValueChange={(value) => {
-          if (value > ageH) {
-            setAgeH(parseInt(value));
-            setAgeL(parseInt(value));
-          } else {
-            setAgeL(parseInt(value));
-          }
-        }}
-        // onSlidingStart={() => setSlidingL("Sliding")}
-        onSlidingComplete={() => setLAge(ageL)}
-      />
-      <Text style={{ fontSize: 20, fontWeight: "bold" }}>{ageH}</Text>
-      {/* <Text style={{ fontSize: 20, fontWeight: "bold" }}>{slidingH}</Text> */}
-      <Slider
-        style={{ width: width * 0.9, height: 40 }}
-        minimumValue={18}
-        maximumValue={100}
-        value={ageH}
-        onValueChange={(value) => {
-          if (value < ageL) {
-            setAgeH(parseInt(value));
-            setAgeL(parseInt(value));
-          } else {
-            setAgeH(parseInt(value));
-          }
-        }}
-        onSlidingComplete={() => setHAge(ageH)}
-      />
+      <View style={styles.ageInfo}>
+        <Text style={{ fontSize: 20, fontWeight: "bold", flex: 1 }}>
+          {ageL}
+        </Text>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "bold",
+            flex: 1,
+            textAlign: "right",
+          }}
+        >
+          Minimum Age:
+        </Text>
+      </View>
+      <View style={styles.sliderContainer}>
+        <View style={styles.spacer}></View>
+        <Slider
+          style={{
+            width: width * 0.9,
+            height: 40,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          minimumValue={18}
+          maximumValue={100}
+          value={ageL}
+          onValueChange={(value) => {
+            if (value > ageH) {
+              setAgeH(parseInt(value));
+              setAgeL(parseInt(value));
+            } else {
+              setAgeL(parseInt(value));
+            }
+          }}
+          onSlidingComplete={() => setLAge(ageL)}
+        />
+        <View style={styles.spacer}></View>
+      </View>
+      <View style={styles.ageInfo}>
+        <Text style={{ fontSize: 20, fontWeight: "bold", flex: 1 }}>
+          {ageH}
+        </Text>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "bold",
+            flex: 1,
+            textAlign: "right",
+          }}
+        >
+          Maximum Age:
+        </Text>
+      </View>
+      <View style={styles.sliderContainer}>
+        <View style={styles.spacer}></View>
+        <Slider
+          style={{ width: width * 0.9, height: 40 }}
+          minimumValue={18}
+          maximumValue={100}
+          value={ageH}
+          onValueChange={(value) => {
+            if (value < ageL) {
+              setAgeH(parseInt(value));
+              setAgeL(parseInt(value));
+            } else {
+              setAgeH(parseInt(value));
+            }
+          }}
+          onSlidingComplete={() => setHAge(ageH)}
+        />
+        <View style={styles.spacer}></View>
+      </View>
+
       {riders.map((rider, index) => {
         return (
           <RiderCard
@@ -236,6 +275,16 @@ const styles = StyleSheet.create({
   },
   filterContainer: {
     flexDirection: "row",
+  },
+  sliderContainer: {
+    flexDirection: "row",
+  },
+  spacer: {
+    flex: 1,
+  },
+  ageInfo: {
+    flexDirection: "row",
+    paddingHorizontal: 15,
   },
   loading: {
     width: 100,
