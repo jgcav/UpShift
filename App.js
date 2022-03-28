@@ -58,6 +58,8 @@ export default function App() {
           <Stack.Screen
             name="SavedRoutes"
             component={SavedRoutes}
+          ></Stack.Screen>
+          <Stack.Screen
             name="Rider Finder"
             component={RiderFinderScreen}
           ></Stack.Screen>
