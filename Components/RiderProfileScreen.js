@@ -12,7 +12,7 @@ import { useAuth } from "../contexts/AuthContext";
 export default function RiderProfileScreen({ route }) {
   const { height, width } = Dimensions.get("window");
   const { currentUser } = useAuth();
-  const { rider, profileUrl, requested, setRequested, addRequest, remRequest } =
+  const { rider, requested, setRequested, addRequest, remRequest } =
     route.params;
   const [updateRequest, setUpdateRequest] = useState(requested);
 
@@ -33,7 +33,7 @@ export default function RiderProfileScreen({ route }) {
         <Image
           style={styles.logo}
           source={{
-            uri: profileUrl,
+            uri: rider.img,
           }}
         />
       </View>
@@ -43,7 +43,6 @@ export default function RiderProfileScreen({ route }) {
             <Text
               style={styles.name}
             >{`${rider.firstName} ${rider.lastName}`}</Text>
-            {/* <Text>405 followers</Text> */}
             <Text style={styles.age}>{rider.age}</Text>
           </View>
 
