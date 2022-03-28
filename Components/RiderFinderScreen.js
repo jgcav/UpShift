@@ -35,23 +35,29 @@ const db = firebase.firestore();
 
 export default function RiderFinder({ navigation: { navigate } }) {
   const [riders, setRiders] = useState([]);
-  const [gender, setGender] = useState("Male");
-  const [region, setRegion] = useState("North East");
   const { currentUser } = useAuth();
+  const [gender, setGender] = useState("All");
+  const [region, setRegion] = useState(`${currentUser.region}`);
   const [loading, setLoading] = useState(true);
 
   function getRiders() {
-    const Proms = [
-      getDocs(
-        query(
-          collection(db, "profiles"),
-          where("selectedGender", "==", `${gender}`),
-          where("region", "==", `${region}`),
-          where("uid", "!=", `${currentUser.uid}`)
-        )
-      ),
-      getDoc(doc(db, `profiles/${currentUser.uid}`)),
-    ];
+    let q;
+    if (gender === "All") {
+      console.log("all");
+      q = query(
+        collection(db, "profiles"),
+        where("region", "==", `${region}`),
+        where("uid", "!=", `${currentUser.uid}`)
+      );
+    } else {
+      q = query(
+        collection(db, "profiles"),
+        where("selectedGender", "==", `${gender}`),
+        where("region", "==", `${region}`),
+        where("uid", "!=", `${currentUser.uid}`)
+      );
+    }
+    const Proms = [getDocs(q), getDoc(doc(db, `profiles/${currentUser.uid}`))];
     return Promise.all(Proms).then(([snapshot, docSnap]) => {
       let profiles = snapshot.docs.map((doc) => {
         return doc.data();
