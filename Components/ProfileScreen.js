@@ -5,15 +5,14 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
-  List,
+  Image,
   ScrollView,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import firebase from "../config/firebase";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { fetchCurrLocation } from "../Components/api";
-  Image,
-} from "react-native";
+
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 
@@ -125,7 +124,10 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           Name: {profile.firstName} {profile.lastName}
         </Text>
         <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
+        <Text style={styles.text}>Region: {profile.region}</Text>
         <Text style={styles.text}>Bike: {profile.bike}</Text>
+        <Text style={styles.text}>Age: {profile.age}</Text>
+        <Text style={styles.text}>Bio: {profile.bio}</Text>
 
         <Image
           style={styles.profilePic}
