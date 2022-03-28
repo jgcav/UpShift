@@ -12,12 +12,11 @@ import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import firebase from "../config/firebase";
 import { setDoc, doc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import DatePicker from "./DatePicker";
 
 export default function ProfileInputs({ navigate }) {
   const [firstName, onChangeFirstName] = useState("");
   const [lastName, onChangeLastName] = useState("");
-  const [date, onChangeDate] = useState("2000-01-01");
   const [selectedGender, setSelectedGender] = useState("");
   const [region, setRegion] = useState("");
   const genders = ["Male", "Female", "Other"];
@@ -38,6 +37,7 @@ export default function ProfileInputs({ navigate }) {
   ];
   const [bike, onChangeBike] = useState("");
   const [bio, onChangeBio] = useState("");
+  const [date, setDate] = useState(new Date());
 
   const db = firebase.firestore();
   const user = firebase.auth().currentUser;
@@ -49,10 +49,6 @@ export default function ProfileInputs({ navigate }) {
   }
 
   const onPress = () => {
-    // const storage = getStorage();
-    // getDownloadURL(ref(storage, `images/${user.uid}/profile.jpg`)).then(
-    //   (url) => {
-    const random = Math.floor(Math.random() * (10000 + 1));
     const profile = {
       firstName,
       lastName,
@@ -60,17 +56,13 @@ export default function ProfileInputs({ navigate }) {
       region,
       bike,
       uid: user.uid,
-      // img: url,
       bio,
-      random,
-      DOB: new Date(2000, 1, 1),
+      DOB: date,
       age: "0",
     };
     postProfile(profile);
     navigate("ProfilePictureChooser");
   };
-  //   );
-  // };
 
   return (
     <View style={styles.container}>
@@ -88,31 +80,8 @@ export default function ProfileInputs({ navigate }) {
         onChangeText={onChangeLastName}
       ></TextInput>
       <Text>Date of Birth</Text>
-      <View style={styles.dateBlock}>
-        <TextInput
-          style={styles.dateInput}
-          placeholder="DD"
-          placeholderTextColor={"white"}
-          keyboardType="number-pad"
-          maxLength={2}
-          returnKeyType={"done"}
-        ></TextInput>
-        <TextInput
-          style={styles.dateInput}
-          placeholder="MM"
-          placeholderTextColor={"white"}
-          keyboardType="number-pad"
-          maxLength={2}
-          returnKeyType={"done"}
-        ></TextInput>
-        <TextInput
-          style={styles.dateInput}
-          placeholder="YYYY"
-          placeholderTextColor={"white"}
-          keyboardType="number-pad"
-          maxLength={4}
-          returnKeyType={"done"}
-        ></TextInput>
+      <View>
+        <DatePicker setDate={setDate} date={date} />
       </View>
       <View style={styles.dropdown}>
         <SelectDropdown
@@ -217,19 +186,6 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: "center",
   },
-  dateInput: {
-    height: 40,
-    width: 60,
-    backgroundColor: "rgba(255,255,255,0.2)",
-    margin: 10,
-    textAlign: "center",
-    color: "white",
-    paddingHorizontal: 10,
-  },
-  dateBlock: {
-    flexDirection: "row",
-  },
-
   dropdown: {
     padding: 10,
     marginBottom: 20,
