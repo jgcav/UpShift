@@ -17,6 +17,8 @@ import {
   getProfilePicture,
 } from "../utils/firebaseFuncs";
 
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
   const [error, setError] = useState("");
@@ -34,6 +36,15 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       setUserLocation(data);
     });
   }, []);
+
+
+  // function getProfilePicture() {
+  //   const storage = getStorage();
+  //   const pathReference = ref(storage, `images/${userId}/profile.jpg`);
+  //   return getDownloadURL(pathReference).then((url) => {
+  //     return url;
+  //   });
+  // }
 
   useEffect(() => {
     getRoutes(userId).then((data) => {
@@ -68,13 +79,15 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
   return (
     <ScrollView>
+
       <Text>{error && error}</Text>
       <TouchableOpacity style={styles.buttonContainer}>
         <Button title="Logout" color="black" onPress={handleLogout} />
       </TouchableOpacity>
 
-      <ProfileCard profile={profile} profilePicture={profilePicture} />
 
+
+      <ProfileCard profile={profile} profilePicture={profilePicture} />
       <View>
         <TouchableOpacity style={styles.buttonContainer}>
           <Button
@@ -85,16 +98,10 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             }}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer}>
-          <Button
-            title="Chat"
-            color="black"
-            onPress={() => {
-              navigate("ChatList");
-            }}
-          />
-        </TouchableOpacity>
       </View>
+
+
+
 
       <View>
         <TouchableOpacity style={styles.buttonContainer}>
@@ -104,6 +111,9 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             onPress={() => navigate("RoutePlanner", { location: userLocation })}
           />
         </TouchableOpacity>
+
+
+
 
         <Text style={styles.title}>Saved Routes</Text>
         <View>
@@ -121,6 +131,8 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           })}
         </View>
       </View>
+
+
     </ScrollView>
   );
 }
