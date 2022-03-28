@@ -9,11 +9,10 @@ import {
   Image,
 } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
-// import ImageChooser from "./ImageChooser";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import firebase from "../config/firebase";
 import { setDoc, doc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from "expo-image-picker";
 
 export default function ProfileInputs({ navigate }) {
@@ -22,8 +21,25 @@ export default function ProfileInputs({ navigate }) {
   const [profilePictureInput, setProfilePictureInput] = useState("not changed");
   const [date, onChangeDate] = useState("2000-01-01");
   const [selectedGender, setSelectedGender] = useState("");
+  const [region, setRegion] = useState("");
   const genders = ["Male", "Female", "Other"];
+  const regions = [
+    "Scotland",
+    "North East",
+    "North West",
+    "Yorkshire & Humberside",
+    "East Midlands",
+    "West Midlands",
+    "East of England",
+    "London",
+    "South East",
+    "South West",
+    "Wales",
+    "Northern Ireland",
+    "Isle of Man",
+  ];
   const [bike, onChangeBike] = useState("");
+  const [bio, onChangeBio] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
   const db = firebase.firestore();
@@ -72,18 +88,29 @@ export default function ProfileInputs({ navigate }) {
     }
     setProfilePictureInput(result.uri);
   };
-  console.log(profilePictureInput);
-  console.log(isUploading);
+
   const onPress = () => {
-    const profile = {
-      firstName,
-      lastName,
-      selectedGender,
-      bike,
-      uid: user.uid,
-    };
-    postProfile(profile);
-    navigate("Profile");
+    const storage = getStorage();
+    getDownloadURL(ref(storage, `images/${user.uid}/profile.jpg`)).then(
+      (url) => {
+        const random = Math.floor(Math.random() * (10000 + 1));
+        const profile = {
+          firstName,
+          lastName,
+          selectedGender,
+          region,
+          bike,
+          uid: user.uid,
+          img: url,
+          bio,
+          random,
+          DOB: new Date(2000, 1, 1),
+          age: "0",
+        };
+        postProfile(profile);
+        navigate("Profile");
+      }
+    );
   };
 
   if (isUploading) {
@@ -154,7 +181,34 @@ export default function ProfileInputs({ navigate }) {
             buttonTextAfterSelection={(selectedItem, index) => {
               return selectedItem;
             }}
-            defaultButtonText={"Select gender"}
+            defaultButtonText={"Select Gender"}
+            buttonStyle={styles.dropdown2BtnStyle}
+            buttonTextStyle={styles.dropdown2BtnTxtStyle}
+            renderDropdownIcon={(isOpened) => {
+              return (
+                <FontAwesome
+                  name={isOpened ? "chevron-up" : "chevron-down"}
+                  color={"#444"}
+                  size={18}
+                />
+              );
+            }}
+            dropdownIconPosition={"right"}
+            dropdownStyle={styles.dropdown2DropdownStyle}
+            rowStyle={styles.dropdown2RowStyle}
+            rowTextStyle={styles.dropdown2RowTxtStyle}
+          />
+        </View>
+        <View style={styles.dropdown}>
+          <SelectDropdown
+            data={regions}
+            onSelect={(selectedItem, index) => {
+              setRegion(selectedItem);
+            }}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              return selectedItem;
+            }}
+            defaultButtonText={"Select Region"}
             buttonStyle={styles.dropdown2BtnStyle}
             buttonTextStyle={styles.dropdown2BtnTxtStyle}
             renderDropdownIcon={(isOpened) => {
@@ -179,6 +233,14 @@ export default function ProfileInputs({ navigate }) {
           placeholderTextColor={"white"}
           onChangeText={onChangeBike}
         ></TextInput>
+        <TextInput
+          style={styles.bio}
+          placeholder="Bio (max 4 lines)"
+          placeholderTextColor={"white"}
+          multiline
+          numberOfLines={4}
+          onChangeText={onChangeBio}
+        ></TextInput>
         <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
           <Text style={styles.buttonText}>CREATE</Text>
         </TouchableOpacity>
@@ -191,6 +253,15 @@ const styles = StyleSheet.create({
   container: { flex: 1, alignItems: "center" },
   input: {
     height: 40,
+    width: 300,
+    backgroundColor: "rgba(255,255,255,0.2)",
+    marginBottom: 20,
+    textAlign: "center",
+    color: "black",
+    paddingHorizontal: 10,
+  },
+  bio: {
+    height: 160,
     width: 300,
     backgroundColor: "rgba(255,255,255,0.2)",
     marginBottom: 20,

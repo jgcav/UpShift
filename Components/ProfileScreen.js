@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
-  List,
+  Image,
   ScrollView,
   Image,
 } from "react-native";
@@ -13,6 +13,8 @@ import { useAuth } from "../contexts/AuthContext";
 import firebase from "../config/firebase";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { fetchCurrLocation } from "../Components/api";
+
+
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 export default function ProfileScreen({ navigation: { navigate } }) {
@@ -106,6 +108,47 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
   return (
     <View style={styles.container}>
+
+
+     <ScrollView>
+      <Text>{currentUser && currentUser.email}</Text>
+      <Text>{error && error}</Text>
+      <TouchableOpacity style={styles.buttonContainer}>
+        <Button title="Logout" color="black" onPress={handleLogout} />
+      </TouchableOpacity>
+      <Text style={styles.title}>Your Profile</Text>
+      <View style={styles.profileCard}>
+        <Text style={styles.text}>
+          Name: {profile.firstName} {profile.lastName}
+        </Text>
+        <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
+        <Text style={styles.text}>Region: {profile.region}</Text>
+        <Text style={styles.text}>Bike: {profile.bike}</Text>
+        <Text style={styles.text}>Age: {profile.age}</Text>
+        <Text style={styles.text}>Bio: {profile.bio}</Text>
+
+        <Image
+          style={styles.profilePic}
+          source={{
+            uri: profilePicture,
+          }}
+        />
+        <Button
+          title="Find Rider"
+          color="black"
+          onPress={() => {
+            navigate("Rider Finder");
+          }}
+        />
+        <Button
+          title="Chat"
+          color="black"
+          onPress={() => {
+            navigate("ChatList");
+          }}
+        />
+     <TouchableOpacity style={styles.buttonContainer}>
+
       <ScrollView>
         <Text>{currentUser && currentUser.email}</Text>
         <Text>{error && error}</Text>
@@ -141,6 +184,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             }}
           />
           <TouchableOpacity style={styles.buttonContainer}>
+
             <Button
               title="Plan Route"
               color="black"
