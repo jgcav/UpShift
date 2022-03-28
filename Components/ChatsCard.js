@@ -8,16 +8,13 @@ const db = firebase.firestore();
 
 export default function ChatsCard({ chat, navigate }) {
   const [userProfile, setUserProfile] = useState({});
-  const [profileUrl, setProfileUrl] = useState("");
-
 
   function getProfile() {
     const docRef = doc(db, "profiles", `${chat.chatterId}`);
 
     return getDoc(docRef)
       .then((docSnap) => {
-        const { firstName, lastName } = docSnap.data();
-        return { firstName, lastName };
+        return docSnap.data();
       })
       .catch((err) => {
         console.log(err);
@@ -28,12 +25,6 @@ export default function ChatsCard({ chat, navigate }) {
     getProfile().then((profile) => {
       setUserProfile(profile);
     });
-    // const storage = getStorage();
-    // getDownloadURL(ref(storage, `images/${userProfile.uid}/profile.jpg`)).then(
-    //   (url) => {
-    //     setProfileUrl(url);
-    //   }
-    // );
   }, []);
 
   return (
@@ -47,7 +38,7 @@ export default function ChatsCard({ chat, navigate }) {
         <Image
           style={styles.logo}
           source={{
-            uri: profileUrl,
+            uri: userProfile.img,
           }}
         />
       </View>

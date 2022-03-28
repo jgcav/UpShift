@@ -17,7 +17,7 @@ import MessageRequestsScreen from "./Components/MessageRequestsScreen";
 import { LogBox } from "react-native";
 import ProfilePictureChooser from "./Components/ProfilePictureChooser";
 
-LogBox.ignoreLogs(["Setting a timer"]);
+LogBox.ignoreLogs(["Setting a timer", "AsyncStorage"]);
 export default function App() {
   const [loading, setLoading] = useState(true);
 
