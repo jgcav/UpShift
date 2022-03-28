@@ -5,20 +5,28 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
-  Image,
+  List,
+  ScrollView,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import firebase from "../config/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { fetchCurrLocation } from "../Components/api";
+  Image,
+} from "react-native";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+
 
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
   const [error, setError] = useState("");
+  const [userLocation, setUserLocation] = useState({});
   const [profile, setProfile] = useState({});
+  const [routes, setRoutes] = useState({});
   const db = firebase.firestore();
   const userId = currentUser.uid;
   const [profilePicture, setProfilePicture] = useState();
+
 
   const handleLogout = () => {
     setError("");
@@ -39,6 +47,28 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     });
   }
 
+
+  function getRoutes() {
+    const userId = currentUser.uid;
+    const ref = collection(db, "profiles", `${userId}`, "routes");
+    let routeInfo = [];
+    return getDocs(ref).then((snapshot) => {
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const id = doc.id;
+        routeInfo.push({ id, ...data });
+      });
+      return routeInfo;
+    });
+  }
+
+  useEffect(() => {
+    fetchCurrLocation().then((data) => {
+      setUserLocation(data);
+    });
+  }, []);
+
+
   function getProfilePicture() {
     const storage = getStorage();
     const pathReference = ref(storage, `images/${userId}/profile.jpg`);
@@ -46,6 +76,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       return url;
     });
   }
+
 
   useEffect(() => {
     getProfile().then((data) => {
@@ -56,8 +87,33 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     });
   }, []);
 
+  useEffect(() => {
+    getRoutes().then((data) => {
+      setRoutes(data);
+    });
+  }, [routes]);
+
+  function displaySavedRoutes() {
+    const savedRoutes = [];
+    for (let i = 0; i < routes.length; i++) {
+      savedRoutes.push(
+        <Button
+          key={i}
+          title={routes[i].id}
+          color="black"
+          onPress={() =>
+            navigate("SavedRoutes", { location: routes[i].myRoute })
+          }
+        />
+      );
+    }
+    return savedRoutes;
+  }
+
   return (
     <View style={styles.container}>
+
+     <ScrollView>
       <Text>{currentUser && currentUser.email}</Text>
       <Text>{error && error}</Text>
       <TouchableOpacity style={styles.buttonContainer}>
@@ -91,7 +147,19 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             navigate("ChatList");
           }}
         />
-      </View>
+     <TouchableOpacity style={styles.buttonContainer}>
+            <Button
+              title="Plan Route"
+              color="black"
+              onPress={() =>
+                navigate("RoutePlanner", { location: userLocation })
+              }
+            />
+          </TouchableOpacity>
+        </View>
+        <Text>Saved Routes</Text>
+        <View>{displaySavedRoutes()}</View>
+      </ScrollView>
     </View>
   );
 }
