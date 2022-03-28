@@ -8,13 +8,13 @@ import {
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import GooglePlacesInput from "./GooglePlacesInput";
-import { fetchCurrLocation, snapToRoad } from "./api";
+import { snapToRoad } from "./api";
 
 import firebase from "../config/firebase";
 import { doc, setDoc } from "firebase/firestore";
 const db = firebase.firestore();
 
-export const RoutePlanner = ({ userLocation }) => {
+export const RoutePlanner = ({ route, navigation: { navigate } }) => {
   const _map = useRef(null);
   const [points, setPoints] = useState([]);
   const [snapped, setSnapped] = useState(false);
@@ -22,11 +22,9 @@ export const RoutePlanner = ({ userLocation }) => {
   const [routeNameField, setRouteNameField] = useState(false);
   const [routeName, setRouteName] = useState("");
 
-  console.log(userLocation, "route");
-
   const [selectedPlace, setSelectedPlace] = useState({
-    lat: 53.82144,
-    lng: -1.8251776,
+    lat: route.params.location.lat,
+    lng: route.params.location.lng,
   });
 
   useEffect(() => {
@@ -95,6 +93,11 @@ export const RoutePlanner = ({ userLocation }) => {
     }
   };
 
+  const returnToProfile = () => {
+    saveRoute();
+    navigate("Profile");
+  };
+
   return (
     <View>
       <View style={styles.searchbar}>
@@ -106,7 +109,9 @@ export const RoutePlanner = ({ userLocation }) => {
         <Button
           title="Save"
           color="black"
-          onPress={() => setRouteNameField((curr) => !curr)}
+          onPress={() => {
+            setRouteNameField((curr) => !curr);
+          }}
         />
         <Button title="Undo" color="black" onPress={undoLastPoint} />
         <Button
@@ -123,10 +128,10 @@ export const RoutePlanner = ({ userLocation }) => {
         <View style={styles.routeNameInput}>
           <SafeAreaView>
             <TextInput
-              placeholder="Route Name"
+              placeholder="Enter a name for this route..."
               onChangeText={(e) => setRouteName(e)}
-              onSubmitEditing={saveRoute}
-              placeholderTextColor="#fff"
+              onSubmitEditing={returnToProfile}
+              placeholderTextColor="black"
               returnKeyType="done"
             />
           </SafeAreaView>
@@ -147,7 +152,7 @@ export const RoutePlanner = ({ userLocation }) => {
           //UI buttons?
           showsTraffic={true}
         >
-          {points.length < 2 ? null : drawMethod === "Draw Polyline" ? (
+          {points.length < 2 ? null : drawMethod === "Polyline" ? (
             <Polygon coordinates={points} strokeWidth={3} strokeColor="black" />
           ) : (
             <Polyline
@@ -164,12 +169,16 @@ export const RoutePlanner = ({ userLocation }) => {
 
 const styles = StyleSheet.create({
   routeNameInput: {
+    flex: 1,
+    position: "absolute",
+    bottom: 430,
+    left: 35,
+    zIndex: 2,
     width: 340,
     height: 50,
     fontSize: 18,
     borderRadius: 8,
     borderColor: "#aaa",
-    color: "#000",
     borderWidth: 1.5,
   },
   toolbar: {
