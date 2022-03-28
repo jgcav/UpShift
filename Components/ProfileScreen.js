@@ -26,7 +26,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
   const [userLocation, setUserLocation] = useState({});
   const [profilePicture, setProfilePicture] = useState();
-  const [isRouteSaved, setIsRouteSaved] = useState(false);
 
   const isFocused = useIsFocused();
   const [profile, setProfile] = useState({});
@@ -41,7 +40,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     });
   }, []);
 
-
   useEffect(() => {
     getRoutes(userId).then((data) => {
       setRoutes(data);
@@ -54,8 +52,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     });
     setLoading(false);
   }, [isFocused]);
-
-
 
   const handleLogout = () => {
     setError("");
@@ -77,13 +73,10 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
   return (
     <ScrollView>
-
       <Text>{error && error}</Text>
       <TouchableOpacity style={styles.buttonContainer}>
         <Button title="Logout" color="black" onPress={handleLogout} />
       </TouchableOpacity>
-
-
 
       <ProfileCard profile={profile} profilePicture={profilePicture} />
       <View>
@@ -98,9 +91,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         </TouchableOpacity>
       </View>
 
-
-
-
       <View>
         <TouchableOpacity style={styles.buttonContainer}>
           <Button
@@ -113,9 +103,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             }
           />
         </TouchableOpacity>
-
-
-
 
         <Text style={styles.title}>Saved Routes</Text>
         <View>
@@ -133,8 +120,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           })}
         </View>
       </View>
-
-
     </ScrollView>
   );
 }
