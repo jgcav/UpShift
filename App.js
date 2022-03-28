@@ -15,6 +15,7 @@ import RiderFinderScreen from "./Components/RiderFinderScreen";
 import RiderProfileScreen from "./Components/RiderProfileScreen";
 import MessageRequestsScreen from "./Components/MessageRequestsScreen";
 import { LogBox } from "react-native";
+import ProfilePictureChooser from "./Components/ProfilePictureChooser";
 
 LogBox.ignoreLogs(["Setting a timer", "AsyncStorage"]);
 export default function App() {
@@ -35,6 +36,11 @@ export default function App() {
           <Stack.Screen
             name="SignUp"
             component={SignUpScreen}
+            options={{ headerShown: false }}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="ProfilePictureChooser"
+            component={ProfilePictureChooser}
             options={{ headerShown: false }}
           ></Stack.Screen>
           <Stack.Screen
