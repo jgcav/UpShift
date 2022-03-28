@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import "react-native-gesture-handler";
@@ -10,11 +10,12 @@ import ProfileScreen from "./Components/ProfileScreen";
 import ProfileMakerScreen from "./Components/ProfileMakerScreen";
 import ChatScreen from "./Components/ChatScreen";
 import ChatListScreen from "./Components/ChatListScreen";
+import { SavedRoutes } from "./Components/SavedRoutes";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
 
-  if (loading) return <RoutePlanner />;
+  // if (loading) return <RoutePlanner />;
 
   const Stack = createStackNavigator();
   return (
@@ -48,6 +49,10 @@ export default function App() {
           <Stack.Screen
             name="RoutePlanner"
             component={RoutePlanner}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="SavedRoutes"
+            component={SavedRoutes}
           ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
