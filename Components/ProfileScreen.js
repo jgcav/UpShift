@@ -5,17 +5,22 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
+  List,
+  ScrollView,
   Image,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import firebase from "../config/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { fetchCurrLocation } from "../Components/api";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
   const [error, setError] = useState("");
+  const [userLocation, setUserLocation] = useState({});
   const [profile, setProfile] = useState({});
+  const [routes, setRoutes] = useState({});
   const db = firebase.firestore();
   const userId = currentUser.uid;
   const [profilePicture, setProfilePicture] = useState();
@@ -39,6 +44,26 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     });
   }
 
+  function getRoutes() {
+    const userId = currentUser.uid;
+    const ref = collection(db, "profiles", `${userId}`, "routes");
+    let routeInfo = [];
+    return getDocs(ref).then((snapshot) => {
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const id = doc.id;
+        routeInfo.push({ id, ...data });
+      });
+      return routeInfo;
+    });
+  }
+
+  useEffect(() => {
+    fetchCurrLocation().then((data) => {
+      setUserLocation(data);
+    });
+  }, []);
+
   function getProfilePicture() {
     const storage = getStorage();
     const pathReference = ref(storage, `images/${userId}/profile.jpg`);
@@ -56,42 +81,78 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     });
   }, []);
 
+  useEffect(() => {
+    getRoutes().then((data) => {
+      setRoutes(data);
+    });
+  }, []);
+
+  function displaySavedRoutes() {
+    const savedRoutes = [];
+    for (let i = 0; i < routes.length; i++) {
+      savedRoutes.push(
+        <Button
+          key={i}
+          title={routes[i].id}
+          color="black"
+          onPress={() =>
+            navigate("SavedRoutes", { location: routes[i].myRoute })
+          }
+        />
+      );
+    }
+    return savedRoutes;
+  }
+
   return (
     <View style={styles.container}>
-      <Text>{currentUser && currentUser.email}</Text>
-      <Text>{error && error}</Text>
-      <TouchableOpacity style={styles.buttonContainer}>
-        <Button title="Logout" color="black" onPress={handleLogout} />
-      </TouchableOpacity>
-      <Text style={styles.title}>Your Profile</Text>
-      <View style={styles.profileCard}>
-        <Text style={styles.text}>
-          Name: {profile.firstName} {profile.lastName}
-        </Text>
-        <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
-        <Text style={styles.text}>Bike: {profile.bike}</Text>
+      <ScrollView>
+        <Text>{currentUser && currentUser.email}</Text>
+        <Text>{error && error}</Text>
+        <TouchableOpacity style={styles.buttonContainer}>
+          <Button title="Logout" color="black" onPress={handleLogout} />
+        </TouchableOpacity>
+        <Text style={styles.title}>Your Profile</Text>
+        <View style={styles.profileCard}>
+          <Text style={styles.text}>
+            Name: {profile.firstName} {profile.lastName}
+          </Text>
+          <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
+          <Text style={styles.text}>Bike: {profile.bike}</Text>
 
-        <Image
-          style={styles.profilePic}
-          source={{
-            uri: profilePicture,
-          }}
-        />
-        <Button
-          title="Find Rider"
-          color="black"
-          onPress={() => {
-            navigate("Rider Finder");
-          }}
-        />
-        <Button
-          title="Chat"
-          color="black"
-          onPress={() => {
-            navigate("ChatList");
-          }}
-        />
-      </View>
+          <Image
+            style={styles.profilePic}
+            source={{
+              uri: profilePicture,
+            }}
+          />
+          <Button
+            title="Find Rider"
+            color="black"
+            onPress={() => {
+              navigate("Rider Finder");
+            }}
+          />
+          <Button
+            title="Chat"
+            color="black"
+            onPress={() => {
+              navigate("ChatList");
+            }}
+          />
+          <TouchableOpacity style={styles.buttonContainer}>
+            <Button
+              title="Plan Route"
+              color="black"
+              onPress={() =>
+                navigate("RoutePlanner", { location: userLocation })
+              }
+            />
+          </TouchableOpacity>
+        </View>
+        <Text>Saved Routes</Text>
+        <View>{displaySavedRoutes()}</View>
+      </ScrollView>
     </View>
   );
 }
