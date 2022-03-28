@@ -5,64 +5,38 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
-  Image,
   ScrollView,
 } from "react-native";
+import { ProfileCard } from "./ProfileCard";
 import { useAuth } from "../contexts/AuthContext";
-import firebase from "../config/firebase";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { fetchCurrLocation } from "../Components/api";
+import { fetchCurrLocation } from "./api";
+
+import {
+  getProfile,
+  getRoutes,
+  getProfilePicture,
+} from "../utils/firebaseFuncs";
 
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
   const [error, setError] = useState("");
+
   const [userLocation, setUserLocation] = useState({});
-  const [profile, setProfile] = useState({});
-  const [routes, setRoutes] = useState({});
-  const db = firebase.firestore();
-  const userId = currentUser.uid;
   const [profilePicture, setProfilePicture] = useState();
+  const [profile, setProfile] = useState({});
+  const [routes, setRoutes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleLogout = () => {
-    setError("");
-
-    logout()
-      .then(() => {
-        navigate("Login");
-      })
-      .catch(() => {
-        setError("Failed to log out");
-      });
-  };
-
-  function getProfile() {
-    const ref = doc(db, "profiles", `${userId}`);
-    return getDoc(ref).then((snapshot) => {
-      return snapshot.data();
-    });
-  }
-
-  function getRoutes() {
-    const userId = currentUser.uid;
-    const ref = collection(db, "profiles", `${userId}`, "routes");
-    let routeInfo = [];
-    return getDocs(ref).then((snapshot) => {
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        const id = doc.id;
-        routeInfo.push({ id, ...data });
-      });
-      return routeInfo;
-    });
-  }
+  const userId = currentUser.uid;
 
   useEffect(() => {
     fetchCurrLocation().then((data) => {
       setUserLocation(data);
     });
   }, []);
+
 
   // function getProfilePicture() {
   //   const storage = getStorage();
@@ -73,76 +47,63 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   // }
 
   useEffect(() => {
-    getProfile().then((data) => {
-      setProfile(data);
-    });
-    // getProfilePicture().then((url) => {
-    //   setProfilePicture(url);
-    // });
-  }, []);
-
-  useEffect(() => {
-    getRoutes().then((data) => {
+    getRoutes(userId).then((data) => {
       setRoutes(data);
     });
+    getProfile(userId).then((data) => {
+      setProfile(data);
+    });
+    getProfilePicture(userId).then((url) => {
+      setProfilePicture(url);
+    });
+    setLoading(false);
   }, []);
 
-  function displaySavedRoutes() {
-    const savedRoutes = [];
-    for (let i = 0; i < routes.length; i++) {
-      savedRoutes.push(
-        <Button
-          key={i}
-          title={routes[i].id}
-          color="black"
-          onPress={() =>
-            navigate("SavedRoutes", { location: routes[i].myRoute })
-          }
-        />
-      );
-    }
-    return savedRoutes;
-  }
+  const handleLogout = () => {
+    setError("");
+    logout()
+      .then(() => {
+        navigate("Login");
+      })
+      .catch(() => {
+        setError("Failed to log out");
+      });
+  };
+
+  if (loading)
+    return (
+      <View>
+        <Text>loading</Text>
+      </View>
+    );
 
   return (
     <ScrollView>
-      <Text>{currentUser && currentUser.email}</Text>
+
       <Text>{error && error}</Text>
       <TouchableOpacity style={styles.buttonContainer}>
         <Button title="Logout" color="black" onPress={handleLogout} />
       </TouchableOpacity>
 
-      <Text style={styles.title}>Your Profile</Text>
-      <View style={styles.profileCard}>
-        <Image
-          style={styles.profilePic}
-          source={{
-            uri: profile.img,
-          }}
-        />
-        <Text style={styles.text}>
-          Name: {profile.firstName} {profile.lastName}
-        </Text>
-        <Text style={styles.text}>Gender: {profile.selectedGender}</Text>
-        <Text style={styles.text}>Bike: {profile.bike}</Text>
-        <Text style={styles.text}>Region: {profile.region}</Text>
-        <Text style={styles.text}>Age: {profile.age}</Text>
-        <Text style={styles.text}>Bio: {profile.bio}</Text>
 
-        <Button
-          title="Find Rider"
-          color="black"
-          onPress={() => {
-            navigate("Rider Finder");
-          }}
-        />
-        <Button
-          title="Chat"
-          color="black"
-          onPress={() => {
-            navigate("ChatList");
-          }}
-        />
+
+      <ProfileCard profile={profile} profilePicture={profilePicture} />
+      <View>
+        <TouchableOpacity style={styles.buttonContainer}>
+          <Button
+            title="Find Rider"
+            color="black"
+            onPress={() => {
+              navigate("Rider Finder");
+            }}
+          />
+        </TouchableOpacity>
+      </View>
+
+
+
+
+      <View>
         <TouchableOpacity style={styles.buttonContainer}>
           <Button
             title="Plan Route"
@@ -150,9 +111,28 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             onPress={() => navigate("RoutePlanner", { location: userLocation })}
           />
         </TouchableOpacity>
+
+
+
+
+        <Text style={styles.title}>Saved Routes</Text>
+        <View>
+          {routes.map((route, i) => {
+            return (
+              <Button
+                key={i}
+                title={`${route.id}`}
+                color="black"
+                onPress={() =>
+                  navigate("SavedRoutes", { location: route.myRoute })
+                }
+              />
+            );
+          })}
+        </View>
       </View>
-      <Text>Saved Routes</Text>
-      <View>{displaySavedRoutes()}</View>
+
+
     </ScrollView>
   );
 }
@@ -172,13 +152,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#fff",
     padding: 10,
-  },
-  profilePic: {
-    width: 250,
-    height: 250,
-    margin: 10,
-    alignSelf: "center",
-    borderRadius: 40,
   },
   title: {
     fontSize: 25,
