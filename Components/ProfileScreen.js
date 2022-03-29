@@ -34,8 +34,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const userId = currentUser.uid;
-
   useEffect(() => {
     fetchCurrLocation().then((data) => {
       setUserLocation(data);
@@ -43,25 +41,28 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   }, []);
 
   useEffect(() => {
-    getRoutes(userId).then((data) => {
-      setRoutes(data);
-    });
-    getProfile(userId).then((data) => {
-      const dobString = new Date(data.DOB.seconds*1000);
-      const calcAge = getAge(dobString);
-      setAge(calcAge);
-      setProfile(data);
-    });
-    getProfilePicture(userId).then((url) => {
-      setProfilePicture(url);
-    });
-    setLoading(false);
+    if (currentUser !== null) {
+      getRoutes(currentUser.uid).then((data) => {
+        setRoutes(data);
+      });
+      getProfile(currentUser.uid).then((data) => {
+        const dobString = new Date(data.DOB.seconds * 1000);
+        const calcAge = getAge(dobString);
+        setAge(calcAge);
+        setProfile(data);
+      });
+      getProfilePicture(currentUser.uid).then((url) => {
+        setProfilePicture(url);
+      });
+      setLoading(false);
+    }
   }, [isFocused]);
 
   const handleLogout = () => {
     setError("");
     logout()
       .then(() => {
+        console.log("here");
         navigate("Login");
       })
       .catch(() => {
@@ -83,7 +84,11 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         <Button title="Logout" color="black" onPress={handleLogout} />
       </TouchableOpacity>
 
-      <ProfileCard age={age} profile={profile} profilePicture={profilePicture} />
+      <ProfileCard
+        age={age}
+        profile={profile}
+        profilePicture={profilePicture}
+      />
       <View>
         <TouchableOpacity style={styles.buttonContainer}>
           <Button
