@@ -58,7 +58,6 @@ export default function ProfileInputs({ navigate }) {
       uid: user.uid,
       bio,
       DOB: date,
-      age: "0",
     };
     postProfile(profile);
     navigate("ProfilePictureChooser");
