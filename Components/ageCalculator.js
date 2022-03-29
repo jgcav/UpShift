@@ -1,4 +1,4 @@
-function getAge(dateString) {
+export default function getAge(dateString) {
   const today = new Date();
   const birthDate = new Date(dateString);
   const age = today.getFullYear() - birthDate.getFullYear();
@@ -8,3 +8,4 @@ function getAge(dateString) {
   }
   return age;
 }
+

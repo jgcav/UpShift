@@ -1,6 +1,7 @@
 import { Text, View, Image, StyleSheet } from "react-native";
+import getAge from "./ageCalculator";
 
-export const ProfileCard = ({ profile, profilePicture }) => {
+export const ProfileCard = ({ age, profile, profilePicture }) => {
   return (
     <View style={styles.profileCard}>
       <Image
@@ -16,7 +17,7 @@ export const ProfileCard = ({ profile, profilePicture }) => {
         <Text style={styles.text}>{profile.selectedGender}</Text>
         <Text style={styles.text}>{profile.bike}</Text>
         <Text style={styles.text}>{profile.region}</Text>
-        <Text style={styles.text}>{profile.age}</Text>
+        <Text style={styles.text}>{age}</Text>
         <Text style={styles.text}>{profile.bio}</Text>
       </View>
     </View>

@@ -19,6 +19,7 @@ import {
 } from "../utils/firebaseFuncs";
 
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import getAge from "./ageCalculator";
 
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
@@ -29,6 +30,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
   const isFocused = useIsFocused();
   const [profile, setProfile] = useState({});
+  const [age, setAge] = useState();
   const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -45,6 +47,9 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       setRoutes(data);
     });
     getProfile(userId).then((data) => {
+      const dobString = new Date(data.DOB.seconds*1000);
+      const calcAge = getAge(dobString);
+      setAge(calcAge);
       setProfile(data);
     });
     getProfilePicture(userId).then((url) => {
@@ -78,7 +83,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         <Button title="Logout" color="black" onPress={handleLogout} />
       </TouchableOpacity>
 
-      <ProfileCard profile={profile} profilePicture={profilePicture} />
+      <ProfileCard age={age} profile={profile} profilePicture={profilePicture} />
       <View>
         <TouchableOpacity style={styles.buttonContainer}>
           <Button
