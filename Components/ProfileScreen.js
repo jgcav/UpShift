@@ -62,7 +62,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     setError("");
     logout()
       .then(() => {
-        console.log("here");
         navigate("Login");
       })
       .catch(() => {
