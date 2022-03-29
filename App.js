@@ -16,7 +16,6 @@ import RiderProfileScreen from "./Components/RiderProfileScreen";
 import MessageRequestsScreen from "./Components/MessageRequestsScreen";
 import { LogBox } from "react-native";
 import ProfilePictureChooser from "./Components/ProfilePictureChooser";
-import { Button } from "@rneui/base";
 
 LogBox.ignoreLogs(["Setting a timer", "AsyncStorage"]);
 export default function App() {
