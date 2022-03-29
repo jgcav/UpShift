@@ -42,7 +42,7 @@ export const UserRoutes = ({ routes, navigate }) => {
 
 const styles = StyleSheet.create({
   shape: {
-    backgroundColor: "red",
+    backgroundColor: "grey",
     height: 100,
   },
 });
