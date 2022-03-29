@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
 
   searchBox: {
-    width: 340,
+    width: 320,
     height: 50,
     fontSize: 18,
     borderRadius: 8,
@@ -106,6 +106,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderWidth: 1.5,
     paddingLeft: 15,
+    marginLeft: 25,
+    marginTop: 5,
   },
 
   autocompleteContainer: {
