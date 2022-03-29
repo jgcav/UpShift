@@ -24,6 +24,7 @@ import firebase from "../config/firebase.js";
 import RiderCard from "./RiderCard";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext.js";
+import { getProfile } from "../utils/firebaseFuncs.js";
 const regions = [
   "Scotland",
   "North East",
@@ -44,6 +45,7 @@ const db = firebase.firestore();
 const { height, width } = Dimensions.get("window");
 export default function RiderFinder({ navigation: { navigate } }) {
   const [riders, setRiders] = useState([]);
+  const [location, setLocation] = useState([]);
   const { currentUser } = useAuth();
   const [gender, setGender] = useState("All");
   const [region, setRegion] = useState("North East");
@@ -75,7 +77,7 @@ export default function RiderFinder({ navigation: { navigate } }) {
     return Promise.all(Proms).then(([snapshot, docSnap]) => {
       let profiles = [];
       snapshot.docs.forEach((doc) => {
-        if (doc.data.uid !== currentUser.uid) profiles.push(doc.data());
+        if (doc.data().uid !== currentUser.uid) profiles.push(doc.data());
       });
       const { connected } = docSnap.data();
       if (connected !== undefined) {
@@ -101,8 +103,10 @@ export default function RiderFinder({ navigation: { navigate } }) {
     d.setHours(0, 0, 0, 0);
     d2.setFullYear(d2.getFullYear() - hAge);
     d2.setHours(23, 59, 59, 99);
-    getRiders(d, d2).then((profiles) => {
+    const Proms = [getProfile(currentUser.uid), getRiders(d, d2)];
+    Promise.all(Proms).then(([user, profiles]) => {
       setRiders(profiles);
+      setLocation(user.location);
       setLoading(false);
     });
   }, [region, gender, lAge, hAge]);
@@ -258,6 +262,7 @@ export default function RiderFinder({ navigation: { navigate } }) {
         return (
           <RiderCard
             rider={rider}
+            location={location}
             navigate={navigate}
             setLoading={setLoading}
             key={index}

@@ -49,7 +49,6 @@ export default function RequestCard({
     Promise.all(Proms).then(() => {
       setInteracted(true);
       setNewChat(true);
-      console.log("done");
     });
   }
 
@@ -64,7 +63,6 @@ export default function RequestCard({
     ];
     Promise.all(Proms).then(() => {
       setInteracted(true);
-      console.log("done");
     });
   }
 
