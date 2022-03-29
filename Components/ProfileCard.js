@@ -1,13 +1,14 @@
 import { Text, View, Image, StyleSheet } from "react-native";
 import getAge from "./ageCalculator";
 
-export const ProfileCard = ({ age, profile, profilePicture }) => {
+export const ProfileCard = ({ age, profile }) => {
+
   return (
     <View style={styles.profileCard}>
       <Image
         style={styles.profilePic}
         source={{
-          uri: profilePicture,
+          uri: profile.img,
         }}
       />
       <View>

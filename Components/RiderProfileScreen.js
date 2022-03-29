@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
+import getAge from "./ageCalculator";
 export default function RiderProfileScreen({ route }) {
   const { height, width } = Dimensions.get("window");
   const { currentUser } = useAuth();
@@ -43,7 +44,7 @@ export default function RiderProfileScreen({ route }) {
             <Text
               style={styles.name}
             >{`${rider.firstName} ${rider.lastName}`}</Text>
-            <Text style={styles.age}>{rider.age}</Text>
+            <Text style={styles.age}>{getAge(new Date(rider.DOB.seconds*1000))}</Text>
           </View>
 
           <Text style={styles.bio}>{rider.bio}</Text>

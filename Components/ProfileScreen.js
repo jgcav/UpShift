@@ -52,9 +52,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       setAge(calcAge);
       setProfile(data);
     });
-    getProfilePicture(userId).then((url) => {
-      setProfilePicture(url);
-    });
     setLoading(false);
   }, [isFocused]);
 
@@ -83,7 +80,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         <Button title="Logout" color="black" onPress={handleLogout} />
       </TouchableOpacity>
 
-      <ProfileCard age={age} profile={profile} profilePicture={profilePicture} />
+      <ProfileCard age={age} profile={profile} />
       <View>
         <TouchableOpacity style={styles.buttonContainer}>
           <Button
