@@ -18,7 +18,6 @@ import {
   getProfilePicture,
 } from "../utils/firebaseFuncs";
 
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import getAge from "./ageCalculator";
 
 export default function ProfileScreen({ navigation: { navigate } }) {
@@ -26,15 +25,12 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   const [error, setError] = useState("");
 
   const [userLocation, setUserLocation] = useState({});
-  const [profilePicture, setProfilePicture] = useState();
 
   const isFocused = useIsFocused();
   const [profile, setProfile] = useState({});
   const [age, setAge] = useState();
   const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const userId = currentUser.uid;
 
   useEffect(() => {
     fetchCurrLocation().then((data) => {
@@ -43,16 +39,18 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   }, []);
 
   useEffect(() => {
-    getRoutes(userId).then((data) => {
-      setRoutes(data);
-    });
-    getProfile(userId).then((data) => {
-      const dobString = new Date(data.DOB.seconds*1000);
-      const calcAge = getAge(dobString);
-      setAge(calcAge);
-      setProfile(data);
-    });
-    setLoading(false);
+    if (currentUser !== null) {
+      getRoutes(currentUser.uid).then((data) => {
+        setRoutes(data);
+      });
+      getProfile(currentUser.uid).then((data) => {
+        const dobString = new Date(data.DOB.seconds * 1000);
+        const calcAge = getAge(dobString);
+        setAge(calcAge);
+        setProfile(data);
+      });
+      setLoading(false);
+    }
   }, [isFocused]);
 
   const handleLogout = () => {
@@ -79,6 +77,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       <TouchableOpacity style={styles.buttonContainer}>
         <Button title="Logout" color="black" onPress={handleLogout} />
       </TouchableOpacity>
+
 
       <ProfileCard age={age} profile={profile} />
       <View>
