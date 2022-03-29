@@ -105,7 +105,6 @@ export default function RiderFinder({ navigation: { navigate } }) {
     d2.setHours(23, 59, 59, 99);
     const Proms = [getProfile(currentUser.uid), getRiders(d, d2)];
     Promise.all(Proms).then(([user, profiles]) => {
-      // console.log(profiles);
       setRiders(profiles);
       setLocation(user.location);
       setLoading(false);

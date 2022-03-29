@@ -22,7 +22,6 @@ const DatePicker = ({ setDate, date }) => {
     setShow(true);
   };
 
-  console.log(date);
   return (
     <View>
       <View>
