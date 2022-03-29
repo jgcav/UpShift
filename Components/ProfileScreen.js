@@ -7,14 +7,6 @@ import { getRoutes } from "../utils/firebaseFuncs";
 import { fetchCurrLocation } from "./api";
 import { UserRoutes } from "./UserRoutes";
 import { Text } from "@rneui/base";
-
-export default function HomePage({ navigation: { navigate } }) {
-import {
-  getProfile,
-  getRoutes,
-  getProfilePicture,
-} from "../utils/firebaseFuncs";
-
 import getAge from "./ageCalculator";
 
 export default function ProfileScreen({ navigation: { navigate } }) {
@@ -27,20 +19,17 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   const [loading, setLoading] = useState(true);
   const userId = currentUser.uid;
 
-
-
-
   useEffect(() => {
     if (currentUser !== null) {
       getRoutes(currentUser.uid).then((data) => {
         setRoutes(data);
       });
-//       getProfile(currentUser.uid).then((data) => {
-//         const dobString = new Date(data.DOB.seconds * 1000);
-//         const calcAge = getAge(dobString);
-//         setAge(calcAge);
-//         setProfile(data);
-//       });
+      //       getProfile(currentUser.uid).then((data) => {
+      //         const dobString = new Date(data.DOB.seconds * 1000);
+      //         const calcAge = getAge(dobString);
+      //         setAge(calcAge);
+      //         setProfile(data);
+      //       });
       setLoading(false);
     }
   }, [isFocused]);
@@ -79,8 +68,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         </Text>
 
         <View style={styles.menue}>
-
-//       <ProfileCard age={age} profile={profile} />
+          {/* // <ProfileCard age={age} profile={profile} /> */}
           <Button
             style={{ margin: 10, width: 150 }}
             title="Logout"
