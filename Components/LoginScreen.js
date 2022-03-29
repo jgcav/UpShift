@@ -26,8 +26,8 @@ export default function LoginScreen({ navigation: { navigate } }) {
       .then(() => {
         setEmail("");
         setPassword("");
-        navigate("Profile");
         setLoading(false);
+        navigate("Profile");
       })
       .catch((err) => {
         if (err.code === "auth/user-not-found") setError("User Does not exist");
