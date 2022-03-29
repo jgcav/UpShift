@@ -28,13 +28,18 @@ export default function SignUpScreen({ navigation: { navigate } }) {
     setLoading(true);
     signup(email, password)
       .then(() => {
+        setLoading(false);
         navigate("ProfileMaker");
       })
       .catch((err) => {
-        setError("Failed to set-up account");
         console.log(err);
+        if (err.code === "auth/email-already-in-use")
+          setError("Email already in use");
+        else if (err.code === "auth/invalid-email") setError("Invalid Email");
+        else if (err.code === "auth/weak-password")
+          setError("Weak Password: 6 characters minimum");
+        else setError("Failed to set up account");
       });
-    setLoading(false);
   }
 
   return (
@@ -73,8 +78,7 @@ export default function SignUpScreen({ navigation: { navigate } }) {
         <Button title="SIGN UP" color="white" onPress={handleSubmit} />
       </TouchableOpacity>
       <Text>
-        Already have an account?
-        {" "}
+        Already have an account?{" "}
         <Text
           style={style.textHighlight}
           onPress={() => {
@@ -115,6 +119,6 @@ const style = StyleSheet.create({
   },
   textHighlight: {
     color: "white",
-    textDecorationLine: "underline"
-  }
+    textDecorationLine: "underline",
+  },
 });

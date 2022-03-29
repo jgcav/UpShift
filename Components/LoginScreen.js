@@ -26,12 +26,16 @@ export default function LoginScreen({ navigation: { navigate } }) {
       .then(() => {
         setEmail("");
         setPassword("");
+        setLoading(false);
         navigate("Profile");
       })
-      .catch(() => {
-        setError("Failed to login");
+      .catch((err) => {
+        if (err.code === "auth/user-not-found") setError("User Does not exist");
+        else if (err.code === "auth/invalid-email") setError("Invalid Email");
+        else if (err.code === "auth/wrong-password")
+          setError("Incorrect Email/Password");
+        else setError("Failed to Sign in");
       });
-    setLoading(false);
   }
 
   return (

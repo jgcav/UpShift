@@ -39,7 +39,6 @@ export default function ChatScreen({ route }) {
           .reverse()
           .map((doc) => {
             const message = { ...doc.data() };
-            console.log(doc.data());
             const d = new Date(
               Number(
                 "" +
@@ -77,7 +76,6 @@ export default function ChatScreen({ route }) {
 
     return getDoc(docRef)
       .then((docSnap) => {
-        console.log(docSnap);
         const { firstName, lastName } = docSnap.data();
         return { firstName, lastName };
       })
