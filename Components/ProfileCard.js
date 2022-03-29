@@ -15,6 +15,9 @@ export const ProfileCard = ({ profile, profilePicture }) => {
         </Text>
         <Text style={styles.text}>{profile.selectedGender}</Text>
         <Text style={styles.text}>{profile.bike}</Text>
+        <Text style={styles.text}>{profile.region}</Text>
+        <Text style={styles.text}>{profile.age}</Text>
+        <Text style={styles.text}>{profile.bio}</Text>
       </View>
     </View>
   );
