@@ -1,5 +1,11 @@
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import firebase from "../config/firebase";
 const db = firebase.firestore();
 const storage = getStorage();
@@ -35,6 +41,18 @@ export const getProfilePicture = async (userId) => {
   try {
     const url = await getDownloadURL(pathReference);
     return url;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const updateProfileLocation = async (userId, currLocation) => {
+  try {
+    const currentLocation = await updateDoc(
+      doc(db, "profiles", `${userId}`),
+      currLocation
+    );
+    return currentLocation;
   } catch (e) {
     console.log(e);
   }
