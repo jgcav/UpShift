@@ -1,7 +1,13 @@
 import React from "react";
 import Carousel from "react-native-snap-carousel/src/carousel/Carousel";
 import { Card, Button, Icon } from "@rneui/base";
-import { Dimensions, StyleSheet, View, TouchableOpacity } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 
 export const UserRoutes = ({ routes, navigate }) => {
   const test = routes.map((t) => t.id);
@@ -17,14 +23,21 @@ export const UserRoutes = ({ routes, navigate }) => {
       >
         <Card>
           <View
-            style={{ flexDirection: "row-reverse", justifyContent: "center" }}
+            style={{
+              flexDirection: "row-reverse",
+            }}
           >
             <Icon name="place" />
-            <Card.Title style={{ padding: 5 }}>{item}</Card.Title>
+            <Card.Title style={{ padding: 5, flex: 1 }}>{item}</Card.Title>
           </View>
 
           <Card.Divider />
-          <View style={styles.shape} />
+          <View style={styles.shape}>
+            <Image
+              source={require("../assets/map.jpg")}
+              style={{ width: undefined, height: 110 }}
+            />
+          </View>
         </Card>
       </TouchableOpacity>
     );
@@ -44,6 +57,6 @@ export const UserRoutes = ({ routes, navigate }) => {
 const styles = StyleSheet.create({
   shape: {
     backgroundColor: "grey",
-    height: 100,
+    height: 110,
   },
 });
