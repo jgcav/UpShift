@@ -136,4 +136,5 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   text: { alignSelf: "center", marginTop: 5, marginBottom: 5 },
+  loadingMessage: {alignSelf: "center", marginTop: 60, marginBottom: 5, fontSize: 18 }
 });
