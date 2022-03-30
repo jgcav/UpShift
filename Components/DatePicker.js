@@ -66,7 +66,7 @@ const DatePicker = ({
                 }
           }
         >
-          <Text style={styles.buttonText}>Choose Date of Birth (18+ Only)</Text>
+          <Text style={styles.buttonText}>* Choose Date of Birth (18+ Only)</Text>
         </TouchableOpacity>
       </View>
       {show && (
@@ -76,6 +76,8 @@ const DatePicker = ({
           mode="date"
           display="default"
           onChange={onChange}
+          textColor="black"
+          style={{flex: 1}}
         />
       )}
     </View>
@@ -92,4 +94,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "grey",
   },
+  // date: {
+  //   color: "red",
+  // }
 });
