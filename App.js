@@ -37,7 +37,7 @@ export default function App() {
           <Stack.Screen
             name="ProfilePictureChooser"
             component={ProfilePictureChooser}
-            options={{ headerShown: false }}
+            
           ></Stack.Screen>
           <Stack.Screen
             name="Profile"

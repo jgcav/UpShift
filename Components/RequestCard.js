@@ -12,7 +12,7 @@ import {
 import firebase from "../config/firebase.js";
 const db = firebase.firestore();
 export default function RequestCard({
-  profileUrl,
+ 
   profile,
   navigate,
   setInteracted,
@@ -72,7 +72,7 @@ export default function RequestCard({
         <Image
           style={styles.logo}
           source={{
-            uri: profileUrl,
+            uri: profile.img,
           }}
         />
       </View>
