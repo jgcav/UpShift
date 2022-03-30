@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  TextInput,
-  Text,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Button,
-  Image,
-} from "react-native";
+import { TextInput, View, TouchableOpacity, StyleSheet } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import firebase from "../config/firebase";
 import { setDoc, doc } from "firebase/firestore";
 import DatePicker from "./DatePicker";
 import getAge from "./ageCalculator";
+import { Button, Text } from "@rneui/base";
 
 export default function ProfileInputs({ navigate }) {
   const [firstName, onChangeFirstName] = useState("");
@@ -89,19 +82,20 @@ export default function ProfileInputs({ navigate }) {
       postProfile(profile);
       navigate("ProfilePictureChooser");
     }
-    console.log(age, "< age");
-    console.log(tooYoung, "< too young?");
-    console.log(firstNameAbsent, "<firstname absent?");
-    console.log(lastNameAbsent, "<lastname absent?");
-    console.log(genderAbsent, "<gender absent?");
-    console.log(regionAbsent, "<region absent?");
-    console.log(bikeAbsent, "<bike absent?");
+    // console.log(age, "< age");
+    // console.log(date);
+    // console.log(tooYoung, "< too young?");
+    // console.log(firstNameAbsent, "<firstname absent?");
+    // console.log(lastNameAbsent, "<lastname absent?");
+    // console.log(genderAbsent, "<gender absent?");
+    // console.log(regionAbsent, "<region absent?");
+    // console.log(bikeAbsent, "<bike absent?");
   };
 
   return (
     <View style={styles.container}>
       {/* Title  */}
-      <Text style={styles.title}>Create Your Profile</Text>
+      <Text style={styles.title}>Sign Up</Text>
       <Text style={styles.starMessage}>Required Fields (*)</Text>
       {/* First Name */}
       <TextInput
@@ -121,15 +115,17 @@ export default function ProfileInputs({ navigate }) {
             : {
                 height: 40,
                 width: 300,
-                backgroundColor: "rgba(255,255,255,0.2)",
+                backgroundColor: "white",
                 marginBottom: 20,
                 textAlign: "center",
                 color: "black",
                 paddingHorizontal: 10,
+                borderColor: "black",
+                borderWidth: 2,
               }
         }
         placeholder="First Name"
-        placeholderTextColor={"white"}
+        placeholderTextColor={"grey"}
         onChangeText={onChangeFirstName}
         /*setFirstNameAbsent(false) tried but prevented*/
       ></TextInput>
@@ -151,15 +147,17 @@ export default function ProfileInputs({ navigate }) {
             : {
                 height: 40,
                 width: 300,
-                backgroundColor: "rgba(255,255,255,0.2)",
+                backgroundColor: "white",
                 marginBottom: 20,
                 textAlign: "center",
                 color: "black",
                 paddingHorizontal: 10,
+                borderColor: "black",
+                borderWidth: 2,
               }
         }
         placeholder="Last Name"
-        placeholderTextColor={"white"}
+        placeholderTextColor={"grey"}
         onChangeText={onChangeLastName}
       ></TextInput>
       {/* DOB Picker */}
@@ -196,7 +194,7 @@ export default function ProfileInputs({ navigate }) {
               : {
                   width: "70%",
                   height: 40,
-                  backgroundColor: "rgba(255,255,255,0.2)",
+                  backgroundColor: "white",
                   borderRadius: 8,
                 }
           }
@@ -238,7 +236,7 @@ export default function ProfileInputs({ navigate }) {
               : {
                   width: "70%",
                   height: 40,
-                  backgroundColor: "rgba(255,255,255,0.2)",
+                  backgroundColor: "white",
                   borderRadius: 8,
                 }
           }
@@ -258,7 +256,6 @@ export default function ProfileInputs({ navigate }) {
           rowTextStyle={styles.dropdown2RowTxtStyle}
         />
       </View>
-
       <TextInput
         style={
           lastNameAbsent
@@ -276,22 +273,24 @@ export default function ProfileInputs({ navigate }) {
             : {
                 height: 40,
                 width: 300,
-                backgroundColor: "rgba(255,255,255,0.2)",
+                backgroundColor: "white",
                 marginBottom: 20,
                 textAlign: "center",
                 color: "black",
                 paddingHorizontal: 10,
+                borderColor: "black",
+                borderWidth: 2,
               }
         }
         placeholder="Bike"
-        placeholderTextColor={"white"}
+        placeholderTextColor={"grey"}
         onChangeText={onChangeBike}
         maxLength={12}
       ></TextInput>
       <TextInput
         style={styles.bio}
         placeholder="Bio (Max 240 Characters)"
-        placeholderTextColor={"white"}
+        placeholderTextColor={"grey"}
         multiline
         maxLength={240}
         onChangeText={onChangeBio}
@@ -303,9 +302,7 @@ export default function ProfileInputs({ navigate }) {
       ) : (
         <Text></Text>
       )}
-      <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
-        <Text style={styles.buttonText}>NEXT</Text>
-      </TouchableOpacity>
+      <Button style={styles.buttonContainer} onPress={onPress} title="Next" />
     </View>
   );
 }
@@ -313,11 +310,11 @@ export default function ProfileInputs({ navigate }) {
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: "center" },
   title: {
+    alignSelf: "center",
+    color: "black",
+    fontSize: 24,
     fontWeight: "bold",
-    color: "white",
-    fontSize: 25,
-    padding: 10,
-    textAlign: "center",
+    padding: 15,
   },
   dropdown: {
     padding: 10,
@@ -326,13 +323,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   dropdown2BtnTxtStyle: {
-    color: "#FFF",
+    color: "grey",
     textAlign: "center",
     fontWeight: "bold",
   },
-  dropdown2DropdownStyle: { backgroundColor: "rgba(255,255,255,0.2)" },
+  dropdown2DropdownStyle: { backgroundColor: "white" },
   dropdown2RowStyle: {
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: "white",
     borderBottomColor: "#C5C5C5",
   },
   dropdown2RowTxtStyle: {
@@ -354,7 +351,7 @@ const styles = StyleSheet.create({
   },
   loadingMessage: {
     fontWeight: "bold",
-    color: "white",
+    color: "black",
     fontSize: 25,
     padding: 20,
     textAlign: "center",
@@ -363,17 +360,19 @@ const styles = StyleSheet.create({
   bio: {
     height: 160,
     width: 300,
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: "white",
     marginBottom: 20,
     textAlign: "center",
     color: "black",
     paddingHorizontal: 10,
+    borderColor: "black",
+    borderWidth: 2,
   },
   warningMessage: {
     color: "red",
   },
   starMessage: {
-    color: "white",
+    color: "black",
     marginBottom: 3,
     fontSize: 11,
   },
