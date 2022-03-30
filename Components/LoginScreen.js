@@ -66,7 +66,6 @@ export default function LoginScreen({ navigation: { navigate } }) {
       </TouchableOpacity>
       <Text>
         Don't have an account?{"  "}
-        <TouchableOpacity>
           <Text
             style={style.textHighlight}
             onPress={() => {
@@ -75,7 +74,6 @@ export default function LoginScreen({ navigation: { navigate } }) {
           >
             Sign Up
           </Text>
-        </TouchableOpacity>
       </Text>
     </View>
   );
