@@ -5,7 +5,15 @@ import GooglePlacesInput from "./GooglePlacesInput";
 import { snapToRoad } from "./api";
 import { useAuth } from "../contexts/AuthContext";
 
-import { SpeedDial, Overlay, Button, Input, Dialog } from "@rneui/base";
+import {
+  SpeedDial,
+  Overlay,
+  Button,
+  Input,
+  Dialog,
+  Tooltip,
+  Text,
+} from "@rneui/base";
 
 import firebase from "../config/firebase";
 import { doc, setDoc } from "firebase/firestore";
@@ -20,8 +28,9 @@ export const RoutePlanner = ({ route, navigation: { navigate } }) => {
   const [drawMethod, setDrawMethod] = useState("Polyline");
   const [routeName, setRouteName] = useState("");
   const [open, setOpen] = useState(false);
-
   const [visible, setVisible] = useState(false);
+
+  const [test, setTest] = useState(true);
 
   const [selectedPlace, setSelectedPlace] = useState({
     lat: route.params.location.lat,
@@ -43,6 +52,7 @@ export const RoutePlanner = ({ route, navigation: { navigate } }) => {
   const drawPolyLine = (e) => {
     const latitude = Number(e.nativeEvent.coordinate.latitude);
     const longitude = Number(e.nativeEvent.coordinate.longitude);
+
     setPoints((currentState) => [
       ...currentState,
       {
@@ -101,6 +111,35 @@ export const RoutePlanner = ({ route, navigation: { navigate } }) => {
 
   return (
     <View>
+      <Overlay
+        overlayStyle={{ margin: 40, borderRadius: 10 }}
+        isVisible={test}
+        onBackdropPress={() => {
+          setTest(!test);
+        }}
+      >
+        <View>
+          <Text h4 h4Style={{ color: "white", padding: 10 }}>
+            Frequent taps work best
+          </Text>
+          <Text h4 h4Style={{ color: "white", padding: 10 }}>
+            Dont Zoom out too far
+          </Text>
+          <Text h4 h4Style={{ color: "white", padding: 10 }}>
+            Before you save press and hold to snap the drawing to real time
+            roads
+          </Text>
+        </View>
+
+        <Button
+          buttonStyle={{ margin: 15 }}
+          title="Start Planning"
+          onPress={() => {
+            setTest(false);
+          }}
+        />
+      </Overlay>
+
       <View style={styles.searchbar}>
         <GooglePlacesInput setSelectedPlace={setSelectedPlace} />
       </View>
@@ -164,7 +203,9 @@ export const RoutePlanner = ({ route, navigation: { navigate } }) => {
             returnKeyType="done"
             autoCapitalize="words"
             editable={true}
+            color="white"
           />
+
           <Dialog.Button
             title="Save Route"
             color="white"
@@ -175,6 +216,7 @@ export const RoutePlanner = ({ route, navigation: { navigate } }) => {
 
       <View style={styles.map}>
         <MapView
+          mapType={"terrain"}
           zoomTapEnabled={false}
           ref={_map}
           customMapStyle={mapStyle}

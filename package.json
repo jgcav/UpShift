@@ -33,7 +33,11 @@
     "react-native-maps": "0.29.4",
     "react-native-paper": "^4.11.2",
     "react-native-select-dropdown": "^1.8.0",
+
     "react-native-svg": "^12.3.0",
+
+    "react-native-snap-carousel": "^3.9.1",
+
     "react-native-web": "0.17.1",
     "socket.io-client": "^4.4.1"
   },
