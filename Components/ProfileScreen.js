@@ -16,7 +16,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   const isFocused = useIsFocused();
   const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const userId = currentUser.uid;
 
   useEffect(() => {
     if (currentUser !== null) {
