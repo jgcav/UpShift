@@ -16,6 +16,7 @@ import {
   getProfile,
   getRoutes,
   getProfilePicture,
+  updateProfileLocation,
 } from "../utils/firebaseFuncs";
 
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
@@ -37,8 +38,12 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   useEffect(() => {
     fetchCurrLocation().then((data) => {
       setUserLocation(data);
+      const currLocation = {
+        location: [userLocation.lat, userLocation.lng],
+      };
+      updateProfileLocation(userId, currLocation);
     });
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
     getRoutes(userId).then((data) => {
