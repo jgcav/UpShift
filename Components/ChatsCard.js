@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
+import { Text, Card, Icon, Button } from "@rneui/base";
 import { getDoc, doc } from "firebase/firestore";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import firebase from "../config/firebase";
+import { getProfile } from "../utils/firebaseFuncs";
 
 const db = firebase.firestore();
 
 export default function ChatsCard({ chat, navigate }) {
   const [userProfile, setUserProfile] = useState({});
+  const [recent, setRecent] = useState({
+    uid: "",
+    message: "",
+    timestamp: "",
+    last: "",
+  });
 
-  function getProfile() {
-    const docRef = doc(db, "profiles", `${chat.chatterId}`);
-
+  function getRecentMsg() {
+    const docRef = doc(db, "rooms", `${chat.roomId}`);
     return getDoc(docRef)
       .then((docSnap) => {
         return docSnap.data();
@@ -22,37 +28,85 @@ export default function ChatsCard({ chat, navigate }) {
   }
 
   useEffect(() => {
-    getProfile().then((profile) => {
+    const Proms = [getProfile(chat.chatterId), getRecentMsg()];
+    Promise.all(Proms).then(([profile, m]) => {
       setUserProfile(profile);
+      if (m !== undefined) {
+        const d = new Date(16487358270000);
+        const yearD = d.getFullYear();
+        const monthD = d.getMonth();
+        const dayD = d.getDate();
+        const ts = new Date(m.timestamp.seconds * 1000);
+        const year = ts.getFullYear();
+        const month = ts.getMonth();
+        const day = ts.getDate();
+        const hour = ts.getHours();
+        const minute = ts.getMinutes();
+        console.log(year, yearD, month, monthD, day, dayD);
+        if (year === yearD && month === monthD && day === dayD) {
+          m.last = `${("0" + hour).slice(-2)}:${("0" + minute).slice(-2)}`;
+          console.log("1");
+        } else if (year === yearD) {
+          m.last = `${("0" + (month + 1)).slice(-2)}-${("0" + day).slice(-2)}`;
+        } else {
+          m.last = `${("0" + year).slice(-2)}-${("0" + (month + 1)).slice(
+            -2
+          )}-${("0" + day).slice(-2)}`;
+        }
+        if (m.message.length > 20) {
+          m.message = m.message.substring(0, 20);
+        }
+        setRecent(m);
+      }
     });
   }, []);
 
   return (
     <TouchableOpacity
-      style={styles.container}
       onPress={() => {
         navigate("Chat", { roomId: chat.roomId });
       }}
     >
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.logo}
-          source={{
-            uri: userProfile.img,
-          }}
-        />
-      </View>
-      <View style={styles.infoContainer}>
-        <Text>{`${userProfile.firstName} ${userProfile.lastName}`}</Text>
-      </View>
+      <Card
+        // style={styles.container}
+        containerStyle={{
+          margin: 0,
+          padding: 0,
+          paddingVertical: 10,
+          borderBottomWidth: 3,
+        }}
+      >
+        <View style={styles.container}>
+          <View style={styles.imageContainer}>
+            <Image
+              style={styles.logo}
+              source={{
+                uri: userProfile.img,
+              }}
+            />
+          </View>
+          <View style={styles.infoContainer}>
+            <Card.Title
+              style={{ textAlign: "left" }}
+            >{`${userProfile.firstName} ${userProfile.lastName}`}</Card.Title>
+            <View style={styles.recentContainer}>
+              <Text style={{ paddingRight: 10 }}>
+                {recent.message === "" ? "Send a Message!" : recent.message}
+              </Text>
+              <Text>{recent.last === "" ? "" : recent.last}</Text>
+            </View>
+          </View>
+        </View>
+      </Card>
     </TouchableOpacity>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    marginTop: 10,
-    backgroundColor: "#299DF6",
+  },
+  recentContainer: {
+    flexDirection: "row",
   },
   imageContainer: {
     flex: 1.1,
