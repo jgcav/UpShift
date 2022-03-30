@@ -1,5 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Text, TextInput, StyleSheet, View, Button } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Text,
+  TextInput,
+  StyleSheet,
+  View,
+  Dimensions,
+  ScrollView,
+  SafeAreaView,
+} from "react-native";
+import { Button } from "@rneui/base";
 import Message from "./Message";
 import io from "socket.io-client";
 import { useAuth } from "../contexts/AuthContext";
@@ -14,7 +23,8 @@ import {
   limit,
 } from "firebase/firestore";
 import firebase from "../config/firebase";
-const socket = io("http://localhost:3000");
+
+const socket = io("https://upshift-socket-server.herokuapp.com/");
 
 const db = firebase.firestore();
 
@@ -29,7 +39,7 @@ export default function ChatScreen({ route }) {
     const q = query(
       collection(db, "rooms", `${roomId}`, "messages"),
       orderBy("timestamp", "desc"),
-      limit(12)
+      limit(20)
     );
 
     return getDocs(q)
@@ -50,6 +60,7 @@ export default function ChatScreen({ route }) {
               message: message.message,
               firstName: message.firstName,
               lastName: message.lastName,
+              uid: message.uid,
               timestamp: `${("0" + d.getHours()).slice(-2)}:${(
                 "0" + d.getMinutes()
               ).slice(-2)}`,
@@ -109,45 +120,69 @@ export default function ChatScreen({ route }) {
   }, [socket]);
 
   function handleSubmit() {
-    const content = {
-      message: currentMessage,
-      firstName: userProfile.firstName,
-      lastName: userProfile.lastName,
-      roomId: roomId,
-      timestamp: new Date(),
-    };
-    socket.emit("chat message", content);
-    postMessage(content);
-    setCurrentMessage("");
+    if (currentMessage !== "") {
+      const content = {
+        message: currentMessage,
+        firstName: userProfile.firstName,
+        lastName: userProfile.lastName,
+        uid: currentUser.uid,
+        roomId: roomId,
+        timestamp: new Date(),
+      };
+      socket.emit("chat message", content);
+      postMessage(content);
+      setCurrentMessage("");
+    }
   }
-
+  const scrollViewRef = useRef();
   return (
-    <View style={styles.container}>
-      {chat.map((message, index) => {
-        return <Message key={index} message={message} />;
-      })}
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        ref={scrollViewRef}
+        onContentSizeChange={() => scrollViewRef.current.scrollToEnd()}
+      >
+        {chat.map((message, index) => {
+          return (
+            <Message key={index} message={message} uid={currentUser.uid} />
+          );
+        })}
+      </ScrollView>
 
       <View style={styles.messageField}>
         <TextInput
+          style={styles.input}
           placeholder="Enter Your Message Here..."
           placeholderTextColor={"black"}
           value={currentMessage}
           onChangeText={setCurrentMessage}
         ></TextInput>
-        <Button title="submit" onPress={handleSubmit} />
+        <Button
+          buttonStyle={{ borderRadius: 30, marginLeft: 10, marginVertical: 2 }}
+          iconContainerStyle={{ marginLeft: 10 }}
+          icon={{ name: "send", color: "#fff", size: 25 }}
+          onPress={handleSubmit}
+        />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
-
+const { height, width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
   messageField: {
-    alignItems: "center",
-    textAlign: "center",
-    position: "absolute",
+    backgroundColor: "white",
+    paddingHorizontal: 10,
+    width: width,
     bottom: 0,
+    flexDirection: "row",
+  },
+  input: {
+    borderRadius: 10,
+    backgroundColor: "#f0f0f0",
+    flex: 1,
+    marginVertical: 5,
   },
 });
