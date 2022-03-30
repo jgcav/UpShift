@@ -10,7 +10,6 @@ import {
   updateProfileLocation,
 } from "../utils/firebaseFuncs";
 
-
 import { UserRoutes } from "./UserRoutes";
 import { Text, Button } from "@rneui/base";
 
@@ -26,10 +25,10 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   useEffect(() => {}, [isFocused]);
 
   useEffect(() => {
-    getProfile(userId).then((data) => {
+    getProfile(currentUser.uid).then((data) => {
       setProfile(data);
     });
-    getProfilePicture(userId).then((url) => {
+    getProfilePicture(currentUser.uid).then((url) => {
       setProfilePicture(url);
     });
     setLoading(false);
@@ -50,7 +49,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         const currLocation = {
           location: [userLocation.lat, userLocation.lng],
         };
-        updateProfileLocation(userId, currLocation);
+        updateProfileLocation(currentUser.uid, currLocation);
       });
     }
   }, [isFocused]);
