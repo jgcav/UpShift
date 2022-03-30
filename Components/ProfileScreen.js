@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import { useIsFocused } from "@react-navigation/native";
-import { getRoutes } from "../utils/firebaseFuncs";
 import { fetchCurrLocation } from "./api";
-
-
 import {
   getProfile,
   getRoutes,
@@ -13,12 +10,8 @@ import {
   updateProfileLocation,
 } from "../utils/firebaseFuncs";
 
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
-
 import { UserRoutes } from "./UserRoutes";
 import { Text, Button } from "@rneui/base";
-import getAge from "./ageCalculator";
-
 
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
@@ -29,26 +22,9 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-
-    fetchCurrLocation().then((data) => {
-      setUserLocation(data);
-      const currLocation = {
-        location: [userLocation.lat, userLocation.lng],
-      };
-      updateProfileLocation(userId, currLocation);
-    });
-  }, [isFocused]);
+  useEffect(() => {}, [isFocused]);
 
   useEffect(() => {
-    getProfile(userId).then((data) => {
-      setProfile(data);
-    });
-    getProfilePicture(userId).then((url) => {
-      setProfilePicture(url);
-    });
-    setLoading(false);
-    
     if (currentUser !== null) {
       getRoutes(currentUser.uid).then((data) => {
         setRoutes(data);
@@ -60,6 +36,13 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       //         setProfile(data);
       //       });
       setLoading(false);
+      fetchCurrLocation().then((data) => {
+        setUserLocation(data);
+        const currLocation = {
+          location: [userLocation.lat, userLocation.lng],
+        };
+        updateProfileLocation(currentUser.uid, currLocation);
+      });
     }
   }, [isFocused]);
 
