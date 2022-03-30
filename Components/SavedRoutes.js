@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 
 export const SavedRoutes = ({ route }) => {
   const _map = useRef(null);
+  const { currentUser } = useAuth();
+  const userId = currentUser.uid;
   const [points, setPoints] = useState(route.params.location);
   const [drawMethod, setDrawMethod] = useState("Polyline");
 
