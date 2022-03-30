@@ -12,7 +12,7 @@ import {
 export const UserRoutes = ({ routes, navigate }) => {
   const test = routes.map((t) => t.id);
   const isCarousel = React.useRef(null);
-  const windowWidth = Dimensions.get("window").width;
+  const { height, width } = Dimensions.get("window");
 
   const _renderItem = ({ item, index }) => {
     return (
@@ -21,21 +21,41 @@ export const UserRoutes = ({ routes, navigate }) => {
           navigate("SavedRoutes", { location: routes[index].myRoute })
         }
       >
-        <Card>
+        <Card
+          containerStyle={{
+            borderRadius: 10,
+            paddingTop: 0,
+          }}
+          wrapperStyle={{
+            padding: 0,
+            margin: 0,
+          }}
+        >
           <View
             style={{
               flexDirection: "row-reverse",
             }}
           >
-            <Icon name="place" />
-            <Card.Title style={{ padding: 5, flex: 1 }}>{item}</Card.Title>
+            {/* <Icon name="place" /> */}
+            <Card.Title
+              style={{
+                padding: 0,
+                flex: 1,
+                margin: 0,
+                fontSize: 18,
+                marginBottom: 4,
+                marginTop: 5,
+              }}
+            >
+              {item}
+            </Card.Title>
           </View>
 
-          <Card.Divider />
-          <View style={styles.shape}>
+          <Card.Divider style={{ marginBottom: 5, padding: 0 }} />
+          <View style={{ backgroundColor: "grey", height: height * 0.21 }}>
             <Image
               source={require("../assets/map.jpg")}
-              style={{ width: undefined, height: 110 }}
+              style={{ width: undefined, height: height * 0.21 }}
             />
           </View>
         </Card>
@@ -48,15 +68,8 @@ export const UserRoutes = ({ routes, navigate }) => {
       ref={isCarousel}
       data={test}
       renderItem={_renderItem}
-      itemWidth={235}
-      sliderWidth={windowWidth}
+      itemWidth={width * 0.85}
+      sliderWidth={width * 0.91}
     />
   );
 };
-
-const styles = StyleSheet.create({
-  shape: {
-    backgroundColor: "grey",
-    height: 110,
-  },
-});
