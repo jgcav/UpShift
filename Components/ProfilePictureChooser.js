@@ -1,19 +1,16 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { Button, Text } from "@rneui/base";
 import React, { useState, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import firebase from "../config/firebase";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { updateDoc, doc } from "firebase/firestore";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProfilePictureChooser = ({ navigation: { navigate } }) => {
-  const [profilePictureInput, setProfilePictureInput] = useState("not changed");
+  const [profilePictureInput, setProfilePictureInput] = useState(
+    "https://i.pinimg.com/originals/e4/03/de/e403de788507db2505774f48f70a8eab.png"
+  );
   const [isUploading, setIsUploading] = useState(false);
   const user = firebase.auth().currentUser;
   const db = firebase.firestore();
@@ -93,8 +90,9 @@ const ProfilePictureChooser = ({ navigation: { navigate } }) => {
     );
   } else {
     return (
-      <View styles={styles.container}>
-        <View>
+      <SafeAreaView behaviour="padding" styles={styles.container}>
+        <Text style={styles.title}>Sign Up</Text>
+        <View style={styles.buttonContainer}>
           <Button
             title="Pick an Image From Camera Roll +"
             onPress={pickImage}
@@ -103,14 +101,12 @@ const ProfilePictureChooser = ({ navigation: { navigate } }) => {
           {profilePictureInput && (
             <Image source={{ uri: profilePictureInput }} style={styles.image} />
           )}
+
+          <Button title="CREATE PROFILE" onPress={onPress} />
+          <Text style={styles.text}>OR</Text>
+          <Button title="Create Profile Without Image" onPress={onSkip} />
         </View>
-        <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
-          <Text style={styles.buttonText}>CREATE</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={onSkip}>
-          <Text style={styles.buttonText}>Choose a Picture Later</Text>
-        </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     );
   }
 };
@@ -118,10 +114,27 @@ const ProfilePictureChooser = ({ navigation: { navigate } }) => {
 export default ProfilePictureChooser;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    backgroundColor: "blue",
+  title: {
+    alignSelf: "center",
+    color: "black",
+    fontSize: 24,
+    fontWeight: "bold",
   },
-  image: { height: 100, width: 100, alignSelf: "center", marginTop: 100 },
+  buttonContainer: {
+    backgroundColor: "#CFDDF6",
+    padding: 10,
+    marginTop: 20,
+    marginBottom: 20,
+    width: "100%",
+    marginVertical: 10,
+    fontSize: 20,
+  },
+  image: {
+    height: 200,
+    width: 200,
+    alignSelf: "center",
+    marginTop: 40,
+    marginBottom: 40,
+  },
+  text: { alignSelf: "center", marginTop: 5, marginBottom: 5 },
 });
