@@ -65,81 +65,76 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     );
 
   return (
-    <View>
-      <SafeAreaView>
-        <Text
-          style={{
-            marginLeft: 30,
-            marginTop: 15,
-            fontWeight: "500",
-            fontStyle: "italic",
+    <SafeAreaView style={styles.container}>
+      <Text
+        style={{
+          marginLeft: 30,
+          marginTop: 15,
+          fontWeight: "500",
+          fontStyle: "italic",
+        }}
+        h1
+      >
+        UpShift
+      </Text>
+
+      <View style={styles.menue}>
+        {/* // <ProfileCard age={age} profile={profile} /> */}
+
+        <Button
+          style={{ margin: 10, width: 150 }}
+          title="Logout"
+          onPress={handleLogout}
+        />
+        <Button
+          style={{ margin: 10, width: 150 }}
+          title="Find Rider"
+          onPress={() => {
+            navigate("Rider Finder");
           }}
-          h1
-        >
-          UpShift
-        </Text>
+        />
+        <Button
+          style={{ margin: 10, width: 150 }}
+          title="Chat"
+          onPress={() => {
+            navigate("ChatList");
+          }}
+        />
+      </View>
 
-        <View style={styles.menue}>
-          {/* // <ProfileCard age={age} profile={profile} /> */}
-
-          <Button
-            style={{ margin: 10, width: 150 }}
-            title="Logout"
-            onPress={handleLogout}
-          />
-          <Button
-            style={{ margin: 10, width: 150 }}
-            title="Find Rider"
-            onPress={() => {
-              navigate("Rider Finder");
-            }}
-          />
-          <Button
-            style={{ margin: 10, width: 150 }}
-            title="Chat"
-            onPress={() => {
-              navigate("ChatList");
-            }}
-          />
-        </View>
-
-        <View style={styles.container}>
-          <Button
-            containerStyle={{ marginLeft: 30 }}
-            buttonStyle={{
-              borderRadius: 30,
-              width: 185,
-              padding: 15,
-            }}
-            title="Plan Route  "
-            onPress={() =>
-              navigate("RoutePlanner", {
-                location: userLocation,
-              })
-            }
-            icon={{ name: "east", color: "white" }}
-            iconRight
-          />
-          <SafeAreaView style={styles.routes_container}>
-            <UserRoutes navigate={navigate} routes={routes} />
-          </SafeAreaView>
-        </View>
-      </SafeAreaView>
-    </View>
+      <Button
+        containerStyle={{ marginLeft: 30 }}
+        buttonStyle={{
+          borderRadius: 30,
+          width: 185,
+          padding: 15,
+        }}
+        title="Plan Route  "
+        onPress={() =>
+          navigate("RoutePlanner", {
+            location: userLocation,
+          })
+        }
+        icon={{ name: "east", color: "white" }}
+        iconRight
+      />
+      <View style={styles.spacer}></View>
+      <View style={styles.routes_container}>
+        <UserRoutes navigate={navigate} routes={routes} />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
-    top: 485,
-    height: 400,
+    flex: 1,
+  },
+  spacer: {
+    flex: 1,
   },
   routes_container: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: 500,
-    marginTop: 20,
+    marginBottom: 10,
   },
   menue: {
     padding: 10,
