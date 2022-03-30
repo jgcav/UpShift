@@ -25,6 +25,7 @@ const DatePicker = ({
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
+    // console.log("here");
     setAge(getAge(date));
   };
 
@@ -54,12 +55,14 @@ const DatePicker = ({
               : {
                   height: 40,
                   width: 300,
-                  backgroundColor: "rgba(255,255,255,0.2)",
+                  backgroundColor: "white",
                   marginBottom: 20,
                   textAlign: "center",
                   color: "black",
                   paddingHorizontal: 10,
                   paddingVertical: 10,
+                  borderColor: "black",
+                  borderWidth: 2,
                 }
           }
         >
@@ -87,6 +90,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     textAlign: "center",
-    color: "white",
+    color: "grey",
   },
 });

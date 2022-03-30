@@ -18,7 +18,7 @@ export default function ProfileMakerScreen({ navigation: { navigate } }) {
 
 const style = StyleSheet.create({
   container: {
-    backgroundColor: "#FFFF",
+    backgroundColor: "#CFDDF6",
     flex: 1,
   },
 });
