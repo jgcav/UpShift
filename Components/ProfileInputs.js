@@ -89,13 +89,13 @@ export default function ProfileInputs({ navigate }) {
       postProfile(profile);
       navigate("ProfilePictureChooser");
     }
-    // console.log(age, "< age");
-    // console.log(tooYoung, "< too young?");
-    // console.log(firstNameAbsent, "<firstname absent?");
-    // console.log(lastNameAbsent, "<lastname absent?");
-    // console.log(genderAbsent, "<gender absent?");
-    // console.log(regionAbsent, "<region absent?");
-    // console.log(bikeAbsent, "<bike absent?");
+    console.log(age, "< age");
+    console.log(tooYoung, "< too young?");
+    console.log(firstNameAbsent, "<firstname absent?");
+    console.log(lastNameAbsent, "<lastname absent?");
+    console.log(genderAbsent, "<gender absent?");
+    console.log(regionAbsent, "<region absent?");
+    console.log(bikeAbsent, "<bike absent?");
   };
 
   return (
@@ -170,6 +170,8 @@ export default function ProfileInputs({ navigate }) {
           tooYoung={tooYoung}
           getAge={getAge}
           setAge={setAge}
+          age={age}
+          setTooYoung={setTooYoung}
         />
       </View>
       {/* Gender Picker */}

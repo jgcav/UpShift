@@ -10,7 +10,15 @@ import {
 import React, { useState } from "react";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 
-const DatePicker = ({ setDate, date, tooYoung, getAge, setAge }) => {
+const DatePicker = ({
+  setDate,
+  date,
+  tooYoung,
+  getAge,
+  setAge,
+  age,
+  setTooYoung,
+}) => {
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
@@ -55,9 +63,7 @@ const DatePicker = ({ setDate, date, tooYoung, getAge, setAge }) => {
                 }
           }
         >
-          <Text style={styles.buttonText}>
-            Choose Date of Birth (18+ Only){" "}
-          </Text>
+          <Text style={styles.buttonText}>Choose Date of Birth (18+ Only)</Text>
         </TouchableOpacity>
       </View>
       {show && (
