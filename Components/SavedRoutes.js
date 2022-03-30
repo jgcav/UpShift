@@ -1,7 +1,7 @@
 import MapView, { Polyline, PROVIDER_GOOGLE, Polygon } from "react-native-maps";
 import { View, StyleSheet } from "react-native";
 import { useState, useEffect, useRef } from "react";
-
+import { useAuth } from "../contexts/AuthContext";
 export const SavedRoutes = ({ route }) => {
   const _map = useRef(null);
   const [points, setPoints] = useState(route.params.location);
