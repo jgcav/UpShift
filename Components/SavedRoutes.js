@@ -9,6 +9,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import GooglePlacesInput from "./GooglePlacesInput";
 import { snapToRoad } from "./api";
+import { useAuth } from "../contexts/AuthContext";
 
 import firebase from "../config/firebase";
 import { doc, setDoc } from "firebase/firestore";
@@ -16,6 +17,8 @@ const db = firebase.firestore();
 
 export const SavedRoutes = ({ route }) => {
   const _map = useRef(null);
+  const { currentUser } = useAuth();
+  const userId = currentUser.uid;
   const [points, setPoints] = useState(route.params.location);
   const [snapped, setSnapped] = useState(false);
   const [drawMethod, setDrawMethod] = useState("Polyline");
@@ -81,7 +84,7 @@ export const SavedRoutes = ({ route }) => {
       const route = { myRoute: points };
       try {
         const newroute = await setDoc(
-          doc(db, `profiles/vr9xGysRo7OpkOEQZ3yAyLkRCg92/routes/${routeName}`),
+          doc(db, `profiles/${userId}/${routeName}`),
           route
         );
         return newroute;
