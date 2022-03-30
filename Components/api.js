@@ -33,3 +33,14 @@ export const fetchCurrLocation = async () => {
     console.log(err);
   }
 };
+
+export const fetchRouteData = async () => {
+  const input = `origins=ChIJ-0tfftstekgR6oITC6qZoHk`;
+  const url = `https://maps.googleapis.com/maps/api/distancematrix/json?${input}`;
+  try {
+    const data = await axios.get(url);
+    return data.data;
+  } catch (err) {
+    console.log(err);
+  }
+};

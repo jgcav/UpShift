@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, ScrollView, SafeAreaView } from "react-native";
-import { Button } from "@rneui/base";
 import { useAuth } from "../contexts/AuthContext";
 import { useIsFocused } from "@react-navigation/native";
 import { getRoutes } from "../utils/firebaseFuncs";
 import { fetchCurrLocation } from "./api";
 import { UserRoutes } from "./UserRoutes";
-import { Text } from "@rneui/base";
+import { Text, Button } from "@rneui/base";
 import getAge from "./ageCalculator";
 
 export default function ProfileScreen({ navigation: { navigate } }) {
@@ -82,21 +81,13 @@ export default function ProfileScreen({ navigation: { navigate } }) {
               navigate("Rider Finder");
             }}
           />
-        </TouchableOpacity>
-      </View>
-      <View>
-        <TouchableOpacity style={styles.buttonContainer}>
           <Button
+            style={{ margin: 10, width: 150 }}
             title="Chat"
-            color="black"
             onPress={() => {
               navigate("ChatList");
             }}
           />
-        </TouchableOpacity>
-      </View>
-        <View style={styles.container}>
-          <Button
         </View>
 
         <View style={styles.container}>
@@ -116,7 +107,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             icon={{ name: "east", color: "white" }}
             iconRight
           />
-
           <SafeAreaView style={styles.routes_container}>
             <UserRoutes navigate={navigate} routes={routes} />
           </SafeAreaView>
@@ -142,5 +132,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 55,
     flexDirection: "row",
+    flexWrap: "wrap",
   },
 });
