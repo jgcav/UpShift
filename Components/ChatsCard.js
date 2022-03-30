@@ -4,11 +4,12 @@ import { Text, Card, Icon, Button } from "@rneui/base";
 import { getDoc, doc } from "firebase/firestore";
 import firebase from "../config/firebase";
 import { getProfile } from "../utils/firebaseFuncs";
-
+import { useIsFocused } from "@react-navigation/native";
 const db = firebase.firestore();
 
 export default function ChatsCard({ chat, navigate }) {
   const [userProfile, setUserProfile] = useState({});
+  const isFocused = useIsFocused();
   const [recent, setRecent] = useState({
     uid: "",
     message: "",
@@ -32,7 +33,7 @@ export default function ChatsCard({ chat, navigate }) {
     Promise.all(Proms).then(([profile, m]) => {
       setUserProfile(profile);
       if (m !== undefined) {
-        const d = new Date(16487358270000);
+        const d = new Date();
         const yearD = d.getFullYear();
         const monthD = d.getMonth();
         const dayD = d.getDate();
@@ -42,10 +43,8 @@ export default function ChatsCard({ chat, navigate }) {
         const day = ts.getDate();
         const hour = ts.getHours();
         const minute = ts.getMinutes();
-        console.log(year, yearD, month, monthD, day, dayD);
         if (year === yearD && month === monthD && day === dayD) {
           m.last = `${("0" + hour).slice(-2)}:${("0" + minute).slice(-2)}`;
-          console.log("1");
         } else if (year === yearD) {
           m.last = `${("0" + (month + 1)).slice(-2)}-${("0" + day).slice(-2)}`;
         } else {
@@ -59,7 +58,7 @@ export default function ChatsCard({ chat, navigate }) {
         setRecent(m);
       }
     });
-  }, []);
+  }, [isFocused]);
 
   return (
     <TouchableOpacity

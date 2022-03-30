@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Text, TextInput, StyleSheet, View, Button } from "react-native";
+import {
+  Text,
+  TextInput,
+  StyleSheet,
+  View,
+  Button,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import ChatsCard from "./ChatsCard";
 import {
@@ -13,12 +21,13 @@ import {
   limit,
 } from "firebase/firestore";
 import firebase from "../config/firebase";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { useIsFocused } from "@react-navigation/native";
 
 const db = firebase.firestore();
 export default function ChatListScreen({ navigation: { navigate } }) {
   const [chats, setChats] = useState([]);
   const [newChat, setNewChat] = useState(false);
+  const isFocused = useIsFocused();
   const { currentUser } = useAuth();
   function getChats() {
     const docsRef = collection(
@@ -37,9 +46,9 @@ export default function ChatListScreen({ navigation: { navigate } }) {
     getChats().then((rooms) => {
       setChats(rooms);
     });
-  }, [newChat]);
+  }, [isFocused]);
   return (
-    <View>
+    <ScrollView>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
@@ -51,7 +60,7 @@ export default function ChatListScreen({ navigation: { navigate } }) {
       {chats.map((chat, index) => {
         return <ChatsCard chat={chat} navigate={navigate} key={chat.roomId} />;
       })}
-    </View>
+    </ScrollView>
   );
 }
 
