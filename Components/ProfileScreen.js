@@ -53,17 +53,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     );
 
   return (
-<<<<<<< HEAD
-    <ScrollView>
-      <Text>{error && error}</Text>
-      <TouchableOpacity style={styles.buttonContainer}>
-        <Button title="Logout" color="black" onPress={handleLogout} />
-      </TouchableOpacity>
-
-      <ProfileCard age={age} profile={profile} />
-      <View>
-        <TouchableOpacity style={styles.buttonContainer}>
-=======
     <View>
       <SafeAreaView>
         <Text
@@ -80,12 +69,12 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
         <View style={styles.menue}>
           {/* // <ProfileCard age={age} profile={profile} /> */}
+
           <Button
             style={{ margin: 10, width: 150 }}
             title="Logout"
             onPress={handleLogout}
           />
->>>>>>> a383837aa1bbc399f3c44ba5aeb21d11129b98d3
           <Button
             style={{ margin: 10, width: 150 }}
             title="Find Rider"
@@ -93,7 +82,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
               navigate("Rider Finder");
             }}
           />
-<<<<<<< HEAD
         </TouchableOpacity>
       </View>
       <View>
@@ -107,9 +95,9 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           />
         </TouchableOpacity>
       </View>
-=======
+        <View style={styles.container}>
+          <Button
         </View>
->>>>>>> a383837aa1bbc399f3c44ba5aeb21d11129b98d3
 
         <View style={styles.container}>
           <Button
