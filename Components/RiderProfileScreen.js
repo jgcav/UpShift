@@ -13,7 +13,7 @@ import getAge from "./ageCalculator";
 export default function RiderProfileScreen({ route }) {
   const { height, width } = Dimensions.get("window");
   const { currentUser } = useAuth();
-  const { rider, requested, setRequested, addRequest, remRequest } =
+  const { rider, requested, setRequested, addRequest, remRequest, distance } =
     route.params;
   const [updateRequest, setUpdateRequest] = useState(requested);
 
@@ -44,7 +44,9 @@ export default function RiderProfileScreen({ route }) {
             <Text
               style={styles.name}
             >{`${rider.firstName} ${rider.lastName}`}</Text>
-            <Text style={styles.age}>{getAge(new Date(rider.DOB.seconds*1000))}</Text>
+            <Text style={styles.age}>
+              {getAge(new Date(rider.DOB.seconds * 1000))}
+            </Text>
           </View>
 
           <Text style={styles.bio}>{rider.bio}</Text>
@@ -63,7 +65,7 @@ export default function RiderProfileScreen({ route }) {
                 style={styles.location}
                 source={require("../images/Location.png")}
               />
-              <Text style={styles.distance}>1 km</Text>
+              <Text style={styles.distance}>{`${distance}km`}</Text>
             </View>
           </View>
         </ScrollView>
