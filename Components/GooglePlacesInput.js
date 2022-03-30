@@ -7,6 +7,7 @@ import {
   TextInput,
   StyleSheet,
   SafeAreaView,
+  Keyboard,
 } from "react-native";
 
 import { searchLocation, fetchLatLng } from "./api";
@@ -56,6 +57,7 @@ const GooglePlacesInput = ({ setSelectedPlace }) => {
                   style={styles.resultItem}
                   onPress={() => {
                     moveMap(item.id);
+                    Keyboard.dismiss();
                     setIsShowing(false);
                   }}
                 >
@@ -80,11 +82,10 @@ const styles = StyleSheet.create({
   },
 
   searchResultsContainer: {
-    width: 340,
-    height: 200,
+    width: 310,
+    height: 150,
     backgroundColor: "#fff",
-    position: "absolute",
-    top: 50,
+    marginLeft: 30,
   },
 
   resultItem: {
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     paddingLeft: 15,
     marginLeft: 25,
-    marginTop: 5,
+    marginTop: 30,
   },
 
   autocompleteContainer: {
