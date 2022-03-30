@@ -3,14 +3,13 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
   TouchableOpacity,
-  Touchable,
-  KeyboardAvoidingView,
   StatusBar,
   Button,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
+import LoginLogo from "./LoginLogo";
+import TextInput from "./TextInput.js";
 
 export default function LoginScreen({ navigation: { navigate } }) {
   const [email, setEmail] = useState("ttt@ttt.com");
@@ -41,10 +40,12 @@ export default function LoginScreen({ navigation: { navigate } }) {
   return (
     <View behavior="padding" style={style.container}>
       <StatusBar barStyle="light-content" />
+      <LoginLogo />
       <TextInput
         style={style.input}
-        placeholder="Email"
-        placeholderTextColor={"rgba(255,255,255,0.6)"}
+        placeholder="Email address"
+        placeholderTextColor={"#a9a9a9"}
+        returnKeyType="next"
         keyboardType="email-address"
         autoCapitalize="none"
         value={email}
@@ -54,33 +55,27 @@ export default function LoginScreen({ navigation: { navigate } }) {
       <TextInput
         style={style.input}
         placeholder="Password"
-        placeholderTextColor={"rgba(255,255,255,0.6)"}
+        placeholderTextColor={"#a9a9a9"}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
       <Text>{error && error}</Text>
       <TouchableOpacity style={style.buttonContainer}>
-        <Button title="LOGIN" color="white" onPress={handleSubmit} />
+        <Button title="Login" color="white" onPress={handleSubmit} />
       </TouchableOpacity>
       <Text>
-        Already have an account?{" "}
-        <Text
-          style={style.textHighlight}
-          onPress={() => {
-            navigate("SignUp");
-          }}
-        >
-          Sign Up
-        </Text>
-        <Text
-          style={style.textHighlight}
-          onPress={() => {
-            navigate("ProfileMaker");
-          }}
-        >
-          ProfileMaker
-        </Text>
+        Don't have an account?{"  "}
+        <TouchableOpacity>
+          <Text
+            style={style.textHighlight}
+            onPress={() => {
+              navigate("SignUp");
+            }}
+          >
+            Sign Up
+          </Text>
+        </TouchableOpacity>
       </Text>
     </View>
   );
@@ -90,21 +85,24 @@ const style = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#0984E3",
+    backgroundColor: "#FFFF",
   },
   input: {
     height: 40,
     width: 300,
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: "#FFFF",
     marginBottom: 20,
-    color: "white",
+    color: "black",
     paddingHorizontal: 10,
+    fontSize: 20,
   },
   buttonContainer: {
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: "#CFDDF6",
     paddingVertical: 10,
-    paddingHorizontal: 10,
     marginBottom: 20,
+    width: "50%",
+    marginVertical: 10,
+    fontSize: 20,
   },
   buttonText: {
     textAlign: "center",
@@ -112,7 +110,9 @@ const style = StyleSheet.create({
     fontWeight: "bold",
   },
   textHighlight: {
-    color: "white",
+    marginTop: 24,
+    fontWeight: "bold",
+    color: "#a9a9a9",
     textDecorationLine: "underline",
   },
 });
