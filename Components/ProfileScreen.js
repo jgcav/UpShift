@@ -78,7 +78,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         <Button title="Logout" color="black" onPress={handleLogout} />
       </TouchableOpacity>
 
-
       <ProfileCard age={age} profile={profile} />
       <View>
         <TouchableOpacity style={styles.buttonContainer}>
@@ -87,6 +86,17 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             color="black"
             onPress={() => {
               navigate("Rider Finder");
+            }}
+          />
+        </TouchableOpacity>
+      </View>
+      <View>
+        <TouchableOpacity style={styles.buttonContainer}>
+          <Button
+            title="Chat"
+            color="black"
+            onPress={() => {
+              navigate("ChatList");
             }}
           />
         </TouchableOpacity>
