@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useIsFocused } from "@react-navigation/native";
-import {
-  Button,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
-import { ProfileCard } from "./ProfileCard";
+import { View, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
+import { useIsFocused } from "@react-navigation/native";
+import { getRoutes } from "../utils/firebaseFuncs";
 import { fetchCurrLocation } from "./api";
+
 
 import {
   getProfile,
@@ -21,21 +15,23 @@ import {
 
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
+import { UserRoutes } from "./UserRoutes";
+import { Text, Button } from "@rneui/base";
+import getAge from "./ageCalculator";
+
+
 export default function ProfileScreen({ navigation: { navigate } }) {
   const { logout, currentUser } = useAuth();
   const [error, setError] = useState("");
-
   const [userLocation, setUserLocation] = useState({});
-  const [profilePicture, setProfilePicture] = useState();
 
   const isFocused = useIsFocused();
-  const [profile, setProfile] = useState({});
   const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const userId = currentUser.uid;
 
   useEffect(() => {
+
     fetchCurrLocation().then((data) => {
       setUserLocation(data);
       const currLocation = {
@@ -46,9 +42,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   }, [isFocused]);
 
   useEffect(() => {
-    getRoutes(userId).then((data) => {
-      setRoutes(data);
-    });
     getProfile(userId).then((data) => {
       setProfile(data);
     });
@@ -56,6 +49,19 @@ export default function ProfileScreen({ navigation: { navigate } }) {
       setProfilePicture(url);
     });
     setLoading(false);
+    
+    if (currentUser !== null) {
+      getRoutes(currentUser.uid).then((data) => {
+        setRoutes(data);
+      });
+      //       getProfile(currentUser.uid).then((data) => {
+      //         const dobString = new Date(data.DOB.seconds * 1000);
+      //         const calcAge = getAge(dobString);
+      //         setAge(calcAge);
+      //         setProfile(data);
+      //       });
+      setLoading(false);
+    }
   }, [isFocused]);
 
   const handleLogout = () => {
@@ -77,78 +83,86 @@ export default function ProfileScreen({ navigation: { navigate } }) {
     );
 
   return (
-    <ScrollView>
-      <Text>{error && error}</Text>
-      <TouchableOpacity style={styles.buttonContainer}>
-        <Button title="Logout" color="black" onPress={handleLogout} />
-      </TouchableOpacity>
+    <View>
+      <SafeAreaView>
+        <Text
+          style={{
+            marginLeft: 30,
+            marginTop: 15,
+            fontWeight: "500",
+            fontStyle: "italic",
+          }}
+          h1
+        >
+          UpShift
+        </Text>
 
-      <ProfileCard profile={profile} profilePicture={profilePicture} />
-      <View>
-        <TouchableOpacity style={styles.buttonContainer}>
+        <View style={styles.menue}>
+          {/* // <ProfileCard age={age} profile={profile} /> */}
+
           <Button
+            style={{ margin: 10, width: 150 }}
+            title="Logout"
+            onPress={handleLogout}
+          />
+          <Button
+            style={{ margin: 10, width: 150 }}
             title="Find Rider"
-            color="black"
             onPress={() => {
               navigate("Rider Finder");
             }}
           />
-        </TouchableOpacity>
-      </View>
-
-      <View>
-        <TouchableOpacity style={styles.buttonContainer}>
           <Button
-            title="Plan Route"
-            color="black"
+            style={{ margin: 10, width: 150 }}
+            title="Chat"
+            onPress={() => {
+              navigate("ChatList");
+            }}
+          />
+        </View>
+
+        <View style={styles.container}>
+          <Button
+            containerStyle={{ marginLeft: 30 }}
+            buttonStyle={{
+              borderRadius: 30,
+              width: 185,
+              padding: 15,
+            }}
+            title="Plan Route  "
             onPress={() =>
               navigate("RoutePlanner", {
                 location: userLocation,
               })
             }
+            icon={{ name: "east", color: "white" }}
+            iconRight
           />
-        </TouchableOpacity>
-
-        <Text style={styles.title}>Saved Routes</Text>
-        <View>
-          {routes.map((route, i) => {
-            return (
-              <Button
-                key={i}
-                title={`${route.id}`}
-                color="black"
-                onPress={() =>
-                  navigate("SavedRoutes", { location: route.myRoute })
-                }
-              />
-            );
-          })}
+          <SafeAreaView style={styles.routes_container}>
+            <UserRoutes navigate={navigate} routes={routes} />
+          </SafeAreaView>
         </View>
-      </View>
-    </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: "#0984E3", flex: 1 },
-  buttonContainer: {
-    backgroundColor: "rgba(255,255,255,0.2)",
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    margin: 20,
+  container: {
+    position: "absolute",
+    top: 485,
+    height: 400,
   },
-  profileCard: {
-    backgroundColor: "#0984E3",
+  routes_container: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 500,
+    marginTop: 20,
   },
-  text: {
-    fontSize: 20,
-    color: "#fff",
+  menue: {
     padding: 10,
-  },
-  title: {
-    fontSize: 25,
-    alignSelf: "center",
-    fontWeight: "bold",
-    color: "#fff",
+    marginTop: 55,
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
 });

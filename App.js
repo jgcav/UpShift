@@ -19,10 +19,6 @@ import ProfilePictureChooser from "./Components/ProfilePictureChooser";
 
 LogBox.ignoreLogs(["Setting a timer", "AsyncStorage"]);
 export default function App() {
-  const [loading, setLoading] = useState(true);
-
-  // if (loading) return <RoutePlanner />;
-
   const Stack = createStackNavigator();
   return (
     <AuthProvider>
@@ -58,6 +54,10 @@ export default function App() {
             component={ChatListScreen}
           ></Stack.Screen>
           <Stack.Screen
+            options={{
+              headerShown: false,
+              presentation: "modal",
+            }}
             name="RoutePlanner"
             component={RoutePlanner}
           ></Stack.Screen>

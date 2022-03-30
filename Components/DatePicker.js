@@ -22,9 +22,8 @@ const DatePicker = ({ setDate, date }) => {
     setShow(true);
   };
 
-  console.log(date);
   return (
-    <View>
+    <View style={styles.dateBlock}>
       <View>
         <Button
           title="Choose Date of Birth"
@@ -47,16 +46,8 @@ const DatePicker = ({ setDate, date }) => {
 export default DatePicker;
 
 const styles = StyleSheet.create({
-  dateInput: {
-    height: 40,
-    width: 60,
-    backgroundColor: "rgba(255,255,255,0.2)",
-    margin: 10,
-    textAlign: "center",
-    color: "white",
-    paddingHorizontal: 10,
-  },
+ 
   dateBlock: {
-    flexDirection: "row",
+    width: 300,
   },
 });

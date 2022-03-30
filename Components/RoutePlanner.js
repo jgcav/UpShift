@@ -1,15 +1,19 @@
 import MapView, { Polyline, PROVIDER_GOOGLE, Polygon } from "react-native-maps";
-import {
-  View,
-  StyleSheet,
-  Button,
-  TextInput,
-  SafeAreaView,
-} from "react-native";
+import { View, StyleSheet, TextInput, SafeAreaView } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import GooglePlacesInput from "./GooglePlacesInput";
 import { snapToRoad } from "./api";
 import { useAuth } from "../contexts/AuthContext";
+
+import {
+  SpeedDial,
+  Overlay,
+  Button,
+  Input,
+  Dialog,
+  Tooltip,
+  Text,
+} from "@rneui/base";
 
 import firebase from "../config/firebase";
 import { doc, setDoc } from "firebase/firestore";
@@ -22,8 +26,11 @@ export const RoutePlanner = ({ route, navigation: { navigate } }) => {
   const [points, setPoints] = useState([]);
   const [snapped, setSnapped] = useState(false);
   const [drawMethod, setDrawMethod] = useState("Polyline");
-  const [routeNameField, setRouteNameField] = useState(false);
   const [routeName, setRouteName] = useState("");
+  const [open, setOpen] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  const [test, setTest] = useState(true);
 
   const [selectedPlace, setSelectedPlace] = useState({
     lat: route.params.location.lat,
@@ -45,6 +52,7 @@ export const RoutePlanner = ({ route, navigation: { navigate } }) => {
   const drawPolyLine = (e) => {
     const latitude = Number(e.nativeEvent.coordinate.latitude);
     const longitude = Number(e.nativeEvent.coordinate.longitude);
+
     setPoints((currentState) => [
       ...currentState,
       {
@@ -103,46 +111,112 @@ export const RoutePlanner = ({ route, navigation: { navigate } }) => {
 
   return (
     <View>
+      <Overlay
+        overlayStyle={{ margin: 40, borderRadius: 10 }}
+        isVisible={test}
+        onBackdropPress={() => {
+          setTest(!test);
+        }}
+      >
+        <View>
+          <Text h4 h4Style={{ color: "white", padding: 10 }}>
+            Frequent taps work best
+          </Text>
+          <Text h4 h4Style={{ color: "white", padding: 10 }}>
+            Dont Zoom out too far
+          </Text>
+          <Text h4 h4Style={{ color: "white", padding: 10 }}>
+            Before you save press and hold to snap the drawing to real time
+            roads
+          </Text>
+        </View>
+
+        <Button
+          buttonStyle={{ margin: 15 }}
+          title="Start Planning"
+          onPress={() => {
+            setTest(false);
+          }}
+        />
+      </Overlay>
+
       <View style={styles.searchbar}>
         <GooglePlacesInput setSelectedPlace={setSelectedPlace} />
       </View>
 
-      <View style={styles.toolbar}>
-        <Button title="Clear" color="black" onPress={resetPolygon} />
-        <Button
-          title="Save"
+      <SpeedDial
+        color="black"
+        style={styles.toolbar}
+        isOpen={open}
+        icon={{ name: "tune", color: "#fff" }}
+        openIcon={{ name: "close", color: "#fff" }}
+        onOpen={() => setOpen(!open)}
+        onClose={() => setOpen(!open)}
+      >
+        <SpeedDial.Action
           color="black"
+          icon={{ name: "clear", color: "#fff" }}
+          title="clear"
           onPress={() => {
-            setRouteNameField((curr) => !curr);
+            resetPolygon(), setOpen(!open);
           }}
         />
-        <Button title="Undo" color="black" onPress={undoLastPoint} />
-        <Button
-          title={drawMethod}
+        <SpeedDial.Action
           color="black"
+          icon={{ name: "undo", color: "#fff" }}
+          title="undo"
+          onPress={() => {
+            undoLastPoint(), setOpen(!open);
+          }}
+        />
+        <SpeedDial.Action
+          color="black"
+          icon={{ name: "save", color: "#fff" }}
+          title="save"
+          onPress={() => {
+            setVisible(!visible), setOpen(!open);
+          }}
+        />
+        <SpeedDial.Action
+          color="black"
+          icon={{ name: "gesture", color: "#fff" }}
+          title={`${drawMethod}`}
           onPress={() => {
             drawMethod === "Polyline"
               ? setDrawMethod("Polygon")
               : setDrawMethod("Polyline");
+            setOpen(!open);
           }}
         />
+      </SpeedDial>
+
+      <View>
+        <Dialog
+          isVisible={visible}
+          onBackdropPress={() => {
+            setVisible(!visible);
+          }}
+        >
+          <Input
+            placeholder="Name this route"
+            onChangeText={(e) => setRouteName(e)}
+            returnKeyType="done"
+            autoCapitalize="words"
+            editable={true}
+            color="white"
+          />
+
+          <Dialog.Button
+            title="Save Route"
+            color="white"
+            onPress={returnToProfile}
+          />
+        </Dialog>
       </View>
-      {routeNameField ? (
-        <View style={styles.routeNameInput}>
-          <SafeAreaView>
-            <TextInput
-              placeholder="Enter a name for this route..."
-              onChangeText={(e) => setRouteName(e)}
-              onSubmitEditing={returnToProfile}
-              placeholderTextColor="black"
-              returnKeyType="done"
-            />
-          </SafeAreaView>
-        </View>
-      ) : null}
 
       <View style={styles.map}>
         <MapView
+          mapType={"terrain"}
           zoomTapEnabled={false}
           ref={_map}
           customMapStyle={mapStyle}
@@ -171,24 +245,13 @@ export const RoutePlanner = ({ route, navigation: { navigate } }) => {
 };
 
 const styles = StyleSheet.create({
-  routeNameInput: {
-    flex: 1,
-    position: "absolute",
-    bottom: 430,
-    left: 35,
-    zIndex: 2,
-    width: 340,
-    height: 50,
-    fontSize: 18,
-    borderRadius: 8,
-    borderColor: "#aaa",
-    borderWidth: 1.5,
+  routename: {
+    width: 500,
   },
+
   toolbar: {
     zIndex: 2,
-    position: "absolute",
-    bottom: 60,
-    right: 30,
+    padding: 20,
   },
   searchbar: {
     zIndex: 2,

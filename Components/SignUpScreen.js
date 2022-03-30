@@ -3,15 +3,12 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
   TouchableOpacity,
-  Touchable,
-  KeyboardAvoidingView,
   StatusBar,
   Button,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
-
+import TextInput from "./TextInput.js";
 export default function SignUpScreen({ navigation: { navigate } }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,13 +25,18 @@ export default function SignUpScreen({ navigation: { navigate } }) {
     setLoading(true);
     signup(email, password)
       .then(() => {
+        setLoading(false);
         navigate("ProfileMaker");
       })
       .catch((err) => {
-        setError("Failed to set-up account");
         console.log(err);
+        if (err.code === "auth/email-already-in-use")
+          setError("Email already in use");
+        else if (err.code === "auth/invalid-email") setError("Invalid Email");
+        else if (err.code === "auth/weak-password")
+          setError("Weak Password: 6 characters minimum");
+        else setError("Failed to set up account");
       });
-    setLoading(false);
   }
 
   return (
@@ -43,7 +45,7 @@ export default function SignUpScreen({ navigation: { navigate } }) {
       <TextInput
         style={style.input}
         placeholder="Email"
-        placeholderTextColor={"rgba(255,255,255,0.6)"}
+        placeholderTextColor={"#a9a9a9"}
         keyboardType="email-address"
         autoCapitalize="none"
         value={email}
@@ -53,7 +55,7 @@ export default function SignUpScreen({ navigation: { navigate } }) {
       <TextInput
         style={style.input}
         placeholder="Password"
-        placeholderTextColor={"rgba(255,255,255,0.6)"}
+        placeholderTextColor={"#a9a9a9"}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -61,7 +63,7 @@ export default function SignUpScreen({ navigation: { navigate } }) {
       <TextInput
         style={style.input}
         placeholder="Confirm Password"
-        placeholderTextColor={"rgba(255,255,255,0.6)"}
+        placeholderTextColor={"#a9a9a9"}
         secureTextEntry
         value={passwordConfirm}
         onChangeText={setPasswordConfirm}
@@ -70,11 +72,10 @@ export default function SignUpScreen({ navigation: { navigate } }) {
       <Text>{error && error}</Text>
 
       <TouchableOpacity style={style.buttonContainer}>
-        <Button title="SIGN UP" color="white" onPress={handleSubmit} />
+        <Button title="Sign up" color="white" onPress={handleSubmit} />
       </TouchableOpacity>
       <Text>
-        Already have an account?
-        {" "}
+        Already have an account?{" "}
         <Text
           style={style.textHighlight}
           onPress={() => {
@@ -91,30 +92,33 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#0984E3",
+    backgroundColor: "#FFFF",
     justifyContent: "center",
   },
   input: {
     height: 40,
     width: 300,
-    backgroundColor: "rgba(255,255,255,0.2)",
     marginBottom: 20,
-    color: "white",
+    color: "black",
     paddingHorizontal: 10,
+    fontSize: 20,
   },
   buttonContainer: {
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: "powderblue",
     paddingVertical: 10,
-    paddingHorizontal: 10,
     marginBottom: 20,
+    width: "50%",
+    marginVertical: 10,
   },
   buttonText: {
     textAlign: "center",
-    color: "white",
+    color: "#CFDDF6",
     fontWeight: "bold",
   },
   textHighlight: {
-    color: "white",
-    textDecorationLine: "underline"
-  }
+    color: "#a9a9a9",
+    textDecorationLine: "underline",
+    marginTop: 24,
+    fontWeight: "bold",
+  },
 });
