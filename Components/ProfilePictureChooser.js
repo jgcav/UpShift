@@ -121,7 +121,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   buttonContainer: {
-    backgroundColor: "#CFDDF6",
     padding: 10,
     marginTop: 20,
     marginBottom: 20,
@@ -137,4 +136,5 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   text: { alignSelf: "center", marginTop: 5, marginBottom: 5 },
+  loadingMessage: {alignSelf: "center", marginTop: 60, marginBottom: 5, fontSize: 18 }
 });

@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, ScrollView, KeyboardAvoidingView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import ProfileInputs from "./ProfileInputs";
 
@@ -10,7 +11,9 @@ export default function ProfileMakerScreen({ navigation: { navigate } }) {
       style={style.container}
     >
       <ScrollView>
-        <ProfileInputs navigate={navigate} />
+        <SafeAreaView>
+          <ProfileInputs navigate={navigate} />
+        </SafeAreaView>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -18,7 +21,6 @@ export default function ProfileMakerScreen({ navigation: { navigate } }) {
 
 const style = StyleSheet.create({
   container: {
-    backgroundColor: "#CFDDF6",
     flex: 1,
   },
 });

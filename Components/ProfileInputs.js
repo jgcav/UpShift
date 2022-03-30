@@ -124,7 +124,7 @@ export default function ProfileInputs({ navigate }) {
                 borderWidth: 2,
               }
         }
-        placeholder="First Name"
+        placeholder="* First Name"
         placeholderTextColor={"grey"}
         onChangeText={onChangeFirstName}
         /*setFirstNameAbsent(false) tried but prevented*/
@@ -156,7 +156,7 @@ export default function ProfileInputs({ navigate }) {
                 borderWidth: 2,
               }
         }
-        placeholder="Last Name"
+        placeholder="* Last Name"
         placeholderTextColor={"grey"}
         onChangeText={onChangeLastName}
       ></TextInput>
@@ -182,7 +182,7 @@ export default function ProfileInputs({ navigate }) {
           buttonTextAfterSelection={(selectedItem, index) => {
             return selectedItem;
           }}
-          defaultButtonText={"Select Gender"}
+          defaultButtonText={"* Select Gender"}
           buttonStyle={
             genderAbsent
               ? {
@@ -224,7 +224,7 @@ export default function ProfileInputs({ navigate }) {
           buttonTextAfterSelection={(selectedItem, index) => {
             return selectedItem;
           }}
-          defaultButtonText={"Select Region"}
+          defaultButtonText={"* Select Region"}
           buttonStyle={
             regionAbsent
               ? {
@@ -282,7 +282,7 @@ export default function ProfileInputs({ navigate }) {
                 borderWidth: 2,
               }
         }
-        placeholder="Bike"
+        placeholder="* Bike"
         placeholderTextColor={"grey"}
         onChangeText={onChangeBike}
         maxLength={12}

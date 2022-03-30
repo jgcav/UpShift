@@ -37,7 +37,7 @@ export default function App() {
           <Stack.Screen
             name="ProfilePictureChooser"
             component={ProfilePictureChooser}
-            
+            options={{ title: "Choose Profile Pic" }}
           ></Stack.Screen>
           <Stack.Screen
             name="Profile"
@@ -47,7 +47,7 @@ export default function App() {
           <Stack.Screen
             name="ProfileMaker"
             component={ProfileMakerScreen}
-            options={{ headerShown: false }}
+            options={{ title: "Enter Details" }}
           ></Stack.Screen>
           <Stack.Screen name="Chat" component={ChatScreen}></Stack.Screen>
           <Stack.Screen
