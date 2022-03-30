@@ -25,14 +25,6 @@ export default function ProfileScreen({ navigation: { navigate } }) {
   useEffect(() => {}, [isFocused]);
 
   useEffect(() => {
-    getProfile(currentUser.uid).then((data) => {
-      setProfile(data);
-    });
-    getProfilePicture(currentUser.uid).then((url) => {
-      setProfilePicture(url);
-    });
-    setLoading(false);
-
     if (currentUser !== null) {
       getRoutes(currentUser.uid).then((data) => {
         setRoutes(data);
