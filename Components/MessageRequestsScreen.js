@@ -12,7 +12,7 @@ export default function MessageRequestsScreen({
   navigation: { navigate },
   route,
 }) {
-  const { setNewChat } = route.params;
+ 
   const [profiles, setProfiles] = useState([]);
 
   const [loading, setLoading] = useState(true);
@@ -61,10 +61,8 @@ export default function MessageRequestsScreen({
         return (
           <RequestCard
             profile={profile}
-           
             navigate={navigate}
             setInteracted={setInteracted}
-            setNewChat={setNewChat}
             key={index}
           />
         );
@@ -75,7 +73,7 @@ export default function MessageRequestsScreen({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#0984E3",
+  
     flex: 1,
   },
   loading: {
@@ -83,6 +81,3 @@ const styles = StyleSheet.create({
     height: 100,
   },
 });
-// we are going to display a list of user cards as requests
-// get harrisons profiles (because we know he has sent a request ) on a card
-// get the profile pictures (separate promise)

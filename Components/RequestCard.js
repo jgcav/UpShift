@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Image, } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import {
   collection,
@@ -10,13 +10,16 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import firebase from "../config/firebase.js";
+import { Text, Card, Icon, Button } from "@rneui/base";
+
+
 const db = firebase.firestore();
 export default function RequestCard({
  
   profile,
   navigate,
   setInteracted,
-  setNewChat,
+ 
 }) {
   const { currentUser } = useAuth();
 
@@ -48,7 +51,7 @@ export default function RequestCard({
     ];
     Promise.all(Proms).then(() => {
       setInteracted(true);
-      setNewChat(true);
+  
     });
   }
 
@@ -67,6 +70,9 @@ export default function RequestCard({
   }
 
   return (
+        <Card containerStyle={{}} wrapperStyle={{}} style={styles.containers}>
+          <Card.Title >{`${profile.firstName} ${profile.lastName}`}</Card.Title>
+<Card.Divider/>
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image
@@ -74,7 +80,7 @@ export default function RequestCard({
           source={{
             uri: profile.img,
           }}
-        />
+          />
       </View>
       <View style={styles.infoContainer}>
         <Text>{`${profile.firstName} ${profile.lastName}`}</Text>
@@ -84,19 +90,27 @@ export default function RequestCard({
           Accept
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.buttons}>
         <Text style={styles.text} onPress={deleteRequest}>
           Decline
         </Text>
       </TouchableOpacity>
     </View>
+          </Card>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     marginTop: 10,
-    backgroundColor: "#299DF6",
+    backgroundColor: "#ffff",
+
+  },
+  containers: {
+    flexDirection: "row",
+    marginTop: 10,
+    backgroundColor: "white",
+
   },
   imageContainer: {
     flex: 1.1,
@@ -122,7 +136,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     borderRadius: 8,
     elevation: 3,
-    backgroundColor: "black",
+    backgroundColor: "#CFDDF6",
+    marginRight: 5,
+  },
+  buttons: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 5,
+    paddingHorizontal: 7,
+    borderRadius: 8,
+    elevation: 3,
+    backgroundColor: "#7379C6",
     marginRight: 5,
   },
   text: {
