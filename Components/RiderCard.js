@@ -90,6 +90,7 @@ export default function RiderCard({ rider, navigate, setLoading, location }) {
           setRequested,
           addRequest,
           remRequest,
+          distance
         });
       }}
     >
