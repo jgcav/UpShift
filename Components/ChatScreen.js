@@ -20,6 +20,8 @@ import {
   query,
   orderBy,
   limit,
+  updateDoc,
+  setDoc,
 } from "firebase/firestore";
 import firebase from "../config/firebase";
 
@@ -80,6 +82,11 @@ export default function ChatScreen({ route }) {
       }
     );
   }
+  function postRecentMessage(content) {
+    return setDoc(doc(db, "rooms", `${roomId}`), content).catch((err) => {
+      console.log(err);
+    });
+  }
 
   function getProfile() {
     const docRef = doc(db, "profiles", `${currentUser.uid}`);
@@ -129,7 +136,16 @@ export default function ChatScreen({ route }) {
         timestamp: new Date(),
       };
       socket.emit("chat message", content);
-      postMessage(content);
+      const Proms = [
+        postMessage(content),
+        postRecentMessage({
+          uid: content.uid,
+          timestamp: content.timestamp,
+          message: currentMessage,
+        }),
+      ];
+      Promise.all(Proms).then(() => {
+      });
       setCurrentMessage("");
     }
   }
