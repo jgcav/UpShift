@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Text,
   View,
   TouchableOpacity,
   Image,
@@ -10,6 +9,8 @@ import {
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import getAge from "./ageCalculator";
+import { Text, Button } from "@rneui/base";
+
 export default function RiderProfileScreen({ route }) {
   const { height, width } = Dimensions.get("window");
   const { currentUser } = useAuth();
@@ -48,8 +49,8 @@ export default function RiderProfileScreen({ route }) {
               {getAge(new Date(rider.DOB.seconds * 1000))}
             </Text>
           </View>
-
-          <Text style={styles.bio}>{rider.bio}</Text>
+          <View style={styles.line}></View>
+          <Text style={styles.gender}>{rider.selectedGender}</Text>
           <View style={styles.bike}>
             <Image
               style={styles.bikeImg}
@@ -57,9 +58,7 @@ export default function RiderProfileScreen({ route }) {
             />
             <Text style={styles.bikeTxt}>{rider.bike}</Text>
           </View>
-
           <View style={styles.infoLower}>
-            <Text style={styles.gender}>{rider.selectedGender}</Text>
             <View style={styles.locationContainer}>
               <Image
                 style={styles.location}
@@ -67,15 +66,15 @@ export default function RiderProfileScreen({ route }) {
               />
               <Text style={styles.distance}>{`${distance}km`}</Text>
             </View>
+            <Button
+              style={styles.buttonContainer}
+              onPress={handlePressed}
+              title={updateRequest ? "Requested" : "Connect"}
+            ></Button>
           </View>
+          <Text style={styles.bio}>{rider.bio}</Text>
         </ScrollView>
       </View>
-
-      <TouchableOpacity style={styles.button} onPress={handlePressed}>
-        <Text style={styles.text}>
-          {updateRequest ? "Requested" : "Connect"}
-        </Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -85,7 +84,7 @@ const { height, width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0984E3",
+    backgroundColor: "white",
   },
   imgContainer: {
     justifyContent: "center",
@@ -118,12 +117,16 @@ const styles = StyleSheet.create({
   bio: {
     flex: 1,
     fontSize: 22,
+    marginTop: 25,
   },
   bike: {
     flexDirection: "row",
+    marginBottom: 5,
+    marginRight: 2,
   },
   bikeTxt: {
     fontSize: 18,
+    marginBottom: 5,
   },
   infoLower: {
     flexDirection: "row",
@@ -131,6 +134,8 @@ const styles = StyleSheet.create({
   },
   gender: {
     fontSize: 18,
+    marginTop: 5,
+    marginBottom: 5,
   },
   distance: {
     fontSize: 18,
@@ -138,13 +143,9 @@ const styles = StyleSheet.create({
   locationContainer: {
     flexDirection: "row",
   },
-  button: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 13,
-    paddingHorizontal: 32,
-    elevation: 3,
-    backgroundColor: "black",
+  buttonContainer: {
+    alignItems: "flex-end",
+    fontSize: 20,
   },
   text: {
     fontSize: 16,
@@ -163,5 +164,8 @@ const styles = StyleSheet.create({
     height: 20,
     marginTop: 3,
     marginRight: 2,
+  },
+  line: {
+    borderBottomWidth: 1,
   },
 });
