@@ -69,6 +69,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
         <View style={styles.menue}>
           {/* // <ProfileCard age={age} profile={profile} /> */}
+
           <Button
             style={{ margin: 10, width: 150 }}
             title="Logout"
@@ -81,6 +82,21 @@ export default function ProfileScreen({ navigation: { navigate } }) {
               navigate("Rider Finder");
             }}
           />
+        </TouchableOpacity>
+      </View>
+      <View>
+        <TouchableOpacity style={styles.buttonContainer}>
+          <Button
+            title="Chat"
+            color="black"
+            onPress={() => {
+              navigate("ChatList");
+            }}
+          />
+        </TouchableOpacity>
+      </View>
+        <View style={styles.container}>
+          <Button
         </View>
 
         <View style={styles.container}>
