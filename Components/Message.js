@@ -1,24 +1,36 @@
-import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 
 export default function Message({ message, uid }) {
+  const [showTime, setShowTime] = useState(false);
+
+  function handlePress() {
+    setShowTime((currTime) => !currTime);
+  }
   return (
-    <View
-      style={
-        message.uid === uid ? styles.containerSender : styles.containerReceiver
-      }
-    >
-      <View style={styles.spacer}></View>
-      <View
+    <View>
+      <Text
+        style={showTime ? styles.timeShow : styles.timeHide}
+      >{`${message.timestamp}`}</Text>
+      <TouchableOpacity
+        onPress={handlePress}
         style={
           message.uid === uid
-            ? styles.containerMsgSender
-            : styles.containerMsgReceiver
+            ? styles.containerSender
+            : styles.containerReceiver
         }
       >
-        <Text style={{ color: "black" }}>{message.message}</Text>
-        {/* <Text>{`${message.firstName} ${message.lastName} ${message.timestamp}`}</Text> */}
-      </View>
+        <View style={styles.spacer}></View>
+        <View
+          style={
+            message.uid === uid
+              ? styles.containerMsgSender
+              : styles.containerMsgReceiver
+          }
+        >
+          <Text style={{ color: "black" }}>{message.message}</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -48,5 +60,13 @@ const styles = StyleSheet.create({
     padding: 10,
     marginLeft: 20,
     marginRight: 40,
+  },
+  timeShow: {
+    display: "flex",
+    textAlign: "center",
+  },
+  timeHide: {
+    display: "none",
+    textAlign: "center",
   },
 });
