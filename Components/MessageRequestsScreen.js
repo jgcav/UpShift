@@ -3,18 +3,18 @@ import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { doc, getDoc } from "firebase/firestore";
 import firebase from "../config/firebase.js";
 import { useAuth } from "../contexts/AuthContext.js";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+
 import RequestCard from "./RequestCard.js";
 
 const db = firebase.firestore();
-const storage = getStorage();
+
 export default function MessageRequestsScreen({
   navigation: { navigate },
   route,
 }) {
   const { setNewChat } = route.params;
   const [profiles, setProfiles] = useState([]);
-  const [profilesUrl, setProfilesUrl] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [interacted, setInteracted] = useState(false);
   const { currentUser } = useAuth();
@@ -36,23 +36,15 @@ export default function MessageRequestsScreen({
     getRequests()
       .then((IDs) => {
         const PromsProfiles = [];
-        const PromsImages = [];
+
         IDs.requests.forEach((ID) => {
           PromsProfiles.push(getProfile(ID));
-          PromsImages.push(
-            getDownloadURL(ref(storage, `images/${ID}/profile.jpg`))
-          );
         });
-        return Promise.all([...PromsProfiles, PromsImages]);
+        return Promise.all(PromsProfiles);
       })
       .then((profiles) => {
-        const PromsImages = profiles.pop();
-        return Promise.all([...PromsImages, profiles]);
-      })
-      .then((urls) => {
-        const profiles = urls.pop();
         setProfiles(profiles);
-        setProfilesUrl(urls);
+
         setLoading(false);
       });
   }, [interacted]);
@@ -69,7 +61,7 @@ export default function MessageRequestsScreen({
         return (
           <RequestCard
             profile={profile}
-            profileUrl={profilesUrl[index]}
+           
             navigate={navigate}
             setInteracted={setInteracted}
             setNewChat={setNewChat}
