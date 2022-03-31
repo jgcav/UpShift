@@ -119,7 +119,6 @@ export default function RiderFinder({ navigation: { navigate } }) {
           alignItems: "center",
           textAlign: "center",
           justifyContent: "center",
-          backgroundColor: "#0984E3",
           flex: 1,
         }}
       >
