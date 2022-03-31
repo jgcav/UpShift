@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useEffect, useState} from "react";
 import { View, StyleSheet, TouchableOpacity, Image, } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import {
@@ -22,7 +22,7 @@ export default function RequestCard({
  
 }) {
   const { currentUser } = useAuth();
-
+  const [distance, setDistance] = useState(1);
   function createChatRoom() {
     const chatRoomRef = doc(
       collection(db, `profiles/${currentUser.uid}/chatRooms`)
@@ -69,21 +69,53 @@ export default function RequestCard({
     });
   }
 
+  function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(lat2 - lat1); // deg2rad below
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    return d;
+  }
+
+  function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+  }
+
+  // useEffect(() => {
+  //   let km = Math.floor(
+  //     getDistanceFromLatLonInKm(
+  //       location[0],
+  //       location[1],
+  //       rider.location[0],
+  //       rider.location[1]
+  //     )
+  //   );
+  //   if (km < 1) km = 1;
+  //   setDistance(km);
+  // }, []);
+
   return (
         <Card containerStyle={{}} wrapperStyle={{}} style={styles.containers}>
-          <Card.Title >{`${profile.firstName} ${profile.lastName}`}</Card.Title>
+          <Card.Title style={{fontSize:20}} >{`${profile.firstName} ${profile.lastName}`}</Card.Title>
 <Card.Divider/>
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image
           style={styles.logo}
           source={{
-            uri: profile.img,
-          }}
+            uri: profile.img  }}
           />
       </View>
       <View style={styles.infoContainer}>
-        <Text>{`${profile.firstName} ${profile.lastName}`}</Text>
+        <Text>{`distance : ${distance} Km`}</Text>
+        <Text>{`connections : ${profile.connected=100}`}</Text>
       </View>
       <TouchableOpacity style={styles.button}>
         <Text style={styles.text} onPress={createChatRoom}>
@@ -106,33 +138,32 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffff",
 
   },
-  containers: {
-    flexDirection: "row",
-    marginTop: 10,
-    backgroundColor: "white",
+  
 
-  },
+  
   imageContainer: {
     flex: 1.1,
     alignItems: "center",
     marginLeft: 8,
     justifyContent: "flex-end",
+
   },
   infoContainer: {
     flex: 3,
     paddingHorizontal: 10,
     paddingVertical: 10,
+    marginLeft:10,
   },
   logo: {
-    marginVertical: 5,
-    width: 66,
-    height: 66,
-    borderRadius: 66 / 2,
+    marginVertical: 0,
+    width: 70,
+    height: 70,
+    borderRadius: 70/ 2,
   },
   button: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 5,
+    paddingVertical: 1,
     paddingHorizontal: 7,
     borderRadius: 8,
     elevation: 3,
@@ -142,7 +173,7 @@ const styles = StyleSheet.create({
   buttons: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 5,
+    paddingVertical: 1,
     paddingHorizontal: 7,
     borderRadius: 8,
     elevation: 3,
@@ -150,7 +181,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   text: {
-    fontSize: 16,
+    fontSize: 20,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
