@@ -100,7 +100,7 @@ export const RoutePlanner = ({ route, navigation: { navigate } }) => {
         console.log(e);
       }
     } else {
-      console.log("please snap to road before saving");
+     
     }
   };
 

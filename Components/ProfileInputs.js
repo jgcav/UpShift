@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextInput, View, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet,ScrollView } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import firebase from "../config/firebase";
@@ -7,7 +7,7 @@ import { setDoc, doc } from "firebase/firestore";
 import DatePicker from "./DatePicker";
 import getAge from "./ageCalculator";
 import { Button, Text } from "@rneui/base";
-
+import TextInput from "./TextInput";
 export default function ProfileInputs({ navigate }) {
   const [firstName, onChangeFirstName] = useState("");
   const [lastName, onChangeLastName] = useState("");
@@ -82,20 +82,22 @@ export default function ProfileInputs({ navigate }) {
       postProfile(profile);
       navigate("ProfilePictureChooser");
     }
-    console.log(age, "< age");
-    console.log(date);
-    // console.log(tooYoung, "< too young?");
-    // console.log(firstNameAbsent, "<firstname absent?");
-    // console.log(lastNameAbsent, "<lastname absent?");
-    // console.log(genderAbsent, "<gender absent?");
-    // console.log(regionAbsent, "<region absent?");
-    // console.log(bikeAbsent, "<bike absent?");
+    
   };
 
   return (
+    <ScrollView>
+
     <View style={styles.container}>
       {/* Title  */}
       <Text style={styles.title}>Sign Up</Text>
+      {firstNameAbsent || lastNameAbsent ||tooYoung || genderAbsent || regionAbsent ||bikeAbsent? (
+        <Text style={styles.warningMessage}>
+          Please Fill All Required Fields (*)
+        </Text>
+      ) : (
+        <Text></Text>
+        )}
       <Text style={styles.starMessage}>Required Fields (*)</Text>
       {/* First Name */}
       <TextInput
@@ -104,15 +106,14 @@ export default function ProfileInputs({ navigate }) {
             ? {
                 height: 40,
                 width: 300,
-                backgroundColor: "rgba(255, 0, 0, 0.5)",
+                backgroundColor: "#FF9494",
                 marginBottom: 20,
                 textAlign: "center",
                 color: "black",
                 paddingHorizontal: 10,
-                borderColor: "red",
-                borderWidth: 2,
+                
               }
-            : {
+              : {
                 height: 40,
                 width: 300,
                 backgroundColor: "white",
@@ -120,43 +121,39 @@ export default function ProfileInputs({ navigate }) {
                 textAlign: "center",
                 color: "black",
                 paddingHorizontal: 10,
-                borderColor: "black",
-                borderWidth: 2,
+                
               }
-        }
-        placeholder="* First Name"
-        placeholderTextColor={"grey"}
-        onChangeText={onChangeFirstName}
-        /*setFirstNameAbsent(false) tried but prevented*/
-      ></TextInput>
+            }
+            placeholder="* First Name"
+            placeholderTextColor={"grey"}
+            onChangeText={onChangeFirstName}
+            /*setFirstNameAbsent(false) tried but prevented*/
+            ></TextInput>
       {/* Last Name */}
       <TextInput
         style={
           lastNameAbsent
-            ? {
+          ? {
                 height: 40,
                 width: 300,
-                backgroundColor: "rgba(255, 0, 0, 0.5)",
+                backgroundColor: "#FF9494",
                 marginBottom: 20,
                 textAlign: "center",
                 color: "black",
                 paddingHorizontal: 10,
-                borderColor: "red",
-                borderWidth: 2,
+             
               }
-            : {
+              : {
                 height: 40,
                 width: 300,
                 backgroundColor: "white",
                 marginBottom: 20,
                 textAlign: "center",
-                color: "black",
-                paddingHorizontal: 10,
-                borderColor: "black",
-                borderWidth: 2,
+            
+                
               }
-        }
-        placeholder="* Last Name"
+            }
+            placeholder="* Last Name"
         placeholderTextColor={"grey"}
         onChangeText={onChangeLastName}
       ></TextInput>
@@ -170,7 +167,8 @@ export default function ProfileInputs({ navigate }) {
           setAge={setAge}
           age={age}
           setTooYoung={setTooYoung}
-        />
+          style={styles.date}
+          />
       </View>
       {/* Gender Picker */}
       <View style={styles.dropdown}>
@@ -185,35 +183,35 @@ export default function ProfileInputs({ navigate }) {
           defaultButtonText={"* Select Gender"}
           buttonStyle={
             genderAbsent
-              ? {
-                  width: "70%",
-                  height: 40,
-                  backgroundColor: "rgba(255, 0, 0, 0.5)",
-                  borderRadius: 8,
-                }
-              : {
-                  width: "70%",
-                  height: 40,
-                  backgroundColor: "white",
-                  borderRadius: 8,
-                  borderWidth: 2,
-                }
+            ? {
+              width: "70%",
+              height: 40,
+              backgroundColor: "#FF9494",
+              borderRadius: 8,
+            }
+            : {
+              width: "70%",
+              height: 40,
+              backgroundColor: "white",
+              borderRadius: 8,
+              borderWidth: 2,
+            }
           }
           buttonTextStyle={styles.dropdown2BtnTxtStyle}
           renderDropdownIcon={(isOpened) => {
             return (
               <FontAwesome
-                name={isOpened ? "chevron-up" : "chevron-down"}
-                color={"#444"}
-                size={18}
+              name={isOpened ? "chevron-up" : "chevron-down"}
+              color={"#444"}
+              size={18}
               />
-            );
-          }}
-          dropdownIconPosition={"right"}
-          dropdownStyle={styles.dropdown2DropdownStyle}
-          rowStyle={styles.dropdown2RowStyle}
-          rowTextStyle={styles.dropdown2RowTxtStyle}
-        />
+              );
+            }}
+            dropdownIconPosition={"right"}
+            dropdownStyle={styles.dropdown2DropdownStyle}
+            rowStyle={styles.dropdown2RowStyle}
+            rowTextStyle={styles.dropdown2RowTxtStyle}
+            />
       </View>
       {/* Region Picker */}
       <View style={styles.dropdown}>
@@ -228,67 +226,65 @@ export default function ProfileInputs({ navigate }) {
           defaultButtonText={"* Select Region"}
           buttonStyle={
             regionAbsent
-              ? {
-                  width: "70%",
-                  height: 40,
-                  backgroundColor: "rgba(255, 0, 0, 0.5)",
-                  borderRadius: 8,
-                }
-              : {
-                  width: "70%",
-                  height: 40,
-                  backgroundColor: "white",
-                  borderRadius: 8,
-                  borderWidth: 2,
-                }
+            ? {
+              width: "70%",
+              height: 40,
+              backgroundColor: "#FF9494",
+              borderRadius: 8,
+            }
+            : {
+              width: "70%",
+              height: 40,
+              backgroundColor: "white",
+              borderRadius: 8,
+              borderWidth: 2,
+            }
           }
           buttonTextStyle={styles.dropdown2BtnTxtStyle}
           renderDropdownIcon={(isOpened) => {
             return (
               <FontAwesome
-                name={isOpened ? "chevron-up" : "chevron-down"}
-                color={"#444"}
-                size={18}
+              name={isOpened ? "chevron-up" : "chevron-down"}
+              color={"#444"}
+              size={18}
               />
-            );
-          }}
-          dropdownIconPosition={"right"}
-          dropdownStyle={styles.dropdown2DropdownStyle}
-          rowStyle={styles.dropdown2RowStyle}
-          rowTextStyle={styles.dropdown2RowTxtStyle}
-        />
+              );
+            }}
+            dropdownIconPosition={"right"}
+            dropdownStyle={styles.dropdown2DropdownStyle}
+            rowStyle={styles.dropdown2RowStyle}
+            rowTextStyle={styles.dropdown2RowTxtStyle}
+            />
       </View>
       <TextInput
         style={
-          lastNameAbsent
-            ? {
-                height: 40,
-                width: 300,
-                backgroundColor: "rgba(255, 0, 0, 0.5)",
-                marginBottom: 20,
-                textAlign: "center",
-                color: "black",
-                paddingHorizontal: 10,
-                borderColor: "red",
-                borderWidth: 2,
-              }
-            : {
-                height: 40,
-                width: 300,
-                backgroundColor: "white",
-                marginBottom: 20,
-                textAlign: "center",
-                color: "black",
-                paddingHorizontal: 10,
-                borderColor: "black",
-                borderWidth: 2,
-              }
+          bikeAbsent
+          ? {
+            height: 40,
+            width: 300,
+            backgroundColor: "#FF9494",
+            marginBottom: 20,
+            textAlign: "center",
+            color: "black",
+            paddingHorizontal: 10,
+          
+          }
+          : {
+            height: 40,
+            width: 300,
+            backgroundColor: "white",
+            marginBottom: 20,
+            textAlign: "center",
+            color: "black",
+            paddingHorizontal: 10,
+         
+          }
         }
         placeholder="* Bike"
         placeholderTextColor={"grey"}
         onChangeText={onChangeBike}
         maxLength={12}
-      ></TextInput>
+        ></TextInput>
       <TextInput
         style={styles.bio}
         placeholder="Bio (Max 240 Characters)"
@@ -296,16 +292,11 @@ export default function ProfileInputs({ navigate }) {
         multiline
         maxLength={240}
         onChangeText={onChangeBio}
-      ></TextInput>
-      {firstNameAbsent || lastNameAbsent ? (
-        <Text style={styles.warningMessage}>
-          Please Fill All Required Fields (*)
-        </Text>
-      ) : (
-        <Text></Text>
-      )}
-      <Button style={styles.buttonContainer} onPress={onPress} title="Next" />
+        ></TextInput>
+ 
+      <Button style={styles.buttonContainer} onPress={onPress} title="Next"/>
     </View>
+        </ScrollView>
   );
 }
 
@@ -319,17 +310,18 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   dropdown: {
-    padding: 10,
+    padding: 8,
     marginBottom: 20,
     textAlign: "center",
-    paddingHorizontal: 10,
+    paddingHorizontal: 1,
   },
   dropdown2BtnTxtStyle: {
+   
     color: "grey",
     textAlign: "center",
     fontWeight: "bold",
   },
-  dropdown2DropdownStyle: { backgroundColor: "white" },
+  dropdown2DropdownStyle: { backgroundColor: "white", borderRadius: 4,},
   dropdown2RowStyle: {
     backgroundColor: "white",
     borderBottomColor: "#C5C5C5",
@@ -340,11 +332,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   buttonContainer: {
-    backgroundColor: "#0984e3",
+   // backgroundColor: "#D1E8EB",
     paddingVertical: 10,
     paddingHorizontal: 10,
     width: 300,
     marginBottom: 20,
+  
+
   },
   buttonText: {
     textAlign: "center",
@@ -367,8 +361,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "black",
     paddingHorizontal: 10,
-    borderColor: "black",
-    borderWidth: 2,
+   
   },
   warningMessage: {
     color: "red",
@@ -378,4 +371,5 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     fontSize: 11,
   },
+
 });
