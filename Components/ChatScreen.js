@@ -6,6 +6,7 @@ import {
   Dimensions,
   ScrollView,
   SafeAreaView,
+  Image,
 } from "react-native";
 import { Button } from "@rneui/base";
 import Message from "./Message";
@@ -35,6 +36,7 @@ export default function ChatScreen({ route }) {
   const [chat, setChat] = useState([]);
   const [userProfile, setUserProfile] = useState({});
   const { currentUser } = useAuth();
+  const [loading, setLoading] = useState(true);
 
   function getMessages() {
     const q = query(
@@ -108,6 +110,7 @@ export default function ChatScreen({ route }) {
     });
     getMessages().then((msgs) => {
       setChat(msgs);
+      setLoading(false);
     });
   }, []);
 
@@ -144,12 +147,30 @@ export default function ChatScreen({ route }) {
           message: currentMessage,
         }),
       ];
-      Promise.all(Proms).then(() => {
-      });
+      Promise.all(Proms).then(() => {});
       setCurrentMessage("");
     }
   }
   const scrollViewRef = useRef();
+
+  if (loading)
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          textAlign: "center",
+          justifyContent: "center",
+          flex: 1,
+        }}
+      >
+        <Image
+          style={styles.loading}
+          source={require("../images/GREY-GEAR-LOADING.gif")}
+        />
+      </View>
+    );
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -199,5 +220,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     flex: 1,
     marginVertical: 5,
+  },
+  loading: {
+    width: 100,
+    height: 100,
   },
 });

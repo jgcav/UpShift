@@ -10,6 +10,7 @@ const db = firebase.firestore();
 export default function ChatsCard({ chat, navigate }) {
   const [userProfile, setUserProfile] = useState({});
   const isFocused = useIsFocused();
+  const [loading, setLoading] = useState(true);
   const [recent, setRecent] = useState({
     uid: "",
     message: "",
@@ -56,9 +57,28 @@ export default function ChatsCard({ chat, navigate }) {
           m.message = m.message.substring(0, 20);
         }
         setRecent(m);
+        setLoading(false);
       }
     });
   }, [isFocused]);
+
+  if (loading)
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          textAlign: "center",
+          justifyContent: "center",
+          flex: 1,
+        }}
+      >
+        <Image
+          style={styles.loading}
+          source={require("../images/GREY-GEAR-LOADING.gif")}
+        />
+      </View>
+    );
 
   return (
     <TouchableOpacity
@@ -123,5 +143,9 @@ const styles = StyleSheet.create({
     width: 66,
     height: 66,
     borderRadius: 66 / 2,
+  },
+  loading: {
+    width: 50,
+    height: 50,
   },
 });
