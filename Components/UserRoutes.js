@@ -25,10 +25,11 @@ export const UserRoutes = ({ routes, navigate }) => {
           containerStyle={{
             borderRadius: 10,
             paddingTop: 0,
+            marginBottom: 0,
           }}
           wrapperStyle={{
             padding: 0,
-            margin: 0,
+            marginBottom: 0,
           }}
         >
           <View
@@ -52,10 +53,10 @@ export const UserRoutes = ({ routes, navigate }) => {
           </View>
 
           <Card.Divider style={{ marginBottom: 5, padding: 0 }} />
-          <View style={{ backgroundColor: "grey", height: height * 0.21 }}>
+          <View style={{ backgroundColor: "grey", height: height * 0.19 }}>
             <Image
               source={require("../assets/map.jpg")}
-              style={{ width: undefined, height: height * 0.21 }}
+              style={{ width: undefined, height: height * 0.19 }}
             />
           </View>
         </Card>

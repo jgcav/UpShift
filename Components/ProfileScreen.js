@@ -84,7 +84,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           style={{
             marginLeft: 30,
             marginTop: Platform.OS === "ios" ? 35 : 15,
-            marginBottom: Platform.OS === "ios" ? 35 : 30,
+            marginBottom: Platform.OS === "ios" ? 35 : 15,
             fontWeight: "500",
             fontStyle: "italic",
           }}
@@ -95,51 +95,12 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         <ProfileCard age={age} profile={profile} />
       </ImageBackground>
 
-      {/* <View style={styles.menue}>
-        <Button
-          style={{ margin: 10, width: 150 }}
-          title="Logout"
-          onPress={handleLogout}
-        />
-        <Button
-          style={{ margin: 10, width: 150 }}
-          title="Find Rider"
-          onPress={() => {
-            navigate("Rider Finder");
-          }}
-        />
-        <Button
-          style={{ margin: 10, width: 150 }}
-          title="Chat"
-          onPress={() => {
-            navigate("ChatList");
-          }}
-        />
-      </View>
-
-      <Button
-        containerStyle={{ marginLeft: 30 }}
-        buttonStyle={{
-          borderRadius: 30,
-          width: 185,
-          padding: 15,
-        }}
-        title="Plan Route  "
-        onPress={() =>
-          navigate("RoutePlanner", {
-            location: userLocation,
-          })
-        }
-        icon={{ name: "east", color: "white" }}
-        iconRight
-      /> */}
-
       <View style={styles.spacer}></View>
       <Card
         containerStyle={{
           padding: 0,
           paddingBottom: 10,
-          marginBottom: 10,
+          marginBottom: 4,
           borderRadius: 10,
         }}
       >
@@ -147,10 +108,83 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           <UserRoutes navigate={navigate} routes={routes} />
         </View>
       </Card>
+      <View style={styles.menue}>
+        <Button
+          buttonStyle={{
+            borderRadius: 0,
+            width: width * 0.25,
+            height: 35,
+            padding: 0,
+          }}
+          containerStyle={{
+            borderRadius: 0,
+            width: width * 0.25,
+            padding: 0,
+          }}
+          onPress={() =>
+            navigate("RoutePlanner", {
+              location: userLocation,
+            })
+          }
+          icon={{ name: "map", type: "feather" }}
+        />
+
+        <Button
+          buttonStyle={{
+            borderRadius: 0,
+            width: width * 0.25,
+            height: 35,
+            padding: 0,
+          }}
+          containerStyle={{
+            borderRadius: 0,
+            width: width * 0.25,
+            borderLeftWidth: 1,
+          }}
+          onPress={() => {
+            navigate("ChatList");
+          }}
+          icon={{ name: "message-circle", type: "feather" }}
+        />
+        <Button
+          buttonStyle={{
+            borderRadius: 0,
+            width: width * 0.25,
+            height: 35,
+            padding: 0,
+          }}
+          containerStyle={{
+            borderRadius: 0,
+            width: width * 0.25,
+            padding: 0,
+            borderLeftWidth: 1,
+          }}
+          onPress={() => {
+            navigate("Rider Finder");
+          }}
+          icon={{ name: "user-plus", type: "feather" }}
+        />
+        <Button
+          buttonStyle={{
+            borderRadius: 0,
+            width: width * 0.25,
+            height: 35,
+            padding: 0,
+          }}
+          containerStyle={{
+            borderRadius: 0,
+            width: width * 0.25,
+            padding: 0,
+            borderLeftWidth: 1,
+          }}
+          onPress={handleLogout}
+          icon={{ name: "log-out", type: "feather" }}
+        />
+      </View>
     </View>
   );
 }
-
+const { height, width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -162,9 +196,9 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   menue: {
-    padding: 10,
-    marginTop: 55,
+    padding: 0,
+    marginTop: 0,
     flexDirection: "row",
-    flexWrap: "wrap",
+    width: width,
   },
 });
