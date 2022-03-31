@@ -85,7 +85,7 @@ export default function LoginScreen({ navigation: { navigate } }) {
           }}
           onPress={handleSubmit}
         />
-        <Text>
+        <Text style={{ color: "white" }}>
           Don't have an account?{"  "}
           <Text
             style={style.textHighlight}
@@ -130,7 +130,7 @@ const style = StyleSheet.create({
   textHighlight: {
     marginTop: 24,
     fontWeight: "bold",
-    color: "#a9a9a9",
+    color: "#D1E8EB",
     textDecorationLine: "underline",
   },
 });
