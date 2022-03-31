@@ -196,6 +196,7 @@ export default function ProfileInputs({ navigate }) {
                   height: 40,
                   backgroundColor: "white",
                   borderRadius: 8,
+                  borderWidth: 2,
                 }
           }
           buttonTextStyle={styles.dropdown2BtnTxtStyle}
@@ -238,6 +239,7 @@ export default function ProfileInputs({ navigate }) {
                   height: 40,
                   backgroundColor: "white",
                   borderRadius: 8,
+                  borderWidth: 2,
                 }
           }
           buttonTextStyle={styles.dropdown2BtnTxtStyle}
