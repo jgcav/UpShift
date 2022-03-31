@@ -4,7 +4,6 @@ import { Text, Card, Icon, Button } from "@rneui/base";
 export const ProfileCard = ({ age, profile }) => {
   const { height, width } = Dimensions.get("window");
   return (
-    
     <Card
       containerStyle={{
         paddingVertical: 10,
@@ -50,5 +49,6 @@ const styles = StyleSheet.create({
   },
   subInfoContainer: {
     flexDirection: "row",
+    marginTop: 70,
   },
 });
