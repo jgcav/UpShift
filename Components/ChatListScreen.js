@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 7,
     elevation: 3,
-    backgroundColor: "powderblue",
+    backgroundColor: "#7379C6",
     marginRight: 5,
   },
   text: {
