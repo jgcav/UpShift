@@ -55,21 +55,15 @@ export default function RiderCard({ rider, navigate, setLoading, location }) {
 
   function addRequest(uid, uid2, type) {
     const msgR = doc(db, "profiles", `${uid}`);
-    updateDoc(msgR, { [type]: arrayUnion(`${uid2}`) })
-      .then(() => {})
-      .catch((err) => {});
-    () => {
+    updateDoc(msgR, { [type]: arrayUnion(`${uid2}`) }).catch((err) => {
       console.log(err);
-    };
+    });
   }
   function remRequest(uid, uid2, type) {
     const msgR = doc(db, "profiles", `${uid}`);
-    updateDoc(msgR, { [type]: arrayRemove(`${uid2}`) })
-      .then(() => {})
-      .catch((err) => {});
-    () => {
+    updateDoc(msgR, { [type]: arrayRemove(`${uid2}`) }).catch((err) => {
       console.log(err);
-    };
+    });
   }
 
   function handlePress() {
