@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
-  Button,
   Image,
   StyleSheet,
   TouchableOpacity,
   Pressable,
 } from "react-native";
+import { Button } from "@rneui/base";
 import { useAuth } from "../contexts/AuthContext";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { updateDoc, doc, arrayUnion, arrayRemove } from "firebase/firestore";
@@ -90,7 +90,7 @@ export default function RiderCard({ rider, navigate, setLoading, location }) {
           setRequested,
           addRequest,
           remRequest,
-          distance
+          distance,
         });
       }}
     >
@@ -129,8 +129,9 @@ export default function RiderCard({ rider, navigate, setLoading, location }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    marginTop: 10,
-    backgroundColor: "#299DF6",
+    backgroundColor: "white",
+    borderBottomWidth: 3,
+    borderBottomColor: "#e1e8ee",
   },
   imageContainer: {
     flex: 1.1,

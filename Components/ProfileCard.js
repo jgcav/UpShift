@@ -18,7 +18,7 @@ export const ProfileCard = ({ age, profile }) => {
             width: width * 0.4,
             height: width * 0.4,
             borderRadius: (width * 0.4) / 2,
-            borderColor: "#dbdbdb",
+            borderColor: "#e1e8ee",
             borderWidth: 5,
           }}
         />
