@@ -1,5 +1,5 @@
-import React ,{useEffect, useState} from "react";
-import { View, StyleSheet, TouchableOpacity, Image, } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import {
   collection,
@@ -10,17 +10,11 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import firebase from "../config/firebase.js";
+import { getProfile } from "../utils/firebaseFuncs";
 import { Text, Card, Icon, Button } from "@rneui/base";
 
-
 const db = firebase.firestore();
-export default function RequestCard({
- 
-  profile,
-  navigate,
-  setInteracted,
- 
-}) {
+export default function RequestCard({ profile, navigate, setInteracted }) {
   const { currentUser } = useAuth();
   const [distance, setDistance] = useState(1);
   function createChatRoom() {
@@ -51,7 +45,6 @@ export default function RequestCard({
     ];
     Promise.all(Proms).then(() => {
       setInteracted(true);
-  
     });
   }
 
@@ -88,47 +81,52 @@ export default function RequestCard({
     return deg * (Math.PI / 180);
   }
 
-  // useEffect(() => {
-  //   let km = Math.floor(
-  //     getDistanceFromLatLonInKm(
-  //       location[0],
-  //       location[1],
-  //       rider.location[0],
-  //       rider.location[1]
-  //     )
-  //   );
-  //   if (km < 1) km = 1;
-  //   setDistance(km);
-  // }, []);
+  useEffect(() => {
+    getProfile(currentUser.uid).then((user) => {
+      let km = Math.floor(
+        getDistanceFromLatLonInKm(
+          user.location[0],
+          user.location[1],
+          profile.location[0],
+          profile.location[1]
+        )
+      );
+      if (km < 1) km = 1;
+      setDistance(km);
+    });
+  }, []);
 
   return (
-        <Card containerStyle={{}} wrapperStyle={{}} style={styles.containers}>
-          <Card.Title style={{fontSize:20}} >{`${profile.firstName} ${profile.lastName}`}</Card.Title>
-<Card.Divider/>
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.logo}
-          source={{
-            uri: profile.img  }}
+    <Card containerStyle={{}} wrapperStyle={{}} style={styles.containers}>
+      <Card.Title
+        style={{ fontSize: 20 }}
+      >{`${profile.firstName} ${profile.lastName}`}</Card.Title>
+      <Card.Divider />
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.logo}
+            source={{
+              uri: profile.img,
+            }}
           />
+        </View>
+        <View style={styles.infoContainer}>
+          <Text>{`${distance} km away`}</Text>
+          <Text>{`connections : ${(profile.connected = 100)}`}</Text>
+        </View>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.text} onPress={createChatRoom}>
+            Accept
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttons}>
+          <Text style={styles.text} onPress={deleteRequest}>
+            Decline
+          </Text>
+        </TouchableOpacity>
       </View>
-      <View style={styles.infoContainer}>
-        <Text>{`distance : ${distance} Km`}</Text>
-        <Text>{`connections : ${profile.connected=100}`}</Text>
-      </View>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.text} onPress={createChatRoom}>
-          Accept
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.buttons}>
-        <Text style={styles.text} onPress={deleteRequest}>
-          Decline
-        </Text>
-      </TouchableOpacity>
-    </View>
-          </Card>
+    </Card>
   );
 }
 const styles = StyleSheet.create({
@@ -136,29 +134,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 10,
     backgroundColor: "#ffff",
-
   },
-  
 
-  
   imageContainer: {
     flex: 1.1,
     alignItems: "center",
     marginLeft: 8,
     justifyContent: "flex-end",
-
   },
   infoContainer: {
     flex: 3,
     paddingHorizontal: 10,
     paddingVertical: 10,
-    marginLeft:10,
+    marginLeft: 10,
   },
   logo: {
     marginVertical: 0,
     width: 70,
     height: 70,
-    borderRadius: 70/ 2,
+    borderRadius: 70 / 2,
   },
   button: {
     alignItems: "center",
