@@ -57,8 +57,8 @@ export default function ChatsCard({ chat, navigate }) {
           m.message = m.message.substring(0, 20);
         }
         setRecent(m);
-        setLoading(false);
       }
+      setLoading(false);
     });
   }, [isFocused]);
 
