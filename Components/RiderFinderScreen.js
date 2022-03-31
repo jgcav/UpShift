@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   Dimensions,
+  StatusBar,
 } from "react-native";
 
 import SelectDropdown from "react-native-select-dropdown";
@@ -122,10 +123,10 @@ export default function RiderFinder({ navigation: { navigate } }) {
           alignItems: "center",
           textAlign: "center",
           justifyContent: "center",
-          backgroundColor: "#0984E3",
           flex: 1,
         }}
       >
+        <StatusBar barStyle="dark-content" />
         <Image
           style={styles.loading}
           source={require("../images/GREY-GEAR-LOADING.gif")}
@@ -135,7 +136,11 @@ export default function RiderFinder({ navigation: { navigate } }) {
 
   return (
     <ScrollView style={styles.container}>
-      <ListItem.Accordion
+
+    <StatusBar barStyle="dark-content" />
+
+    
+    <ListItem.Accordion
         containerStyle={{
           paddingLeft: 15,
           marginRight: -5,
@@ -231,6 +236,7 @@ export default function RiderFinder({ navigation: { navigate } }) {
         </ListItem>
       </ListItem.Accordion>
 
+        
       <View style={styles.filterContainer}>
         <SelectDropdown
           data={regions}

@@ -53,11 +53,11 @@ export default function App() {
           <Stack.Screen
             name="ChatList"
             component={ChatListScreen}
-            options={{ title: '' }}
+            options={{ title: "" }}
           ></Stack.Screen>
           <Stack.Screen
             options={{
-              headerShown: false,
+              title: "Plan a Route",
               presentation: "modal",
             }}
             name="RoutePlanner"

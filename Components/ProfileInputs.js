@@ -82,8 +82,8 @@ export default function ProfileInputs({ navigate }) {
       postProfile(profile);
       navigate("ProfilePictureChooser");
     }
-    // console.log(age, "< age");
-    // console.log(date);
+    console.log(age, "< age");
+    console.log(date);
     // console.log(tooYoung, "< too young?");
     // console.log(firstNameAbsent, "<firstname absent?");
     // console.log(lastNameAbsent, "<lastname absent?");
@@ -196,6 +196,7 @@ export default function ProfileInputs({ navigate }) {
                   height: 40,
                   backgroundColor: "white",
                   borderRadius: 8,
+                  borderWidth: 2,
                 }
           }
           buttonTextStyle={styles.dropdown2BtnTxtStyle}
@@ -238,6 +239,7 @@ export default function ProfileInputs({ navigate }) {
                   height: 40,
                   backgroundColor: "white",
                   borderRadius: 8,
+                  borderWidth: 2,
                 }
           }
           buttonTextStyle={styles.dropdown2BtnTxtStyle}

@@ -7,6 +7,8 @@ import {
   ImageBackground,
   Dimensions,
   Platform,
+  Image,
+  StatusBar,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import { useIsFocused } from "@react-navigation/native";
@@ -44,8 +46,9 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         const calcAge = getAge(dobString);
         setAge(calcAge);
         setProfile(data);
+        setLoading(false);
       });
-      setLoading(false);
+
       fetchCurrLocation().then((data) => {
         setUserLocation(data);
         const currLocation = {
@@ -69,13 +72,25 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
   if (loading)
     return (
-      <View>
-        <Text>loading</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          textAlign: "center",
+          justifyContent: "center",
+          flex: 1,
+        }}
+      >
+        <Image
+          style={styles.loading}
+          source={require("../images/GREY-GEAR-LOADING.gif")}
+        />
       </View>
     );
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       <ImageBackground
         source={require("../assets/harley-davidson.jpg")}
         style={{ width: width, height: height * 0.25 }}
@@ -104,9 +119,22 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           borderRadius: 10,
         }}
       >
-        <View style={styles.routes_container}>
-          <UserRoutes navigate={navigate} routes={routes} />
-        </View>
+        {routes.length !== 0 ? (
+          <View style={styles.routes_container}>
+            <UserRoutes navigate={navigate} routes={routes} />
+          </View>
+        ) : (
+          <Text
+            onPress={() =>
+              navigate("RoutePlanner", {
+                location: userLocation,
+              })
+            }
+            style={styles.createRoute}
+          >
+            Create Your First Route ...
+          </Text>
+        )}
       </Card>
       <View style={styles.menue}>
         <Button
@@ -115,7 +143,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             width: width * 0.25,
             height: 35,
             padding: 0,
-            backgroundColor: "#7379C6",
+            backgroundColor: "#888888",
           }}
           containerStyle={{
             borderRadius: 0,
@@ -136,7 +164,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             width: width * 0.25,
             height: 35,
             padding: 0,
-            backgroundColor: "#7379C6",
+            backgroundColor: "#888888",
           }}
           containerStyle={{
             borderRadius: 0,
@@ -154,7 +182,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             width: width * 0.25,
             height: 35,
             padding: 0,
-            backgroundColor: "#7379C6",
+            backgroundColor: "#888888",
           }}
           containerStyle={{
             borderRadius: 0,
@@ -173,7 +201,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             width: width * 0.25,
             height: 35,
             padding: 0,
-            backgroundColor: "#7379C6",
+            backgroundColor: "#888888",
           }}
           containerStyle={{
             borderRadius: 0,
@@ -192,6 +220,7 @@ const { height, width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: Platform.OS === "ios" ? 10 : 0,
   },
   spacer: {
     flex: 1,
@@ -204,5 +233,10 @@ const styles = StyleSheet.create({
     marginTop: 0,
     flexDirection: "row",
     width: width,
+  },
+  createRoute: { padding: 20, alignSelf: "center" },
+  loading: {
+    width: 100,
+    height: 100,
   },
 });

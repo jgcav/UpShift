@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  StatusBar,
+} from "react-native";
 import { doc, getDoc } from "firebase/firestore";
 import firebase from "../config/firebase.js";
 import { useAuth } from "../contexts/AuthContext.js";
@@ -12,7 +19,6 @@ export default function MessageRequestsScreen({
   navigation: { navigate },
   route,
 }) {
- 
   const [profiles, setProfiles] = useState([]);
 
   const [loading, setLoading] = useState(true);
@@ -49,14 +55,29 @@ export default function MessageRequestsScreen({
       });
   }, [interacted]);
 
-  if (loading) {
-    return <Text>loading...</Text>;
-  }
+  if (loading)
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          textAlign: "center",
+          justifyContent: "center",
+          flex: 1,
+        }}
+      >
+        <Image
+          style={styles.loading}
+          source={require("../images/GREY-GEAR-LOADING.gif")}
+        />
+      </View>
+    );
   if (interacted) {
   }
 
   return (
     <ScrollView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       {profiles.map((profile, index) => {
         return (
           <RequestCard
@@ -73,7 +94,6 @@ export default function MessageRequestsScreen({
 
 const styles = StyleSheet.create({
   container: {
-  
     flex: 1,
   },
   loading: {

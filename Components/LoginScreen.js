@@ -74,7 +74,6 @@ export default function LoginScreen({ navigation: { navigate } }) {
             width: 200,
             height: 35,
             padding: 0,
-            backgroundColor: "#7379C6",
           }}
           containerStyle={{
             borderRadius: 0,

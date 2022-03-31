@@ -21,12 +21,24 @@ const DatePicker = ({
 }) => {
   const [show, setShow] = useState(false);
 
+  console.log(age, "<<< age");
+
+  // const onChange = (event, selectedDate) => {
+  //   const currentDate = selectedDate || date;
+  //   setShow(Platform.OS === "ios");
+  //   setDate(currentDate);
+  //   console.log(date);
+  //   setAge(getAge(date));
+  //   console.log(age);
+  // };
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
+    const currentDate = selectedDate;
+    console.log(currentDate, "<< currentDate");
     setDate(currentDate);
-    // console.log("here");
-    setAge(getAge(date));
+    console.log(date, "<<< date");
+    let ageS = getAge(currentDate);
+    console.log(ageS, "<<< ageS");
+    setAge(ageS);
   };
 
   const showMode = (currentMode) => {

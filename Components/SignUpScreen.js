@@ -5,10 +5,13 @@ import {
   Text,
   TouchableOpacity,
   StatusBar,
-  Button,
+  ImageBackground,
+  Dimensions,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import TextInput from "./TextInput.js";
+import { Button } from "@rneui/base";
+
 export default function SignUpScreen({ navigation: { navigate } }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,61 +41,81 @@ export default function SignUpScreen({ navigation: { navigate } }) {
         else setError("Failed to set up account");
       });
   }
+  const { height, width } = Dimensions.get("window");
 
   return (
-    <View behavior="padding" style={style.container}>
-      <StatusBar barStyle="light-content" />
-      <TextInput
-        style={style.input}
-        placeholder="Email"
-        placeholderTextColor={"#a9a9a9"}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        value={email}
-        onChangeText={setEmail}
-        autoCorrect={false}
-      />
-      <TextInput
-        style={style.input}
-        placeholder="Password"
-        placeholderTextColor={"#a9a9a9"}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <TextInput
-        style={style.input}
-        placeholder="Confirm Password"
-        placeholderTextColor={"#a9a9a9"}
-        secureTextEntry
-        value={passwordConfirm}
-        onChangeText={setPasswordConfirm}
-        returnKeyType="go"
-      />
-      <Text>{error && error}</Text>
+    <ImageBackground
+      source={require("../assets/bike6.jpg")}
+      style={{ width: width, height: height }}
+    >
+      <View behavior="padding" style={style.container}>
+        <StatusBar barStyle="light-content" />
+        <TextInput
+          style={style.input}
+          placeholder="Email"
+          placeholderTextColor={"#a9a9a9"}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
+          autoCorrect={false}
+        />
+        <TextInput
+          style={style.input}
+          placeholder="Password"
+          placeholderTextColor={"#a9a9a9"}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <TextInput
+          style={style.input}
+          placeholder="Confirm Password"
+          placeholderTextColor={"#a9a9a9"}
+          secureTextEntry
+          value={passwordConfirm}
+          onChangeText={setPasswordConfirm}
+          returnKeyType="go"
+        />
+        <Text>{error && error}</Text>
 
-      <TouchableOpacity style={style.buttonContainer}>
-        <Button title="Sign up" color="white" onPress={handleSubmit} />
-      </TouchableOpacity>
-      <Text>
-        Already have an account?{" "}
-        <Text
-          style={style.textHighlight}
-          onPress={() => {
-            navigate("Login");
+        <Button
+          title="Sign Up"
+          buttonStyle={{
+            borderRadius: 0,
+            width: 200,
+            height: 35,
+            padding: 0,
           }}
-        >
-          Login
+          containerStyle={{
+            borderRadius: 0,
+            width: 202,
+            height: 37,
+            padding: 0,
+            borderWidth: 1,
+          }}
+          onPress={handleSubmit}
+        />
+        <Text style={{ color: "white" }}>
+          Already have an account?{" "}
+          <Text
+            style={style.textHighlight}
+            onPress={() => {
+              navigate("Login");
+            }}
+          >
+            Login
+          </Text>
         </Text>
-      </Text>
-    </View>
+      </View>
+    </ImageBackground>
   );
 }
 const style = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#FFFF",
+
     justifyContent: "center",
   },
   input: {
@@ -116,9 +139,12 @@ const style = StyleSheet.create({
     fontWeight: "bold",
   },
   textHighlight: {
-    color: "#a9a9a9",
-    textDecorationLine: "underline",
     marginTop: 24,
     fontWeight: "bold",
+    color: "#D1E8EB",
+    textDecorationLine: "underline",
+  },
+  alreadyHaveAccount: {
+    color: "white",
   },
 });
