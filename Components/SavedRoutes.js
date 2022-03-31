@@ -1,5 +1,5 @@
 import MapView, { Polyline, PROVIDER_GOOGLE, Polygon } from "react-native-maps";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, StatusBar } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext";
 export const SavedRoutes = ({ route }) => {
@@ -26,6 +26,7 @@ export const SavedRoutes = ({ route }) => {
 
   return (
     <View>
+      <StatusBar barStyle="dark-content" />
       <View style={styles.map}>
         <MapView
           mapType={"terrain"}

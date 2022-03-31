@@ -8,6 +8,7 @@ import {
   Dimensions,
   Platform,
   Image,
+  StatusBar,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import { useIsFocused } from "@react-navigation/native";
@@ -89,6 +90,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       <ImageBackground
         source={require("../assets/harley-davidson.jpg")}
         style={{ width: width, height: height * 0.25 }}

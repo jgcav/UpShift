@@ -7,6 +7,7 @@ import {
   ScrollView,
   SafeAreaView,
   Image,
+  StatusBar,
 } from "react-native";
 import { Button } from "@rneui/base";
 import Message from "./Message";
@@ -164,6 +165,7 @@ export default function ChatScreen({ route }) {
           flex: 1,
         }}
       >
+        <StatusBar barStyle="dark-content" />
         <Image
           style={styles.loading}
           source={require("../images/GREY-GEAR-LOADING.gif")}
@@ -173,6 +175,7 @@ export default function ChatScreen({ route }) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       <ScrollView
         ref={scrollViewRef}
         onContentSizeChange={() => scrollViewRef.current.scrollToEnd()}

@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  StatusBar,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import ChatsCard from "./ChatsCard";
@@ -53,6 +54,7 @@ export default function ChatListScreen({ navigation: { navigate } }) {
           flex: 1,
         }}
       >
+        <StatusBar barStyle="dark-content" />
         <Image
           style={styles.loading}
           source={require("../images/GREY-GEAR-LOADING.gif")}
@@ -62,6 +64,7 @@ export default function ChatListScreen({ navigation: { navigate } }) {
 
   return (
     <ScrollView>
+      <StatusBar barStyle="dark-content" />
       <Text style={styles.text}>Messages</Text>
       <TouchableOpacity
         style={styles.button}
