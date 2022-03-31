@@ -115,6 +115,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             width: width * 0.25,
             height: 35,
             padding: 0,
+            backgroundColor: "#7379C6",
           }}
           containerStyle={{
             borderRadius: 0,
@@ -135,6 +136,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             width: width * 0.25,
             height: 35,
             padding: 0,
+            backgroundColor: "#7379C6",
           }}
           containerStyle={{
             borderRadius: 0,
@@ -152,6 +154,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             width: width * 0.25,
             height: 35,
             padding: 0,
+            backgroundColor: "#7379C6",
           }}
           containerStyle={{
             borderRadius: 0,
@@ -170,6 +173,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             width: width * 0.25,
             height: 35,
             padding: 0,
+            backgroundColor: "#7379C6",
           }}
           containerStyle={{
             borderRadius: 0,
