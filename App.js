@@ -53,6 +53,7 @@ export default function App() {
           <Stack.Screen
             name="ChatList"
             component={ChatListScreen}
+            options={{ title: '' }}
           ></Stack.Screen>
           <Stack.Screen
             options={{
