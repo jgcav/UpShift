@@ -8,6 +8,7 @@ import {
   Button,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import ChatsCard from "./ChatsCard";
@@ -18,7 +19,7 @@ import { useIsFocused } from "@react-navigation/native";
 const db = firebase.firestore();
 export default function ChatListScreen({ navigation: { navigate } }) {
   const [chats, setChats] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const isFocused = useIsFocused();
   const { currentUser } = useAuth();
   function getChats() {
@@ -37,8 +38,28 @@ export default function ChatListScreen({ navigation: { navigate } }) {
   useEffect(() => {
     getChats().then((rooms) => {
       setChats(rooms);
+      setLoading(false);
     });
   }, [isFocused]);
+
+  if (loading)
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          textAlign: "center",
+          justifyContent: "center",
+          flex: 1,
+        }}
+      >
+        <Image
+          style={styles.loading}
+          source={require("../images/GREY-GEAR-LOADING.gif")}
+        />
+      </View>
+    );
+
   return (
     <ScrollView>
       <Text style={styles.text}>Messages</Text>
@@ -84,5 +105,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "black",
+  },
+  loading: {
+    width: 100,
+    height: 100,
   },
 });

@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Dimensions,
   Platform,
+  Image,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import { useIsFocused } from "@react-navigation/native";
@@ -44,8 +45,9 @@ export default function ProfileScreen({ navigation: { navigate } }) {
         const calcAge = getAge(dobString);
         setAge(calcAge);
         setProfile(data);
+        setLoading(false);
       });
-      setLoading(false);
+
       fetchCurrLocation().then((data) => {
         setUserLocation(data);
         const currLocation = {
@@ -69,8 +71,19 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
   if (loading)
     return (
-      <View>
-        <Text>loading</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          textAlign: "center",
+          justifyContent: "center",
+          flex: 1,
+        }}
+      >
+        <Image
+          style={styles.loading}
+          source={require("../images/GREY-GEAR-LOADING.gif")}
+        />
       </View>
     );
 
@@ -219,4 +232,8 @@ const styles = StyleSheet.create({
     width: width,
   },
   createRoute: { padding: 20, alignSelf: "center" },
+  loading: {
+    width: 100,
+    height: 100,
+  },
 });
