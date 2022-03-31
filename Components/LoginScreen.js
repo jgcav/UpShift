@@ -13,7 +13,7 @@ import LoginLogo from "./LoginLogo";
 import TextInput from "./TextInput.js";
 
 export default function LoginScreen({ navigation: { navigate } }) {
-  const [email, setEmail] = useState("ttt@ttt.com");
+  const [email, setEmail] = useState("chris@test.com");
   const [password, setPassword] = useState("Password");
   const { login } = useAuth();
   const [error, setError] = useState("");
@@ -66,7 +66,7 @@ export default function LoginScreen({ navigation: { navigate } }) {
           onChangeText={setPassword}
           secureTextEntry
         />
-        <Text>{error && error}</Text>
+        <Text style={{ color: "white" }}>{error && error}</Text>
         <Button
           title="Login"
           buttonStyle={{
