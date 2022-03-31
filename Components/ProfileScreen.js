@@ -117,9 +117,22 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           borderRadius: 10,
         }}
       >
-        <View style={styles.routes_container}>
-          <UserRoutes navigate={navigate} routes={routes} />
-        </View>
+        {routes.length !== 0 ? (
+          <View style={styles.routes_container}>
+            <UserRoutes navigate={navigate} routes={routes} />
+          </View>
+        ) : (
+          <Text
+            onPress={() =>
+              navigate("RoutePlanner", {
+                location: userLocation,
+              })
+            }
+            style={styles.createRoute}
+          >
+            Create Your First Route ...
+          </Text>
+        )}
       </Card>
       <View style={styles.menue}>
         <Button
@@ -218,6 +231,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: width,
   },
+  createRoute: { padding: 20, alignSelf: "center" },
   loading: {
     width: 100,
     height: 100,
