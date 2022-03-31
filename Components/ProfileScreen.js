@@ -8,6 +8,7 @@ import {
   Dimensions,
   Platform,
   Image,
+  StatusBar,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import { useIsFocused } from "@react-navigation/native";
@@ -89,6 +90,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       <ImageBackground
         source={require("../assets/harley-davidson.jpg")}
         style={{ width: width, height: height * 0.25 }}
@@ -141,7 +143,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             width: width * 0.25,
             height: 35,
             padding: 0,
-            backgroundColor: "#7379C6",
+            backgroundColor: "#888888",
           }}
           containerStyle={{
             borderRadius: 0,
@@ -162,7 +164,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             width: width * 0.25,
             height: 35,
             padding: 0,
-            backgroundColor: "#7379C6",
+            backgroundColor: "#888888",
           }}
           containerStyle={{
             borderRadius: 0,
@@ -180,7 +182,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             width: width * 0.25,
             height: 35,
             padding: 0,
-            backgroundColor: "#7379C6",
+            backgroundColor: "#888888",
           }}
           containerStyle={{
             borderRadius: 0,
@@ -199,7 +201,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
             width: width * 0.25,
             height: 35,
             padding: 0,
-            backgroundColor: "#7379C6",
+            backgroundColor: "#888888",
           }}
           containerStyle={{
             borderRadius: 0,
@@ -218,6 +220,7 @@ const { height, width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: Platform.OS === "ios" ? 10 : 0,
   },
   spacer: {
     flex: 1,

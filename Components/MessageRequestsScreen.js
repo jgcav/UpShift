@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, ScrollView, Image } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  StatusBar,
+} from "react-native";
 import { doc, getDoc } from "firebase/firestore";
 import firebase from "../config/firebase.js";
 import { useAuth } from "../contexts/AuthContext.js";
@@ -70,6 +77,7 @@ export default function MessageRequestsScreen({
 
   return (
     <ScrollView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       {profiles.map((profile, index) => {
         return (
           <RequestCard

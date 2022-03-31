@@ -1,9 +1,10 @@
-import { View, Image, StyleSheet, Dimensions } from "react-native";
+import { View, Image, StyleSheet, Dimensions, StatusBar } from "react-native";
 import { Text, Card, Icon, Button } from "@rneui/base";
 
 export const ProfileCard = ({ age, profile }) => {
   const { height, width } = Dimensions.get("window");
   return (
+    
     <Card
       containerStyle={{
         paddingVertical: 10,
@@ -18,7 +19,7 @@ export const ProfileCard = ({ age, profile }) => {
             width: width * 0.4,
             height: width * 0.4,
             borderRadius: (width * 0.4) / 2,
-            borderColor: "#dbdbdb",
+            borderColor: "#e1e8ee",
             borderWidth: 5,
           }}
         />
