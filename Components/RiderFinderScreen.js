@@ -26,6 +26,8 @@ import RiderCard from "./RiderCard";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext.js";
 import { getProfile } from "../utils/firebaseFuncs.js";
+import { ListItem } from "@rneui/themed";
+import { List } from "react-native-paper";
 const regions = [
   "Scotland",
   "North East",
@@ -55,6 +57,7 @@ export default function RiderFinder({ navigation: { navigate } }) {
   const [ageH, setAgeH] = useState(100);
   const [lAge, setLAge] = useState(18);
   const [hAge, setHAge] = useState(100);
+  const [expanded, setExpanded] = useState(false);
 
   function getRiders(minDOB, maxDOB) {
     let q;
@@ -133,7 +136,107 @@ export default function RiderFinder({ navigation: { navigate } }) {
 
   return (
     <ScrollView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+
+    <StatusBar barStyle="dark-content" />
+
+    
+    <ListItem.Accordion
+        containerStyle={{
+          paddingLeft: 15,
+          marginRight: -5,
+          backgroundColor: "#EFEFEFEF",
+        }}
+        content={
+          <>
+            <ListItem.Content>
+              <ListItem.Title style={{ alignSelf: "flex-end", fontSize: 17 }}>
+                Age Preferences
+              </ListItem.Title>
+            </ListItem.Content>
+          </>
+        }
+        isExpanded={expanded}
+        onPress={() => {
+          setExpanded(!expanded);
+        }}
+      >
+        <ListItem>
+          <ListItem.Content>
+            <View style={styles.ageInfo}>
+              <Text style={{ fontSize: 20, fontWeight: "bold", flex: 1 }}>
+                {ageL}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  flex: 1,
+                  textAlign: "right",
+                }}
+              >
+                Minimum Age:
+              </Text>
+            </View>
+            <View style={styles.sliderContainer}>
+              <Slider
+                style={{
+                  width: width * 0.9,
+                  height: 40,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                minimumValue={18}
+                maximumValue={100}
+                value={ageL}
+                onValueChange={(value) => {
+                  if (value > ageH) {
+                    setAgeH(parseInt(value));
+                    setAgeL(parseInt(value));
+                  } else {
+                    setAgeL(parseInt(value));
+                  }
+                }}
+                onSlidingComplete={() => setLAge(ageL)}
+              />
+            </View>
+            <View style={styles.ageInfo}>
+              <Text style={{ fontSize: 20, fontWeight: "bold", flex: 1 }}>
+                {ageH}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  flex: 1,
+                  textAlign: "right",
+                }}
+              >
+                Maximum Age:
+              </Text>
+            </View>
+
+            <View style={styles.sliderContainer}>
+              <Slider
+                style={{ width: width * 0.9, height: 40 }}
+                minimumValue={18}
+                maximumValue={100}
+                value={ageH}
+                onValueChange={(value) => {
+                  if (value < ageL) {
+                    setAgeH(parseInt(value));
+                    setAgeL(parseInt(value));
+                  } else {
+                    setAgeH(parseInt(value));
+                  }
+                }}
+                onSlidingComplete={() => setHAge(ageH)}
+              />
+            </View>
+          </ListItem.Content>
+        </ListItem>
+      </ListItem.Accordion>
+
+        
       <View style={styles.filterContainer}>
         <SelectDropdown
           data={regions}
@@ -151,7 +254,7 @@ export default function RiderFinder({ navigation: { navigate } }) {
               <FontAwesome
                 name={isOpened ? "chevron-up" : "chevron-down"}
                 color={"#444"}
-                size={18}
+                size={13}
               />
             );
           }}
@@ -176,7 +279,8 @@ export default function RiderFinder({ navigation: { navigate } }) {
               <FontAwesome
                 name={isOpened ? "chevron-up" : "chevron-down"}
                 color={"#444"}
-                size={18}
+                size={13}
+                style={{ paddingRight: 11 }}
               />
             );
           }}
@@ -185,79 +289,6 @@ export default function RiderFinder({ navigation: { navigate } }) {
           rowStyle={styles.dropdown2RowStyle}
           rowTextStyle={styles.dropdown2RowTxtStyle}
         />
-      </View>
-      <View style={styles.ageInfo}>
-        <Text style={{ fontSize: 20, fontWeight: "bold", flex: 1 }}>
-          {ageL}
-        </Text>
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: "bold",
-            flex: 1,
-            textAlign: "right",
-          }}
-        >
-          Minimum Age:
-        </Text>
-      </View>
-      <View style={styles.sliderContainer}>
-        <View style={styles.spacer}></View>
-        <Slider
-          style={{
-            width: width * 0.9,
-            height: 40,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          minimumValue={18}
-          maximumValue={100}
-          value={ageL}
-          onValueChange={(value) => {
-            if (value > ageH) {
-              setAgeH(parseInt(value));
-              setAgeL(parseInt(value));
-            } else {
-              setAgeL(parseInt(value));
-            }
-          }}
-          onSlidingComplete={() => setLAge(ageL)}
-        />
-        <View style={styles.spacer}></View>
-      </View>
-      <View style={styles.ageInfo}>
-        <Text style={{ fontSize: 20, fontWeight: "bold", flex: 1 }}>
-          {ageH}
-        </Text>
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: "bold",
-            flex: 1,
-            textAlign: "right",
-          }}
-        >
-          Maximum Age:
-        </Text>
-      </View>
-      <View style={styles.sliderContainer}>
-        <View style={styles.spacer}></View>
-        <Slider
-          style={{ width: width * 0.9, height: 40 }}
-          minimumValue={18}
-          maximumValue={100}
-          value={ageH}
-          onValueChange={(value) => {
-            if (value < ageL) {
-              setAgeH(parseInt(value));
-              setAgeL(parseInt(value));
-            } else {
-              setAgeH(parseInt(value));
-            }
-          }}
-          onSlidingComplete={() => setHAge(ageH)}
-        />
-        <View style={styles.spacer}></View>
       </View>
 
       {riders.map((rider, index) => {
@@ -277,7 +308,7 @@ export default function RiderFinder({ navigation: { navigate } }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#0984E3",
+    backgroundColor: "white",
     flex: 1,
   },
   filterContainer: {

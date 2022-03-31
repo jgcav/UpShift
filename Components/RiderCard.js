@@ -12,6 +12,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { updateDoc, doc, arrayUnion, arrayRemove } from "firebase/firestore";
 
+import { Card, ListItem } from "@rneui/base";
+
 import firebase from "../config/firebase.js";
 const db = firebase.firestore();
 export default function RiderCard({ rider, navigate, setLoading, location }) {
@@ -129,6 +131,10 @@ export default function RiderCard({ rider, navigate, setLoading, location }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    marginTop: 10,
+    padding: 12,
+    marginLeft: 10,
+    marginRight: 10,
     backgroundColor: "white",
     borderBottomWidth: 3,
     borderBottomColor: "#e1e8ee",
