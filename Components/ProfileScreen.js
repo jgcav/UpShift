@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
-  ScrollView,
-  SafeAreaView,
   ImageBackground,
   Dimensions,
   Platform,
@@ -141,7 +139,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           buttonStyle={{
             borderRadius: 0,
             width: width * 0.25,
-            height: 35,
+            height: 50,
             padding: 0,
             backgroundColor: "#888888",
           }}
@@ -162,7 +160,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           buttonStyle={{
             borderRadius: 0,
             width: width * 0.25,
-            height: 35,
+            height: 50,
             padding: 0,
             backgroundColor: "#888888",
           }}
@@ -180,7 +178,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           buttonStyle={{
             borderRadius: 0,
             width: width * 0.25,
-            height: 35,
+            height: 50,
             padding: 0,
             backgroundColor: "#888888",
           }}
@@ -199,7 +197,7 @@ export default function ProfileScreen({ navigation: { navigate } }) {
           buttonStyle={{
             borderRadius: 0,
             width: width * 0.25,
-            height: 35,
+            height: 50,
             padding: 0,
             backgroundColor: "#888888",
           }}
@@ -220,7 +218,7 @@ const { height, width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: Platform.OS === "ios" ? 10 : 0,
+    marginBottom: Platform.OS === "ios" ? 0 : 0,
   },
   spacer: {
     flex: 1,
@@ -229,7 +227,6 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   menue: {
-    padding: 0,
     marginTop: 0,
     flexDirection: "row",
     width: width,
