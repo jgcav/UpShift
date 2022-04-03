@@ -34,9 +34,10 @@
     "react-native-paper": "^4.11.2",
     "react-native-select-dropdown": "^1.8.0",
     "react-native-snap-carousel": "^3.9.1",
-    "react-native-svg": "^12.3.0",
+    "react-native-svg": "12.1.1",
     "react-native-web": "0.17.1",
-    "socket.io-client": "^4.4.1"
+    "socket.io-client": "^4.4.1",
+    "expo-updates": "~0.11.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
