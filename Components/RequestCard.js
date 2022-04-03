@@ -113,7 +113,6 @@ export default function RequestCard({ profile, navigate, setInteracted }) {
         </View>
         <View style={styles.infoContainer}>
           <Text>{`${distance} km away`}</Text>
-          <Text>{`connections : ${(profile.connected = 100)}`}</Text>
         </View>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.text} onPress={createChatRoom}>
@@ -157,8 +156,8 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 1,
-    paddingHorizontal: 7,
+    paddingVertical: 0,
+    paddingHorizontal: 1,
     borderRadius: 8,
     elevation: 3,
     backgroundColor: "#CFDDF6",
@@ -167,15 +166,15 @@ const styles = StyleSheet.create({
   buttons: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 1,
-    paddingHorizontal: 7,
+    paddingVertical: 0,
+    paddingHorizontal: 2,
     borderRadius: 8,
     elevation: 3,
     backgroundColor: "#7379C6",
-    marginRight: 5,
+    marginRight: 2,
   },
   text: {
-    fontSize: 20,
+    fontSize: 16,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
