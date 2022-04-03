@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import TextInput from "./TextInput.js";
-import { Button } from "@rneui/base";
+import { Button, color } from "@rneui/base";
 
 export default function SignUpScreen({ navigation: { navigate } }) {
   const [email, setEmail] = useState("");
@@ -77,7 +77,7 @@ export default function SignUpScreen({ navigation: { navigate } }) {
           onChangeText={setPasswordConfirm}
           returnKeyType="go"
         />
-        <Text>{error && error}</Text>
+        <Text style={{color:"white"}}>{error && error}</Text>
 
         <Button
           title="Sign Up"
