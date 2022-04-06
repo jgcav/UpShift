@@ -1,7 +1,7 @@
 
 # [UpShift](https://expo.dev/@mrchrish/UpShift)
 
-[UpShift](https://expo.dev/@mrchrish/UpShift) is a group project social media app designed to be used by motorcyclists. The app allows for users to find other riders within their local area and plan trips. Features of the app include:
+[UpShift](https://expo.dev/@mrchrish/UpShift) is a social media app designed to be used by motorcyclists, created as a group for our final project on the Northcoders bootcamp. The app allows for users to find other riders within their local area and plan trips. Features of the app include:
   - Login/ Sign up Authentication
   - Upload photos
   - Create Routes
