@@ -18,9 +18,17 @@ Users can sign up or login to the app using Firebase Authentication when opening
 ## Run Locally
 ### Requirements
 
-node - v16.13.2\
+node - v16.13.2
 
 ### Cloning & Set-up
+
+**Please note that the app requires a Google Maps API Key for the Route Planner feature to be fully functional. As our API Key is gitignored, below I have provided some screenshots of the working Route Planner feature.**
+
+![IMG_6779](https://user-images.githubusercontent.com/96108416/162227381-f0a499f4-ee47-4829-9f82-8327f18c11e3.PNG)
+![IMG_6780](https://user-images.githubusercontent.com/96108416/162227440-280ce9ce-8ee9-40df-be64-2c6db22bc38c.PNG)
+![IMG_6781](https://user-images.githubusercontent.com/96108416/162227465-11bad77e-74a7-45fb-99a5-082fac2c3427.PNG)
+![IMG_6782](https://user-images.githubusercontent.com/96108416/162227582-f3197761-85ea-45b0-8dd1-f900be189111.PNG)
+
 
 #### Clone the project
 
